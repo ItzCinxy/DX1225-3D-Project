@@ -774,7 +774,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 436.75, y: -228.5}
+  m_AnchoredPosition: {x: 424, y: 214}
   m_SizeDelta: {x: 263.5, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &989074527
@@ -797,7 +797,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Ammo: 10 / 10'
+  m_text: 'Ammo: 10 / 100'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3338,7 +3338,10 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
-  maxAmmo: 10
+  maxMagazineSize: 10
+  totalAmmo: 100
+  reloadTime: 2
+  ammoDisplay: {fileID: 989074527}
 --- !u!4 &8890824581245087515
 Transform:
   m_ObjectHideFlags: 0
