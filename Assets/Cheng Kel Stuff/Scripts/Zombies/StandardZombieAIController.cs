@@ -1,7 +1,8 @@
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class EnemyAIController : MonoBehaviour
+public class StandardZombieAIController : MonoBehaviour
 {
     public enum EnemyState { Idle, Walk, Run, Attack }
     private EnemyState currentState;

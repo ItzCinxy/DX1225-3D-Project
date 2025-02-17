@@ -2543,7 +2543,7 @@ GameObject:
   - component: {fileID: 30888778058747467}
   - component: {fileID: 4527785291907671667}
   - component: {fileID: 4218876127713114864}
-  - component: {fileID: 6815836885651178646}
+  - component: {fileID: 9141434904774239891}
   m_Layer: 0
   m_Name: StandardZombie
   m_TagString: Untagged
@@ -2632,7 +2632,7 @@ MonoBehaviour:
   maxHealth: 300
   currentHealth: 0
   damageAmount: 50
---- !u!114 &6815836885651178646
+--- !u!114 &9141434904774239891
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2641,12 +2641,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7997650950129744345}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a0229a590715f9418a9a8d293a1971e, type: 3}
+  m_Script: {fileID: 11500000, guid: 1e98ffccd51b0ec4d8840a9c9ff44120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roamRadius: 10
-  chaseRange: 5
-  attackRange: 1
+  roamRadius: 5
+  chaseRange: 10
+  attackRange: 2
   idleTime: 3
   walkTime: 5
   walkSpeed: 1.5
