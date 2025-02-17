@@ -1,58 +1,84 @@
-using Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
-using UnityEngine.Playables;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
     [SerializeField] private CharacterController _characterController;
+    [SerializeField] private float moveSpeed = 5f;
 
     [SerializeField] private PlayerInput _playerInput;
     private InputActionAsset _inputActions;
 
-    [SerializeField] private CinemachineFreeLook _freelookCamera;
+    private Vector2 inputDirection;
 
-    public enum PlayerState
-    {
-        Idle,
-        Walking
-    }
-
-    private PlayerState _currentState;
-
-    // Start is called before the first frame update
     void Start()
     {
         _inputActions = _playerInput.actions;
-        _currentState = PlayerState.Idle;
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
-        
+
     void Update()
     {
         HandleMovement();
+        RotateWithCamera();
     }
 
     private void HandleMovement()
     {
-        Vector2 input = _inputActions["Move"].ReadValue<Vector2>();
-        Vector3 moveDirection = new Vector3(input.x, 0, input.y);
+        inputDirection = _inputActions["Move"].ReadValue<Vector2>();
+
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraRight = Camera.main.transform.right;
+        cameraForward.y = 0;
+        cameraRight.y = 0;
+
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+
+        Vector3 moveDirection = (cameraForward * inputDirection.y + cameraRight * inputDirection.x).normalized;
 
         bool isMoving = moveDirection.magnitude > 0;
         _animator.SetBool("IsWalking", isMoving);
 
-        RotateWithCamera();
-
-        if (moveDirection.magnitude > 0)
+        if (isMoving)
         {
-            moveDirection = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up) * moveDirection;
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 250f);
+            float angle = Vector3.SignedAngle(cameraForward, moveDirection, Vector3.up);
+
+            PlaySimpleDirectionalAnimation(angle);
+
+            _characterController.Move(moveDirection * moveSpeed * Time.deltaTime);
+        }
+        else
+        {
+            _animator.SetBool("IsWalking", false);
+        }
+    }
+
+    private void PlaySimpleDirectionalAnimation(float angle)
+    {
+        _animator.SetBool("WalkForward", false);
+        _animator.SetBool("WalkBackward", false);
+        _animator.SetBool("WalkLeft", false);
+        _animator.SetBool("WalkRight", false);
+
+        if (angle >= -45f && angle <= 45f)
+        {
+            _animator.SetBool("WalkForward", true);
+        }
+        else if (angle > 45f && angle <= 135f)
+        {
+            _animator.SetBool("WalkRight", true);
+        }
+        else if (angle < -45f && angle >= -135f)
+        {
+            _animator.SetBool("WalkLeft", true);
+        }
+        else
+        {
+            _animator.SetBool("WalkBackward", true);
         }
     }
 
