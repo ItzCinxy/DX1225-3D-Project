@@ -6,18 +6,17 @@ public class EnemyHealth : MonoBehaviour
     [Header("Health Settings")]
     [SerializeField] private int maxHealth = 300;
     [SerializeField] private int currentHealth;
-    [SerializeField] private int damageAmount = 50; // Damage taken when pressing F
+
+    private UIEnemyHealthBar healthBar;
 
     void Start()
     {
         currentHealth = maxHealth;
-    }
+        healthBar = GetComponentInChildren<UIEnemyHealthBar>();
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (healthBar != null)
         {
-            TakeDamage(damageAmount);
+            healthBar.SetMaxHealth(maxHealth);
         }
     }
 
@@ -25,6 +24,13 @@ public class EnemyHealth : MonoBehaviour
     {
         currentHealth -= damage;
         Debug.Log($"{gameObject.name} took {damage} damage! Remaining HP: {currentHealth}");
+
+        //SoundManager.Instance.enemyChannel.PlayOneShot(SoundManager.Instance.enemyHurt);
+
+        if (healthBar != null)
+        {
+            healthBar.SetHealth(currentHealth);
+        }
 
         if (currentHealth <= 0)
         {
@@ -34,9 +40,17 @@ public class EnemyHealth : MonoBehaviour
 
     private IEnumerator DieWithDelay()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.5f); // Small delay to let attack sound finish
 
-        Debug.Log($"{gameObject.name} has died!");
+        Debug.Log($"{gameObject.name} died!");
+
+        if (healthBar != null)
+        {
+            Destroy(healthBar.gameObject);
+        }
+
+        //SoundManager.Instance.enemyChannel.PlayOneShot(SoundManager.Instance.enemyDie);
+
         Destroy(gameObject);
     }
 }
