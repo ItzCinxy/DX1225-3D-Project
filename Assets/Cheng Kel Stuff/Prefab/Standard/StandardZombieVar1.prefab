@@ -2631,7 +2631,7 @@ MonoBehaviour:
   roamRadius: 5
   chaseRange: 10
   attackRange: 2
-  idleTime: 4
+  idleTime: 3
   walkTime: 5
   walkSpeed: 1.5
   runSpeed: 4

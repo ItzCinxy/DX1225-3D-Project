@@ -2009,20 +2009,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roamRadius: 5
   chaseRange: 10
-  attackRange: 2
-  idleTime: 3
-  walkTime: 5
-  walkSpeed: 1.5
-  runSpeed: 4
+  attackRange: 1
+  idleTime: 2
+  walkTime: 3
+  walkSpeed: 1.8
+  runSpeed: 5
   visionAngle: 60
-  rotationSpeed: 5
+  rotationSpeed: 6
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
-  maxHealth: 100
+  maxHealth: 80
   currentHealth: 0
-  attackDamage: 10
-  attackCooldown: 1.5
+  attackDamage: 50
+  attackCooldown: 3
   ammoPrefab: {fileID: 0}
   healthPrefab: {fileID: 0}
 --- !u!1 &5965322281953759808
