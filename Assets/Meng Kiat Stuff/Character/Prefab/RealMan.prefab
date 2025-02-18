@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2627682049090555116}
   - component: {fileID: 2917849897386155581}
+  - component: {fileID: 5443282104975317522}
   m_Layer: 5
   m_Name: StaminaBar
   m_TagString: Untagged
@@ -35,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 120, y: 2}
+  m_AnchoredPosition: {x: 120, y: 25}
   m_SizeDelta: {x: 200, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2917849897386155581
@@ -89,6 +90,21 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5443282104975317522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467277381564057870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dd0bbcbb33e74c4aa56e7d9cbfa75de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxStamina: 100
+  currentStamina: 0
+  staminaBar: {fileID: 2917849897386155581}
 --- !u!1 &660686781869482982
 GameObject:
   m_ObjectHideFlags: 0
@@ -1354,6 +1370,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5261615851519303189}
   - component: {fileID: 3005377749802210668}
+  - component: {fileID: 5540761107649882281}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -1433,6 +1450,19 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5540761107649882281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6531810499182446896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a995ebbd00c04c84ba9766f01e3110e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 3005377749802210668}
 --- !u!1 &6685497728182184612
 GameObject:
   m_ObjectHideFlags: 0
@@ -1800,6 +1830,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RealMan
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ce2b38e4593a63e4184aa73cca3bff24,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: ce2b38e4593a63e4184aa73cca3bff24,
         type: 3}
       propertyPath: m_Controller
@@ -1853,6 +1888,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 76525652064397418}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ce2b38e4593a63e4184aa73cca3bff24,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3319194615257389677}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ce2b38e4593a63e4184aa73cca3bff24,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 86350873216297504}
   m_SourcePrefab: {fileID: 100100000, guid: ce2b38e4593a63e4184aa73cca3bff24, type: 3}
 --- !u!4 &32774869689298478 stripped
 Transform:
@@ -1918,13 +1961,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 1.59
-  m_Radius: 0.23
+  m_Height: 1.6
+  m_Radius: 0.3
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.84, z: 0}
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!114 &52950440523894269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1976,6 +2019,36 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   ammoDisplay: {fileID: 0}
+--- !u!114 &3319194615257389677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149565387616923703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab3b4e520ca98cb41803a0a061dae336, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  healthBar: {fileID: 3005377749802210668}
+--- !u!114 &86350873216297504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149565387616923703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df57d0cd48df9f24d9e22328f28cbb8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxStamina: 100
+  currentStamina: 0
+  staminaBar: {fileID: 2917849897386155581}
 --- !u!95 &5935726549204480247 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: ce2b38e4593a63e4184aa73cca3bff24,

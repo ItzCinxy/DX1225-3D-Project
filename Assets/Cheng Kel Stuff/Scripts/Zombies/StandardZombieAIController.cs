@@ -35,7 +35,7 @@ public class StandardZombieAIController : MonoBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
-        playerController = player?.GetComponent<CharacterController>(); // Get player CharacterController
+        playerController = player?.GetComponent<CharacterController>();
         ChangeState(EnemyState.Walk);
     }
 
@@ -219,7 +219,6 @@ public class StandardZombieAIController : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) > attackRange)
             ChangeState(EnemyState.Run);
     }
-
 
     IEnumerator TransitionToWalk()
     {
