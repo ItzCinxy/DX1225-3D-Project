@@ -124,6 +124,7 @@ public class StandardZombieAIController : MonoBehaviour
         return false;
     }
 
+    //PLEASE REFRENCE THIS TO WHO IT MAY CONCERN
     public void OnGunshotHeard(Vector3 gunshotPosition)
     {
         if (currentState == EnemyState.Run || currentState == EnemyState.Attack) return;

@@ -2018,7 +2018,7 @@ MonoBehaviour:
   pickupLayer:
     serializedVersion: 2
     m_Bits: 128
-  ammoDisplay: {fileID: 0}
+  ammoDisplay: {fileID: 3804670500230771840}
 --- !u!114 &3319194615257389677
 MonoBehaviour:
   m_ObjectHideFlags: 0
