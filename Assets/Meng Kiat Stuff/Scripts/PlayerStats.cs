@@ -1,0 +1,226 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+using TMPro;
+
+public class PlayerStats : MonoBehaviour
+{
+    [Header("Health Settings")]
+    private float maxHealth = 100f;
+    [SerializeField] private float currentHealth;
+
+    [Header("Stamina Settings")]
+    private float maxStamina = 100f;
+    [SerializeField] private float currentStamina;
+
+    [Header("UI Settings")]
+    [SerializeField] private Slider healthBar;
+    [SerializeField] private TMP_Text healthText;
+    [SerializeField] private Slider staminaBar;
+    [SerializeField] private TMP_Text staminaText;
+
+    private Coroutine healthBarLerpCoroutine;
+    private Coroutine staminaBarLerpCoroutine;
+
+    void Start()
+    {
+        currentHealth = maxHealth;
+        if (healthBar != null)
+        {
+            healthBar.maxValue = maxHealth;
+            healthBar.value = currentHealth;
+        }
+
+        currentStamina = maxStamina;
+        if (staminaBar != null)
+        {
+            staminaBar.maxValue = maxStamina;
+            staminaBar.value = currentStamina;
+        }
+
+        // Update text on start
+        UpdateUIText();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            TakeDamage(10);
+        }
+        if (Input.GetKey(KeyCode.J))
+        {
+            UseStamina(0.1f);
+        }    }
+
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+        Debug.Log($"Player took {damage} damage! Current health: {currentHealth}");
+
+        UpdateHealthBar();
+        UpdateUIText();
+
+        if (currentHealth <= 0)
+        {
+            StartCoroutine(DieWithDelay());
+        }
+    }
+
+    public void Heal(float amount)
+    {
+        currentHealth += amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+        Debug.Log($"Player healed by {amount}! Current health: {currentHealth}");
+
+        UpdateHealthBar();
+        UpdateUIText();
+    }
+
+    public void UseStamina(float amount)
+    {
+        currentStamina -= amount;
+        currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
+
+        Debug.Log($"Player used {amount} stamina! Current stamina: {currentStamina}");
+
+        UpdateStaminaBar();
+        UpdateUIText();
+
+        if (currentStamina <= 0)
+        {
+            StartCoroutine(ExhaustWithDelay());
+        }
+    }
+
+    public void RecoverStamina(float amount)
+    {
+        currentStamina += amount;
+        currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
+
+        Debug.Log($"Player recovered {amount} stamina! Current stamina: {currentStamina}");
+
+        UpdateStaminaBar();
+        UpdateUIText();
+    }
+
+    private void UpdateHealthBar()
+    {
+        if (healthBar != null)
+        {
+            if (healthBarLerpCoroutine != null)
+            {
+                StopCoroutine(healthBarLerpCoroutine);
+            }
+            healthBarLerpCoroutine = StartCoroutine(SmoothHealthBarUpdate());
+        }
+    }
+
+    private void UpdateStaminaBar()
+    {
+        if (staminaBar != null)
+        {
+            if (staminaBarLerpCoroutine != null)
+            {
+                StopCoroutine(staminaBarLerpCoroutine);
+            }
+            staminaBarLerpCoroutine = StartCoroutine(SmoothStaminaBarUpdate());
+        }
+    }
+
+    private void UpdateUIText()
+    {
+        if (healthText != null)
+        {
+            healthText.text = $"{currentHealth} / {maxHealth}";
+        }
+
+        if (staminaText != null)
+        {
+            staminaText.text = $"{currentStamina} / {maxStamina}";
+        }
+    }
+
+    private IEnumerator SmoothHealthBarUpdate()
+    {
+        float elapsedTime = 0f;
+        float duration = 0.5f;
+        float startValue = healthBar.value;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            healthBar.value = Mathf.Lerp(startValue, currentHealth, elapsedTime / duration);
+            yield return null;
+        }
+
+        healthBar.value = currentHealth;
+    }
+
+    private IEnumerator SmoothStaminaBarUpdate()
+    {
+        float elapsedTime = 0f;
+        float duration = 0.5f;
+        float startValue = staminaBar.value;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            staminaBar.value = Mathf.Lerp(startValue, currentStamina, elapsedTime / duration);
+            yield return null;
+        }
+
+        staminaBar.value = currentStamina;
+    }
+
+    private IEnumerator DieWithDelay()
+    {
+        yield return new WaitForSeconds(0.3f);
+        Debug.Log("Player died!");
+        Destroy(gameObject);
+    }
+    private IEnumerator ExhaustWithDelay()
+    {
+        yield return new WaitForSeconds(0.3f);
+        Debug.Log("Player is exhausted!");
+    }
+
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+
+    public float GetCurrentStamina()
+    {
+        return currentStamina;
+    }
+
+    public void IncreaseMaxHealth(float amountToIncrease)
+    {
+        maxHealth += amountToIncrease;
+
+        if (healthBar != null)
+        {
+            healthBar.maxValue = maxHealth;
+            healthBar.value = currentHealth;
+        }
+
+        UpdateUIText();
+    }
+
+    public void IncreaseMaxStamina(float amountToIncrease)
+    {
+        maxStamina += amountToIncrease;
+
+        if (staminaBar != null)
+        {
+            staminaBar.maxValue = maxStamina;
+            staminaBar.value = currentStamina;
+        }
+
+        UpdateUIText();
+    }
+}
