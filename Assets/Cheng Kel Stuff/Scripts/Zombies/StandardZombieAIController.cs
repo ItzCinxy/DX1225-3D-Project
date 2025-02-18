@@ -35,7 +35,17 @@ public class StandardZombieAIController : MonoBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
-        playerController = player?.GetComponent<CharacterController>();
+        
+        if (player == null)
+        {
+            GameObject foundPlayer = GameObject.FindGameObjectWithTag("Player");
+            if (foundPlayer != null)
+            {
+                player = foundPlayer.transform;
+                playerController = player.GetComponent<CharacterController>();
+            }
+        }
+
         ChangeState(EnemyState.Walk);
     }
 
@@ -113,14 +123,16 @@ public class StandardZombieAIController : MonoBehaviour
 
         if (angleToPlayer < visionAngle / 2)
         {
-            if (Physics.Raycast(transform.position + Vector3.up * 1.5f, directionToPlayer, out RaycastHit hit, chaseRange))
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position + Vector3.up * 1.5f, directionToPlayer, out hit, chaseRange))
             {
-                if (hit.collider.TryGetComponent<CharacterController>(out _))
+                if (hit.collider.CompareTag("Player"))
                 {
                     return true;
                 }
             }
         }
+
         return false;
     }
 
@@ -138,10 +150,12 @@ public class StandardZombieAIController : MonoBehaviour
 
     void Die()
     {
+        Debug.Log($"{gameObject.name} has died.");
         Instantiate(ammoPrefab, transform.position, Quaternion.identity);
         Instantiate(healthPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
+
 
     void RotateTowardsMovementDirection()
     {
