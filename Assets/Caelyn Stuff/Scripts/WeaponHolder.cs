@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class WeaponHolder : MonoBehaviour
 {
     [SerializeField] private Transform weaponHolder;
-    [SerializeField] private Weapon equippedWeapon;
+    public Weapon equippedWeapon;
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private float pickupRange = 3f; 
     [SerializeField] private LayerMask pickupLayer;
@@ -17,23 +17,15 @@ public class WeaponHolder : MonoBehaviour
     {
         if (_playerInput.actions["Shoot"].WasPressedThisFrame())
         {
-            Debug.Log("Shoot");
             Shoot();
         }
         if (_playerInput.actions["Reload"].IsPressed())
         {
-            Debug.Log("Reload");
             Reload();
         }
         if (_playerInput.actions["Interact"].WasPressedThisFrame())
         {
-            Debug.Log("Interact");
             TryPickupWeapon();
-        }
-        if (_playerInput.actions["Drop"].WasPressedThisFrame())
-        {
-            Debug.Log("Dropped");
-            DropWeapon();
         }
     }
 

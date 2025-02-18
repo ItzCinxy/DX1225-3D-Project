@@ -28,7 +28,6 @@ public class Weapon : MonoBehaviour
     public void Shoot()
     {
         if (isReloading || currentAmmoInMag <= 0) return;
-        Debug.Log("WShoot");
         currentAmmoInMag--;
         UpdateAmmoDisplay();
         weaponRaycast?.FireRaycast();
@@ -56,7 +55,7 @@ public class Weapon : MonoBehaviour
     private void UpdateAmmoDisplay()
     {
         if (ammoDisplay != null)
-            ammoDisplay.text = $"Ammo: {currentAmmoInMag} / {totalAmmo}";
+            ammoDisplay.text = $"{currentAmmoInMag} / {totalAmmo}";
     }
 
     public void SetAmmoDisplay(TMP_Text newDisplay)
