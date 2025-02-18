@@ -1,3 +1,4 @@
+﻿using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,13 +7,30 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float sprintSpeed = 8f;
+    [SerializeField] private float crouchSpeed = 2f; // Slower speed when crouching
+    [SerializeField] private float jumpHeight = 2f;
+    [SerializeField] private float gravity = -9.81f;
+    [SerializeField] private float groundCheckDistance = 0.3f;
+    [SerializeField] private LayerMask groundLayer;
 
     [SerializeField] private PlayerInput _playerInput;
+
+    [SerializeField] private CinemachineFreeLook _freelookCamera;
+    [SerializeField] private Transform _standLookAt;
+    [SerializeField] private Transform _crouchLookAt;
+
     private InputActionAsset _inputActions;
-
     private Vector2 inputDirection;
+    private Vector3 velocity;
+    private bool isGrounded;
+    private bool isSprinting;
+    private bool isCrouching;
+    private bool isMoving;
+    private float jumpTimer;
+    private bool jumped;
 
-    void Start()
+    private void Start()
     {
         _inputActions = _playerInput.actions;
 
@@ -20,10 +38,59 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Update()
+    private void Update()
     {
+        HandleGroundCheck();
+        HandleCrouch();
         HandleMovement();
+        HandleJump();
         RotateWithCamera();
+        CinemachineLookAt();
+
+        // **Reset animations when NOT moving**
+        if (!isMoving)
+        {
+            ResetMovementAnimations();
+        }
+    }
+
+    private void CinemachineLookAt()
+    {
+        if (_freelookCamera == null) return; // Ensure camera exists
+
+        if (!isCrouching)
+        {
+            _freelookCamera.LookAt = _standLookAt; // Look at standing target
+            _freelookCamera.Follow = _standLookAt;
+        }
+        else
+        {
+            _freelookCamera.LookAt = _crouchLookAt; // Look at crouching target
+            _freelookCamera.Follow = _crouchLookAt;
+        }
+    }
+
+
+    private void HandleGroundCheck()
+    {
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+
+        if (isGrounded && velocity.y < 0)
+        {
+            velocity.y = -5f; // Stick to ground
+        }
+    }
+
+    private void HandleCrouch()
+    {
+        isCrouching = _inputActions["Crouch"].IsPressed(); // Hold to crouch
+
+        if (isCrouching)
+        {
+            isSprinting = false; // Disable sprinting if crouching
+        }
+
+        _animator.SetBool("IsCrouching", isCrouching);
     }
 
     private void HandleMovement()
@@ -40,45 +107,82 @@ public class PlayerController : MonoBehaviour
 
         Vector3 moveDirection = (cameraForward * inputDirection.y + cameraRight * inputDirection.x).normalized;
 
-        bool isMoving = moveDirection.magnitude > 0;
-        _animator.SetBool("IsWalking", isMoving);
+        isMoving = moveDirection.magnitude > 0;
+        bool isMovingForward = inputDirection.y > 0;
+
+        // Sprinting Logic (Disabled if crouching)
+        isSprinting = _inputActions["Sprint"].IsPressed() && isMovingForward && isGrounded && !isCrouching;
+
+        // Set movement speed based on state
+        float currentSpeed = isCrouching ? crouchSpeed : (isSprinting ? sprintSpeed : moveSpeed);
+
+        // Update animator parameters
+        _animator.SetBool("IsWalking", isMoving && !isCrouching); // Walking only when not crouching
+        _animator.SetBool("IsSprinting", isSprinting);
+        _animator.SetBool("IsCrouching", isCrouching);
 
         if (isMoving)
         {
             float angle = Vector3.SignedAngle(cameraForward, moveDirection, Vector3.up);
-
-            PlaySimpleDirectionalAnimation(angle);
-
-            _characterController.Move(moveDirection * moveSpeed * Time.deltaTime);
+            PlayDirectionalAnimation(angle);
         }
-        else
+
+        // Apply movement
+        Vector3 finalMove = moveDirection * currentSpeed;
+        finalMove.y = velocity.y;
+        _characterController.Move(finalMove * Time.deltaTime);
+
+        // Apply gravity
+        velocity.y += gravity * Time.deltaTime;
+    }
+
+    private void HandleJump()
+    {
+        if (!jumped && _inputActions["Jump"].WasPressedThisFrame() && isGrounded && !isCrouching)
         {
-            _animator.SetBool("IsWalking", false);
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            _animator.SetBool("IsJumping", true);
+            jumped = true;
+        }
+
+        if (jumped)
+        {
+            jumpTimer += Time.deltaTime;
+            if (jumpTimer >= 0.5f)
+            {
+                jumped = false;
+                _animator.SetBool("IsJumping", false);
+                jumpTimer = 0f;
+            }
         }
     }
 
-    private void PlaySimpleDirectionalAnimation(float angle)
+    private void PlayDirectionalAnimation(float angle)
     {
-        _animator.SetBool("WalkForward", false);
-        _animator.SetBool("WalkBackward", false);
-        _animator.SetBool("WalkLeft", false);
-        _animator.SetBool("WalkRight", false);
+        // **Reset all movement animations before setting new one**
+        ResetMovementAnimations();
 
-        if (angle >= -45f && angle <= 45f)
+        if (isCrouching)
         {
-            _animator.SetBool("WalkForward", true);
-        }
-        else if (angle > 45f && angle <= 135f)
-        {
-            _animator.SetBool("WalkRight", true);
-        }
-        else if (angle < -45f && angle >= -135f)
-        {
-            _animator.SetBool("WalkLeft", true);
+            if (angle >= -45f && angle <= 45f)
+                _animator.SetBool("CrouchForward", true);
+            else if (angle > 45f && angle <= 135f)
+                _animator.SetBool("CrouchRight", true);
+            else if (angle < -45f && angle >= -135f)
+                _animator.SetBool("CrouchLeft", true);
+            else
+                _animator.SetBool("CrouchBackward", true);
         }
         else
         {
-            _animator.SetBool("WalkBackward", true);
+            if (angle >= -45f && angle <= 45f)
+                _animator.SetBool("WalkForward", true);
+            else if (angle > 45f && angle <= 135f)
+                _animator.SetBool("WalkRight", true);
+            else if (angle < -45f && angle >= -135f)
+                _animator.SetBool("WalkLeft", true);
+            else
+                _animator.SetBool("WalkBackward", true);
         }
     }
 
@@ -92,5 +196,17 @@ public class PlayerController : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 500f);
         }
+    }
+
+    private void ResetMovementAnimations()
+    {
+        _animator.SetBool("WalkForward", false);
+        _animator.SetBool("WalkBackward", false);
+        _animator.SetBool("WalkLeft", false);
+        _animator.SetBool("WalkRight", false);
+        _animator.SetBool("CrouchForward", false);
+        _animator.SetBool("CrouchBackward", false);
+        _animator.SetBool("CrouchLeft", false);
+        _animator.SetBool("CrouchRight", false);
     }
 }
