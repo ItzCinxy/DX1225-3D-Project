@@ -14,7 +14,7 @@ public class Weapon : MonoBehaviour
     private bool isReloading = false;
 
     [Header("UI Elements")]
-    [SerializeField] private TMP_Text ammoDisplay;
+    private TMP_Text ammoDisplay;
 
     private WeaponRaycast weaponRaycast;
 
@@ -57,5 +57,11 @@ public class Weapon : MonoBehaviour
     {
         if (ammoDisplay != null)
             ammoDisplay.text = $"Ammo: {currentAmmoInMag} / {totalAmmo}";
+    }
+
+    public void SetAmmoDisplay(TMP_Text newDisplay)
+    {
+        ammoDisplay = newDisplay;
+        UpdateAmmoDisplay();
     }
 }

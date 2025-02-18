@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class WeaponHolder : MonoBehaviour
@@ -8,6 +9,9 @@ public class WeaponHolder : MonoBehaviour
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private float pickupRange = 3f; 
     [SerializeField] private LayerMask pickupLayer;
+
+    [Header("UI References")]
+    [SerializeField] private TMP_Text ammoDisplay;
 
     private void Update()
     {
@@ -85,6 +89,11 @@ public class WeaponHolder : MonoBehaviour
         if (bc) bc.enabled = false;
 
         Debug.Log("Equipped weapon: " + equippedWeapon.name);
+
+        if (ammoDisplay != null)
+        {
+            equippedWeapon.SetAmmoDisplay(ammoDisplay);
+        }
     }
 
     public void DropWeapon()
