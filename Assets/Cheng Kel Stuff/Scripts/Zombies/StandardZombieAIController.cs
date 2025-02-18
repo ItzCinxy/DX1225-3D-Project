@@ -26,6 +26,7 @@ public class StandardZombieAIController : MonoBehaviour
     [SerializeField] private GameObject healthPrefab;
 
     private Transform player;
+    private CharacterController playerController;
     private Vector3 velocity;
     private Vector3 targetPosition;
     private Animator animator;
@@ -34,6 +35,7 @@ public class StandardZombieAIController : MonoBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        playerController = player?.GetComponent<CharacterController>(); // Get player CharacterController
         ChangeState(EnemyState.Walk);
     }
 
@@ -90,6 +92,7 @@ public class StandardZombieAIController : MonoBehaviour
     {
         Vector3 desiredVelocity = (target - transform.position).normalized * speed;
 
+        // Avoid walls if detected
         if (Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward, out RaycastHit hit, 1.5f, obstacleLayer))
         {
             Vector3 avoidDirection = Vector3.Cross(Vector3.up, hit.normal).normalized;
@@ -112,7 +115,10 @@ public class StandardZombieAIController : MonoBehaviour
         {
             if (Physics.Raycast(transform.position + Vector3.up * 1.5f, directionToPlayer, out RaycastHit hit, chaseRange))
             {
-                if (hit.collider.gameObject.CompareTag("Player")) return true;
+                if (hit.collider.TryGetComponent<CharacterController>(out _))
+                {
+                    return true;
+                }
             }
         }
         return false;
@@ -164,6 +170,7 @@ public class StandardZombieAIController : MonoBehaviour
     void HandleRunState()
     {
         if (player == null) return;
+
         Seek(player.position, runSpeed);
 
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
@@ -195,6 +202,25 @@ public class StandardZombieAIController : MonoBehaviour
         targetPosition = transform.position;
     }
 
+    IEnumerator PerformAttack()
+    {
+        yield return new WaitForSeconds(1f);
+        Debug.Log($"{gameObject.name} attacks!");
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
+        foreach (Collider collider in hitColliders)
+        {
+            if (collider.TryGetComponent<CharacterController>(out CharacterController playerController))
+            {
+                Debug.Log("Player hit by zombie!");
+            }
+        }
+
+        if (Vector3.Distance(transform.position, player.position) > attackRange)
+            ChangeState(EnemyState.Run);
+    }
+
+
     IEnumerator TransitionToWalk()
     {
         yield return new WaitForSeconds(Random.Range(2, idleTime));
@@ -205,14 +231,6 @@ public class StandardZombieAIController : MonoBehaviour
     {
         yield return new WaitForSeconds(walkTime);
         ChangeState(EnemyState.Idle);
-    }
-
-    IEnumerator PerformAttack()
-    {
-        yield return new WaitForSeconds(1f);
-        Debug.Log($"{gameObject.name} attacked!");
-        if (Vector3.Distance(transform.position, player.position) > attackRange)
-            ChangeState(EnemyState.Run);
     }
 
     void OnDrawGizmos()
