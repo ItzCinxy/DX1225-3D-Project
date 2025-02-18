@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StandardZombieAIController : MonoBehaviour
 {
-    public enum EnemyState { Idle, Walk, Run, Attack, Dead }
+    public enum EnemyState { Idle, Walk, Run, Attack }
     private EnemyState currentState;
 
     [Header("AI Settings")]
@@ -29,7 +29,6 @@ public class StandardZombieAIController : MonoBehaviour
     private Vector3 velocity;
     private Vector3 targetPosition;
     private Animator animator;
-    private bool isDead = false;
 
     void Start()
     {
@@ -40,8 +39,6 @@ public class StandardZombieAIController : MonoBehaviour
 
     void Update()
     {
-        if (isDead) return; // Prevent further updates after death
-
         switch (currentState)
         {
             case EnemyState.Idle: HandleIdleState(); break;
@@ -60,7 +57,7 @@ public class StandardZombieAIController : MonoBehaviour
 
     void ChangeState(EnemyState newState)
     {
-        if (isDead || currentState == newState) return;
+        if (currentState == newState) return;
         currentState = newState;
 
         switch (currentState)
@@ -123,7 +120,7 @@ public class StandardZombieAIController : MonoBehaviour
 
     public void OnGunshotHeard(Vector3 gunshotPosition)
     {
-        if (isDead || currentState == EnemyState.Run || currentState == EnemyState.Attack) return;
+        if (currentState == EnemyState.Run || currentState == EnemyState.Attack) return;
 
         if (Vector3.Distance(transform.position, gunshotPosition) < 15f)
         {
@@ -132,33 +129,11 @@ public class StandardZombieAIController : MonoBehaviour
         }
     }
 
-    public void Die()
+    void Die()
     {
-        if (isDead) return; // Prevent multiple deaths
-
-        isDead = true;
-        currentState = EnemyState.Dead; // Prevent further movement
-
-        if (animator != null)
-        {
-            animator.SetTrigger("Die");
-        }
-
-        velocity = Vector3.zero;
-
-        StartCoroutine(DestroyAfterDeathAnimation());
-    }
-
-    IEnumerator DestroyAfterDeathAnimation()
-    {
-        yield return new WaitForSeconds(3f); // Adjust based on animation length
-
-        // Spawn loot
         Instantiate(ammoPrefab, transform.position, Quaternion.identity);
         Instantiate(healthPrefab, transform.position, Quaternion.identity);
-
-        // Disable object instead of destroying immediately
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 
     void RotateTowardsMovementDirection()
