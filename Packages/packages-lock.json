@@ -20,7 +20,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
+<<<<<<< HEAD
       "version": "1.8.18",
+=======
+      "version": "1.8.17",
+>>>>>>> main
       "depth": 1,
       "source": "registry",
       "dependencies": {
