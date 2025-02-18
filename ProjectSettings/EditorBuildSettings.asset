@@ -8,4 +8,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Cindys/Scenes/Scene/Start.unity
+    guid: 4c52c6f3cd3ccf446a1cd6800d3177c1
+  - enabled: 1
+    path: Assets/Cindys/Scenes/Scene/Map2.1.unity
+    guid: a1453276777d80d4ca978dcd288fd555
+  - enabled: 1
+    path: Assets/Cindys/Scenes/Scene/Map1.unity
+    guid: 866bb3da54a934547b872994b6f21ae9
+  - enabled: 1
+    path: Assets/Cindys/Scenes/Scene/Main Menu.unity
+    guid: 7aa9bb6df832e8844966b1aedd13fd4f
   m_configObjects: {}
