@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float sprintSpeed = 8f; // Sprint speed
     [SerializeField] private float jumpHeight = 2f;
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float groundCheckDistance = 0.3f; // Distance for ground check
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 inputDirection;
     private Vector3 velocity;
     private bool isGrounded;
+    private bool isSprinting;
     private float jumpTimer;
     private bool jumped;
 
@@ -62,28 +64,25 @@ public class PlayerController : MonoBehaviour
         Vector3 moveDirection = (cameraForward * inputDirection.y + cameraRight * inputDirection.x).normalized;
 
         bool isMoving = moveDirection.magnitude > 0;
+        bool isMovingForward = inputDirection.y > 0; // Only sprint when moving forward
 
-        // Disable movement animations if airborne
-        if (isGrounded && !jumped)
+        // Sprinting Logic
+        isSprinting = _inputActions["Sprint"].IsPressed() && isMovingForward && isGrounded;
+
+        float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
+
+        // Ensure IsWalking remains true while sprinting
+        _animator.SetBool("IsWalking", isMoving);
+        _animator.SetBool("IsSprinting", isSprinting);
+
+        if (isMoving)
         {
-            _animator.SetBool("IsWalking", isMoving);
-            if (isMoving)
-            {
-                float angle = Vector3.SignedAngle(cameraForward, moveDirection, Vector3.up);
-                PlaySimpleDirectionalAnimation(angle);
-            }
-            else
-            {
-                _animator.SetBool("IsWalking", false);
-            }
-        }
-        else
-        {
-            _animator.SetBool("IsWalking", false);
+            float angle = Vector3.SignedAngle(cameraForward, moveDirection, Vector3.up);
+            PlaySimpleDirectionalAnimation(angle);
         }
 
         // Apply both movement and jump force
-        Vector3 finalMove = moveDirection * moveSpeed;
+        Vector3 finalMove = moveDirection * currentSpeed;
         finalMove.y = velocity.y; // Preserve jump velocity
         _characterController.Move(finalMove * Time.deltaTime);
 
