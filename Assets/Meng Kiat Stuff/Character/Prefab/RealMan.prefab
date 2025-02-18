@@ -31,6 +31,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 342206559525137037}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1491831535260699781
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5942074085093289176}
+  m_Layer: 0
+  m_Name: Camera Target Crouch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5942074085093289176
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1491831535260699781}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.000000004010871, y: -1.8189892e-12, z: -8.217769e-11, w: 1}
+  m_LocalPosition: {x: 0.497, y: 0.622, z: 0.89}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 342206559525137037}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1602360298972658430
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,7 +246,7 @@ Transform:
   m_GameObject: {fileID: 3685291797391830296}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.18455309, y: 3.2410002, z: -1.4752223}
+  m_LocalPosition: {x: -0.19612405, y: 3.22, z: -1.5119947}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -354,7 +385,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3762826572377654121}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.29471335, y: 0.14772879, z: -0.04617086, w: 0.94296795}
+  m_LocalRotation: {x: 0.29536998, y: 0.13362929, z: -0.04176423, w: 0.9450691}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -433,7 +464,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3765152310848501332}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.44936386, y: 0.1927183, z: -0.09993487, w: 0.8665708}
+  m_LocalRotation: {x: 0.44456917, y: 0.19229129, z: -0.09833787, w: 0.869317}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -853,7 +884,7 @@ GameObject:
   m_Component:
   - component: {fileID: 114826749376075016}
   m_Layer: 0
-  m_Name: Camera Target
+  m_Name: Camera Target Stand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -867,8 +898,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7297006059246418698}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.58, y: 1.371, z: 0.905}
+  m_LocalRotation: {x: -0.000000004010871, y: -1.8189892e-12, z: -8.217769e-11, w: 1}
+  m_LocalPosition: {x: 0.497, y: 1.35, z: 0.89}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -899,8 +930,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7888358020480444603}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.277558, y: 0.14854206, z: -0.043483242, w: 0.9481593}
-  m_LocalPosition: {x: -0.00000017881393, y: 0, z: 0}
+  m_LocalRotation: {x: 0.27817646, y: 0.13436498, z: -0.03933313, w: 0.950272}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -985,10 +1016,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6135442161473634688}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 306, y: 212}
-  m_SizeDelta: {x: 262.9711, y: 52.7695}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -131.49, y: 26.385}
+  m_SizeDelta: {x: 262.97107, y: 52.7695}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8914204588925911461
 CanvasRenderer:
@@ -1018,7 +1049,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Ammo: 10 / 100'
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1161,11 +1192,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce2b38e4593a63e4184aa73cca3bff24,
         type: 3}
       insertIndex: -1
+      addedObject: {fileID: 2916398003581286101}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce2b38e4593a63e4184aa73cca3bff24,
+        type: 3}
+      insertIndex: -1
       addedObject: {fileID: 114826749376075016}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce2b38e4593a63e4184aa73cca3bff24,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2916398003581286101}
+      addedObject: {fileID: 5942074085093289176}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce2b38e4593a63e4184aa73cca3bff24,
         type: 3}
       insertIndex: -1
@@ -1230,6 +1265,7 @@ MonoBehaviour:
   _characterController: {fileID: 6422553613245323938}
   moveSpeed: 2
   sprintSpeed: 4
+  crouchSpeed: 2
   jumpHeight: 0.7
   gravity: -9.81
   groundCheckDistance: 0.3
@@ -1237,6 +1273,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   _playerInput: {fileID: 52950440523894269}
+  _freelookCamera: {fileID: 5862271993271227855}
+  _standLookAt: {fileID: 114826749376075016}
+  _crouchLookAt: {fileID: 5942074085093289176}
 --- !u!143 &6422553613245323938
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1262,7 +1301,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.76, z: 0}
+  m_Center: {x: 0, y: 0.84, z: 0}
 --- !u!114 &52950440523894269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1309,7 +1348,7 @@ MonoBehaviour:
   weaponHolder: {fileID: 8280104596190241485}
   equippedWeapon: {fileID: 0}
   _playerInput: {fileID: 52950440523894269}
-  pickupRange: 4
+  pickupRange: 6
   pickupLayer:
     serializedVersion: 2
     m_Bits: 128
