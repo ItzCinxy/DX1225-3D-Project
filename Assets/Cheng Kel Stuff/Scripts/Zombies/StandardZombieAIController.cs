@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StandardZombieAIController : MonoBehaviour
 {
-    public enum EnemyState { Idle, Walk, Run, Attack }
+    public enum EnemyState { Idle, Walk, Run, Attack, Hit, Dying }
     private EnemyState currentState;
 
     [Header("AI Settings")]
@@ -17,9 +17,21 @@ public class StandardZombieAIController : MonoBehaviour
 
     [SerializeField] private float walkSpeed = 1.5f;
     [SerializeField] private float runSpeed = 4f;
+
     [SerializeField] private float visionAngle = 60f;
     [SerializeField] private float rotationSpeed = 5f;
+
     [SerializeField] private LayerMask obstacleLayer;
+
+    [Header("Health Settings")]
+    private UIEnemyHealthBar healthBar;
+    [SerializeField] private int maxHealth = 100;
+    [SerializeField] private int currentHealth;
+
+    [Header("Attack Settings")]
+    [SerializeField] private int attackDamage = 10;
+    [SerializeField] private float attackCooldown = 1.5f;
+    private bool canAttack = true;
 
     [Header("Loot Drops")]
     [SerializeField] private GameObject ammoPrefab;
@@ -27,23 +39,31 @@ public class StandardZombieAIController : MonoBehaviour
 
     private Transform player;
     private CharacterController playerController;
+    private PlayerHealth playerHealth;
     private Vector3 velocity;
     private Vector3 targetPosition;
     private Animator animator;
 
+    private bool isDying = false;
+
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
+        healthBar = GetComponentInChildren<UIEnemyHealthBar>();
+
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
-        
-        if (player == null)
+
+        if (player != null)
         {
-            GameObject foundPlayer = GameObject.FindGameObjectWithTag("Player");
-            if (foundPlayer != null)
-            {
-                player = foundPlayer.transform;
-                playerController = player.GetComponent<CharacterController>();
-            }
+            playerController = player.GetComponent<CharacterController>();
+            playerHealth = player.GetComponent<PlayerHealth>();
+        }
+
+        currentHealth = maxHealth;
+
+        if (healthBar != null)
+        {
+            healthBar.SetMaxHealth(maxHealth);
         }
 
         ChangeState(EnemyState.Walk);
@@ -51,25 +71,32 @@ public class StandardZombieAIController : MonoBehaviour
 
     void Update()
     {
+        if (isDying) return;
+
         switch (currentState)
         {
             case EnemyState.Idle: HandleIdleState(); break;
             case EnemyState.Walk: HandleWalkState(); break;
             case EnemyState.Run: HandleRunState(); break;
             case EnemyState.Attack: HandleAttackState(); break;
+            case EnemyState.Hit: break;
         }
 
-        transform.position += velocity * Time.deltaTime;
+        if (!isDying)
+        {
+            transform.position += velocity * Time.deltaTime;
+        }
 
-        if (velocity.magnitude > 0.1f)
+        if (velocity.magnitude > 0.1f && !isDying)
         {
             RotateTowardsMovementDirection();
         }
     }
 
+
     void ChangeState(EnemyState newState)
     {
-        if (currentState == newState) return;
+        if (currentState == newState || isDying) return;
         currentState = newState;
 
         switch (currentState)
@@ -95,14 +122,22 @@ public class StandardZombieAIController : MonoBehaviour
                 animator.SetTrigger("Attack");
                 StartCoroutine(PerformAttack());
                 break;
+
+            case EnemyState.Hit:
+                animator.SetTrigger("Hit");
+                StartCoroutine(RecoverFromHit());
+                break;
+
+            case EnemyState.Dying:
+                animator.SetTrigger("Die");
+                StartCoroutine(ConvulseBeforeDespawn());
+                break;
         }
     }
 
     void Seek(Vector3 target, float speed)
     {
         Vector3 desiredVelocity = (target - transform.position).normalized * speed;
-
-        // Avoid walls if detected
         if (Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward, out RaycastHit hit, 1.5f, obstacleLayer))
         {
             Vector3 avoidDirection = Vector3.Cross(Vector3.up, hit.normal).normalized;
@@ -123,8 +158,7 @@ public class StandardZombieAIController : MonoBehaviour
 
         if (angleToPlayer < visionAngle / 2)
         {
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position + Vector3.up * 1.5f, directionToPlayer, out hit, chaseRange))
+            if (Physics.Raycast(transform.position + Vector3.up * 1.5f, directionToPlayer, out RaycastHit hit, chaseRange))
             {
                 if (hit.collider.CompareTag("Player"))
                 {
@@ -132,30 +166,46 @@ public class StandardZombieAIController : MonoBehaviour
                 }
             }
         }
-
         return false;
     }
 
-    //PLEASE REFRENCE THIS TO WHO IT MAY CONCERN
-    public void OnGunshotHeard(Vector3 gunshotPosition)
+    public void TakeDamage(int damage)
     {
-        if (currentState == EnemyState.Run || currentState == EnemyState.Attack) return;
+        if (isDying) return;
 
-        if (Vector3.Distance(transform.position, gunshotPosition) < 15f)
+        currentHealth -= damage;
+        Debug.Log($"{gameObject.name} took {damage} damage! HP: {currentHealth}");
+
+        if (healthBar != null)
         {
-            targetPosition = gunshotPosition;
-            ChangeState(EnemyState.Run);
+            healthBar.SetHealth(currentHealth);
+        }
+
+        if (currentHealth <= 0)
+        {
+            ChangeState(EnemyState.Dying);
+        }
+        else
+        {
+            ChangeState(EnemyState.Hit);
         }
     }
 
     void Die()
     {
-        Debug.Log($"{gameObject.name} has died.");
+        if (isDying) return;
+        isDying = true;
+
         Instantiate(ammoPrefab, transform.position, Quaternion.identity);
         Instantiate(healthPrefab, transform.position, Quaternion.identity);
+
+        if (healthBar != null)
+        {
+            Destroy(healthBar.gameObject);
+        }
+
         Destroy(gameObject);
     }
-
 
     void RotateTowardsMovementDirection()
     {
@@ -175,7 +225,6 @@ public class StandardZombieAIController : MonoBehaviour
     void HandleWalkState()
     {
         Seek(targetPosition, walkSpeed);
-
         if (Vector3.Distance(transform.position, targetPosition) < 1f)
             ChangeState(EnemyState.Idle);
 
@@ -191,14 +240,17 @@ public class StandardZombieAIController : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
             ChangeState(EnemyState.Attack);
 
-        if (!CanSeePlayer()) ChangeState(EnemyState.Walk);
+        if (!CanSeePlayer()) ChangeState(EnemyState.Idle);
     }
 
     void HandleAttackState()
     {
         transform.LookAt(player);
-        if (Vector3.Distance(transform.position, player.position) > attackRange)
-            ChangeState(EnemyState.Run);
+
+        if (Vector3.Distance(transform.position, player.position) <= attackRange)
+            return;
+
+        ChangeState(EnemyState.Run);
     }
 
     void ChooseValidRandomTarget()
@@ -219,20 +271,32 @@ public class StandardZombieAIController : MonoBehaviour
 
     IEnumerator PerformAttack()
     {
-        yield return new WaitForSeconds(1f);
-        Debug.Log($"{gameObject.name} attacks!");
+        if (!canAttack || isDying) yield break;
+        canAttack = false;
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
-        foreach (Collider collider in hitColliders)
+        yield return new WaitForSeconds(1f);
+
+        if (Vector3.Distance(transform.position, player.position) <= attackRange && !isDying)
         {
-            if (collider.TryGetComponent<CharacterController>(out CharacterController playerController))
-            {
-                Debug.Log("Player hit by zombie!");
-            }
+            Debug.Log("Player hit by zombie!");
+            playerHealth?.TakeDamage(attackDamage);
         }
 
-        if (Vector3.Distance(transform.position, player.position) > attackRange)
-            ChangeState(EnemyState.Run);
+        yield return new WaitForSeconds(attackCooldown);
+        canAttack = true;
+    }
+
+
+    IEnumerator RecoverFromHit()
+    {
+        yield return new WaitForSeconds(0.5f);
+        ChangeState(EnemyState.Run);
+    }
+
+    IEnumerator ConvulseBeforeDespawn()
+    {
+        yield return new WaitForSeconds(2f);
+        Die();
     }
 
     IEnumerator TransitionToWalk()
