@@ -94,7 +94,6 @@ public class PlayerHealth : MonoBehaviour
     {
         yield return new WaitForSeconds(0.3f);
         Debug.Log("Player died!");
-        //SoundManager.Instance.playerChannel.PlayOneShot(SoundManager.Instance.playerDie);
 
         Destroy(gameObject);
     }
