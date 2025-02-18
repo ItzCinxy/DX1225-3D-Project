@@ -2589,7 +2589,7 @@ CapsuleCollider:
   m_Radius: 0.4
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0.08}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!54 &4527785291907671667
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2631,7 +2631,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 300
   currentHealth: 0
-  damageAmount: 50
 --- !u!114 &9141434904774239891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2646,8 +2645,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roamRadius: 5
   chaseRange: 10
-  attackRange: 2
-  idleTime: 3
+  attackRange: 1
+  idleTime: 4
   walkTime: 5
   walkSpeed: 1.5
   runSpeed: 4
