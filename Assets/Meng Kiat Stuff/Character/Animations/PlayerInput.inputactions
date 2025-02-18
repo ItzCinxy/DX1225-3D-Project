@@ -54,9 +54,15 @@
                     "name": "Drop",
                     "type": "Button",
                     "id": "04ee0a22-9b35-47b5-9d54-71b11b1f62d7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Sprint",
                     "type": "Button",
-                    "id": "a17c25a8-c352-419c-ba67-d6aadd4bceda",
+                    "id": "e7a2014f-88e7-4227-8b37-327877a6fc84",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -171,7 +177,12 @@
                     "processors": "",
                     "groups": "",
                     "action": "Drop",
-                    "id": "6ae8a653-9165-4cc7-a9e9-3460e6c700af",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e67b017d-bbbd-4ddf-97f1-d947ff25d04c",
                     "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
