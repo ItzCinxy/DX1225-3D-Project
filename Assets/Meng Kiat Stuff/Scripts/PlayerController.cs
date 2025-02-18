@@ -6,13 +6,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float jumpHeight = 2f;
+    [SerializeField] private float gravity = -9.81f;
+    [SerializeField] private float groundCheckDistance = 0.3f; // Distance for ground check
+    [SerializeField] private LayerMask groundLayer; // Ensure this is set in the Inspector
 
     [SerializeField] private PlayerInput _playerInput;
+
     private InputActionAsset _inputActions;
-
     private Vector2 inputDirection;
+    private Vector3 velocity;
+    private bool isGrounded;
+    private float jumpTimer;
+    private bool jumped;
 
-    void Start()
+    private void Start()
     {
         _inputActions = _playerInput.actions;
 
@@ -20,10 +28,23 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Update()
+    private void Update()
     {
+        HandleGroundCheck();
         HandleMovement();
+        HandleJump();
         RotateWithCamera();
+    }
+
+    private void HandleGroundCheck()
+    {
+        // Raycast slightly below the character to detect ground
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+
+        if (isGrounded && velocity.y < 0)
+        {
+            velocity.y = -5f; // Ensure player sticks to the ground
+        }
     }
 
     private void HandleMovement()
@@ -41,19 +62,54 @@ public class PlayerController : MonoBehaviour
         Vector3 moveDirection = (cameraForward * inputDirection.y + cameraRight * inputDirection.x).normalized;
 
         bool isMoving = moveDirection.magnitude > 0;
-        _animator.SetBool("IsWalking", isMoving);
 
-        if (isMoving)
+        // Disable movement animations if airborne
+        if (isGrounded && !jumped)
         {
-            float angle = Vector3.SignedAngle(cameraForward, moveDirection, Vector3.up);
-
-            PlaySimpleDirectionalAnimation(angle);
-
-            _characterController.Move(moveDirection * moveSpeed * Time.deltaTime);
+            _animator.SetBool("IsWalking", isMoving);
+            if (isMoving)
+            {
+                float angle = Vector3.SignedAngle(cameraForward, moveDirection, Vector3.up);
+                PlaySimpleDirectionalAnimation(angle);
+            }
+            else
+            {
+                _animator.SetBool("IsWalking", false);
+            }
         }
         else
         {
             _animator.SetBool("IsWalking", false);
+        }
+
+        // Apply both movement and jump force
+        Vector3 finalMove = moveDirection * moveSpeed;
+        finalMove.y = velocity.y; // Preserve jump velocity
+        _characterController.Move(finalMove * Time.deltaTime);
+
+        // Apply gravity
+        velocity.y += gravity * Time.deltaTime;
+    }
+
+    private void HandleJump()
+    {
+        if (!jumped && _inputActions["Jump"].WasPressedThisFrame() && isGrounded)
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity); // Jump calculation
+            _animator.SetBool("IsJumping", true);
+            jumped = true;
+        }
+
+        // Reset jumping state when back on the ground
+        if (jumped)
+        {
+            jumpTimer += Time.deltaTime;
+            if (jumpTimer >= 0.5f)
+            {
+                jumped = false;
+                _animator.SetBool("IsJumping", false);
+                jumpTimer = 0f;
+            }
         }
     }
 
