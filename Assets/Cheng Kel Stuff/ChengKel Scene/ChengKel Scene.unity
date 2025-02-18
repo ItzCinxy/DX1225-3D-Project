@@ -882,12 +882,12 @@ PrefabInstance:
     - target: {fileID: 1085352861447147325, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.13362972
+      value: 0.13362975
       objectReference: {fileID: 0}
     - target: {fileID: 1085352861447147325, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.041764367
+      value: -0.04176437
       objectReference: {fileID: 0}
     - target: {fileID: 1149565387616923703, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
@@ -1012,17 +1012,17 @@ PrefabInstance:
     - target: {fileID: 8920303612581458692, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.4445691
+      value: 0.44456908
       objectReference: {fileID: 0}
     - target: {fileID: 8920303612581458692, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.19229172
+      value: 0.1922917
       objectReference: {fileID: 0}
     - target: {fileID: 8920303612581458692, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.09833809
+      value: -0.09833807
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1517,10 +1517,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Charger ZombieVar1
       objectReference: {fileID: 0}
+    - target: {fileID: 771147018229639532, guid: b0c2bfd626f0b8b45b5fe1998e1f56a1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1270470744548704194, guid: b0c2bfd626f0b8b45b5fe1998e1f56a1,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2946563311169904110, guid: b0c2bfd626f0b8b45b5fe1998e1f56a1,
         type: 3}
@@ -1695,10 +1700,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Charger ZombieVar2
       objectReference: {fileID: 0}
+    - target: {fileID: 771147018229639532, guid: c728d78b699db7741a80d0858dc1e76b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1270470744548704194, guid: c728d78b699db7741a80d0858dc1e76b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2946563311169904110, guid: c728d78b699db7741a80d0858dc1e76b,
         type: 3}
