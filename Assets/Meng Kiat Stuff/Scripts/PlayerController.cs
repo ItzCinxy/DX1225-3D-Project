@@ -140,29 +140,22 @@ public class PlayerController : MonoBehaviour
         Vector3 cameraRight = Camera.main.transform.right;
         cameraForward.y = 0;
         cameraRight.y = 0;
-
         cameraForward.Normalize();
         cameraRight.Normalize();
 
-        Vector3 moveDirection = (cameraForward * inputDirection.y + cameraRight * inputDirection.x).normalized;
+        // ✅ Movement without rotation issues
+        Vector3 moveDirection = (cameraForward * inputDirection.y) + (cameraRight * inputDirection.x);
+        moveDirection.Normalize();
 
         isMoving = moveDirection.magnitude > 0;
         bool isMovingForward = inputDirection.y > 0;
-
         isSprinting = _inputActions["Sprint"].IsPressed() && isMovingForward && isGrounded && !isCrouching;
-
 
         float currentSpeed = isCrouching ? crouchSpeed : (isSprinting ? sprintSpeed : moveSpeed);
 
-        _animator.SetBool("IsWalking", isMoving && !isCrouching); // Walking only when not crouching
+        _animator.SetBool("IsWalking", isMoving && !isCrouching);
         _animator.SetBool("IsSprinting", isSprinting);
         _animator.SetBool("IsCrouching", isCrouching);
-
-        if (isMoving)
-        {
-            float angle = Vector3.SignedAngle(cameraForward, moveDirection, Vector3.up);
-            PlayDirectionalAnimation(angle);
-        }
 
         Vector3 finalMove = moveDirection * currentSpeed;
         finalMove.y = velocity.y;
