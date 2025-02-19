@@ -25,7 +25,7 @@ public class WeaponHolder : MonoBehaviour
         }
         if (_playerInput.actions["Interact"].WasPressedThisFrame())
         {
-            TryPickupWeapon();
+            Interact();
         }
     }
 
@@ -41,12 +41,19 @@ public class WeaponHolder : MonoBehaviour
         equippedWeapon.Reload();
     }
 
-    private void TryPickupWeapon()
+    private void Interact()
     {
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, pickupRange, pickupLayer))
         {
             Debug.Log("Raycast hit: " + hit.collider.gameObject.name);
+
+            if (hit.collider.TryGetComponent(out LuckyBox luckyBox))
+            {
+                Debug.Log("Interacting with Lucky Box");
+                luckyBox.InteractWithBox(); // ✅ Call Lucky Box interaction
+                return; // ✅ Exit function to prevent picking up a weapon at the same time
+            }
 
             if (hit.collider.TryGetComponent(out Weapon weapon))
             {
@@ -60,7 +67,7 @@ public class WeaponHolder : MonoBehaviour
         }
         else
         {
-            Debug.Log("No weapon detected.");
+            Debug.Log("Nothing to interact with detected.");
         }
     }
 
@@ -70,17 +77,30 @@ public class WeaponHolder : MonoBehaviour
             DropWeapon();
 
         equippedWeapon = newWeapon;
+
+        FloatingWeapon floatingEffect = equippedWeapon.GetComponent<FloatingWeapon>();
+        if (floatingEffect != null)
+            Destroy(floatingEffect);
+
+        LuckyBox luckyBox = FindObjectOfType<LuckyBox>(); // ✅ Get the Lucky Box
+        if (luckyBox != null)
+        {
+            luckyBox.WeaponPickedUp(equippedWeapon); // ✅ Tell it to stop tracking the weapon
+        }
+
         equippedWeapon.transform.SetParent(weaponHolder);
         equippedWeapon.transform.localPosition = Vector3.zero;
         equippedWeapon.transform.localRotation = Quaternion.identity;
 
         Rigidbody rb = equippedWeapon.GetComponent<Rigidbody>();
         if (rb) rb.isKinematic = true;
+        else equippedWeapon.gameObject.AddComponent<Rigidbody>();
 
-        BoxCollider bc = equippedWeapon.GetComponent<BoxCollider>();
+            BoxCollider bc = equippedWeapon.GetComponent<BoxCollider>();
         if (bc) bc.enabled = false;
+        else equippedWeapon.gameObject.AddComponent<BoxCollider>();
 
-        Debug.Log("Equipped weapon: " + equippedWeapon.name);
+            Debug.Log("Equipped weapon: " + equippedWeapon.name);
 
         if (ammoDisplay != null)
         {
