@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CinemachineFreeLook _freelookCamera;
     [SerializeField] private Transform _standLookAt;
     [SerializeField] private Transform _crouchLookAt;
+    [SerializeField] private Transform _raycastStart;
 
     [SerializeField] private Canvas _skillTreeCanvas;
     private bool isSkillTreeOpen;
@@ -27,7 +28,7 @@ public class PlayerController : MonoBehaviour
     private InputActionAsset _inputActions;
     private Vector2 inputDirection;
     private Vector3 velocity;
-    private bool isGrounded;
+    [SerializeField] private bool isGrounded;
     private bool isSprinting;
     private bool isCrouching;
     private bool isMoving;
@@ -68,7 +69,8 @@ public class PlayerController : MonoBehaviour
             _animator.SetBool("IsWalking", false);
             _animator.SetBool("IsSprinting", false);
             _animator.SetBool("IsCrouching", false);
-            ResetMovementAnimations(); // Reset directional movement
+            ResetMovementAnimations();
+            return;
         }
         else
         {
@@ -76,11 +78,7 @@ public class PlayerController : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             _skillTreeCanvas.gameObject.SetActive(false);
             _freelookCamera.gameObject.SetActive(true);
-
-            _animator.speed = 1;
         }
-
-        if (isSkillTreeOpen) return;
 
         HandleGroundCheck();
         HandleCrouch();
@@ -89,7 +87,6 @@ public class PlayerController : MonoBehaviour
         RotateWithCamera();
         CinemachineLookAt();
 
-        // **Reset animations when NOT moving**
         if (!isMoving)
         {
             ResetMovementAnimations();
@@ -98,16 +95,16 @@ public class PlayerController : MonoBehaviour
 
     private void CinemachineLookAt()
     {
-        if (_freelookCamera == null) return; // Ensure camera exists
+        if (_freelookCamera == null) return;
 
         if (!isCrouching)
         {
-            _freelookCamera.LookAt = _standLookAt; // Look at standing target
+            _freelookCamera.LookAt = _standLookAt; 
             _freelookCamera.Follow = _standLookAt;
         }
         else
         {
-            _freelookCamera.LookAt = _crouchLookAt; // Look at crouching target
+            _freelookCamera.LookAt = _crouchLookAt;
             _freelookCamera.Follow = _crouchLookAt;
         }
     }
@@ -115,21 +112,21 @@ public class PlayerController : MonoBehaviour
 
     private void HandleGroundCheck()
     {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+        isGrounded = Physics.Raycast(_raycastStart.position, Vector3.down, groundCheckDistance, groundLayer);
 
         if (isGrounded && velocity.y < 0)
         {
-            velocity.y = -5f; // Stick to ground
+            velocity.y = -5f;
         }
     }
 
     private void HandleCrouch()
     {
-        isCrouching = _inputActions["Crouch"].IsPressed(); // Hold to crouch
+        isCrouching = _inputActions["Crouch"].IsPressed();
 
         if (isCrouching)
         {
-            isSprinting = false; // Disable sprinting if crouching
+            isSprinting = false;
         }
 
         _animator.SetBool("IsCrouching", isCrouching);
@@ -152,13 +149,11 @@ public class PlayerController : MonoBehaviour
         isMoving = moveDirection.magnitude > 0;
         bool isMovingForward = inputDirection.y > 0;
 
-        // Sprinting Logic (Disabled if crouching)
         isSprinting = _inputActions["Sprint"].IsPressed() && isMovingForward && isGrounded && !isCrouching;
 
-        // Set movement speed based on state
+
         float currentSpeed = isCrouching ? crouchSpeed : (isSprinting ? sprintSpeed : moveSpeed);
 
-        // Update animator parameters
         _animator.SetBool("IsWalking", isMoving && !isCrouching); // Walking only when not crouching
         _animator.SetBool("IsSprinting", isSprinting);
         _animator.SetBool("IsCrouching", isCrouching);
@@ -169,12 +164,10 @@ public class PlayerController : MonoBehaviour
             PlayDirectionalAnimation(angle);
         }
 
-        // Apply movement
         Vector3 finalMove = moveDirection * currentSpeed;
         finalMove.y = velocity.y;
         _characterController.Move(finalMove * Time.deltaTime);
 
-        // Apply gravity
         velocity.y += gravity * Time.deltaTime;
     }
 
@@ -200,8 +193,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private void PlayDirectionalAnimation(float angle)
-    {
-        // **Reset all movement animations before setting new one**
+    { 
         ResetMovementAnimations();
 
         if (isCrouching)
