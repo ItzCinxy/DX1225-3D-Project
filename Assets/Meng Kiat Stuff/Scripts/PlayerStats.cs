@@ -51,7 +51,8 @@ public class PlayerStats : MonoBehaviour
         if (Input.GetKey(KeyCode.J))
         {
             UseStamina(0.1f);
-        }    }
+        }
+    }
 
     public void TakeDamage(float damage)
     {
