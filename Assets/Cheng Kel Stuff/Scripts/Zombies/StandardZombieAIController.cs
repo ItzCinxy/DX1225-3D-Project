@@ -45,6 +45,7 @@ public class StandardZombieAIController : MonoBehaviour
     private Animator animator;
 
     private bool isDying = false;
+    private bool isConvulsing = false;
 
     void Start()
     {
@@ -71,7 +72,7 @@ public class StandardZombieAIController : MonoBehaviour
 
     void Update()
     {
-        if (isDying) return;
+        if (isDying || isConvulsing) return;
 
         switch (currentState)
         {
@@ -82,7 +83,7 @@ public class StandardZombieAIController : MonoBehaviour
             case EnemyState.Hit: break;
         }
 
-        if (!isDying)
+        if (!isDying || !isConvulsing)
         {
             transform.position += velocity * Time.deltaTime;
         }
@@ -131,11 +132,14 @@ public class StandardZombieAIController : MonoBehaviour
                 break;
 
             case EnemyState.Convulsing:
+                isConvulsing = true;
+                velocity = Vector3.zero;
                 animator.SetBool("Convulsing", true);
                 StartCoroutine(ConvulseBeforeDespawn());
                 break;
 
             case EnemyState.Dying:
+                isDying = true;
                 animator.SetBool("Die", true);
                 StartCoroutine(DieAfterAnimation());
                 break;
@@ -189,7 +193,7 @@ public class StandardZombieAIController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (isDying) return;
+        if (isDying || isConvulsing) return;
 
         currentHealth -= damage;
         Debug.Log($"{gameObject.name} took {damage} damage! HP: {currentHealth}");
@@ -211,17 +215,20 @@ public class StandardZombieAIController : MonoBehaviour
 
     IEnumerator DieAfterAnimation()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2.5f);
         Die();
     }
 
     void Die()
     {
-        if (isDying) return;
-        isDying = true;
-
-        Instantiate(ammoPrefab, transform.position, Quaternion.identity);
-        Instantiate(healthPrefab, transform.position, Quaternion.identity);
+        if (ammoPrefab != null)
+        {
+            Instantiate(ammoPrefab, transform.position, Quaternion.identity);
+        }
+        if (healthPrefab != null)
+        {
+            Instantiate(healthPrefab, transform.position, Quaternion.identity);
+        }
 
         if (healthBar != null)
         {
