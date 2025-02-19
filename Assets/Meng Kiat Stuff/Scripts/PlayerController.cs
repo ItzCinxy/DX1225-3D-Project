@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,6 +21,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _standLookAt;
     [SerializeField] private Transform _crouchLookAt;
 
+    [SerializeField] private Canvas _skillTreeCanvas;
+    private bool isSkillTreeOpen;
+
     private InputActionAsset _inputActions;
     private Vector2 inputDirection;
     private Vector3 velocity;
@@ -34,12 +38,37 @@ public class PlayerController : MonoBehaviour
     {
         _inputActions = _playerInput.actions;
 
-        //Cursor.visible = false;
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        if (_skillTreeCanvas != null)
+        {
+            _skillTreeCanvas.gameObject.SetActive(false);
+        }
     }
 
     private void Update()
     {
+        if (_inputActions["ToggleSkillTree"].WasPressedThisFrame())
+        {
+            isSkillTreeOpen = !isSkillTreeOpen;
+        }
+
+        if (isSkillTreeOpen)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            _skillTreeCanvas.gameObject.SetActive(true);
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            _skillTreeCanvas.gameObject.SetActive(false);
+        }
+
+        if (isSkillTreeOpen) return;
+
         HandleGroundCheck();
         HandleCrouch();
         HandleMovement();
