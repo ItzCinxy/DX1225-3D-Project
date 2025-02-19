@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cinemachine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -28,6 +29,11 @@ public class PlayerController : MonoBehaviour
     private float jumpTimer;
     private bool jumped;
 
+    [SerializeField] private CinemachineVirtualCamera _thirdPersonCamera;
+    [SerializeField] private CinemachineVirtualCamera _firstPersonCamera;
+    [SerializeField] private SkinnedMeshRenderer _skin;
+    private bool isFirstPerson;
+
     private void Start()
     {
         _inputActions = _playerInput.actions;
@@ -41,6 +47,8 @@ public class PlayerController : MonoBehaviour
         {
             _skillTreeCanvas.gameObject.SetActive(false);
         }
+
+        isFirstPerson = false;
     }
 
     private void Update()
@@ -48,6 +56,11 @@ public class PlayerController : MonoBehaviour
         if (_inputActions["ToggleSkillTree"].WasPressedThisFrame())
         {
             isSkillTreeOpen = !isSkillTreeOpen;
+        }
+
+        if (_inputActions["ToggleCamera"].WasPressedThisFrame())
+        {
+            isFirstPerson = !isFirstPerson;
         }
 
         if (isSkillTreeOpen)
@@ -75,10 +88,27 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
         HandleJump();
         RotateWithCamera();
+        HandleCameraSwap();
 
         if (!isMoving)
         {
             ResetMovementAnimations();
+        }
+    }
+
+    private void HandleCameraSwap()
+    {
+        if (isFirstPerson)
+        {
+            _firstPersonCamera.Priority = 20;
+            _thirdPersonCamera.Priority = 10;
+            _skin.gameObject.SetActive(false);
+        }
+        else
+        {
+            _firstPersonCamera.Priority = 10;
+            _thirdPersonCamera.Priority = 20;
+            _skin.gameObject.SetActive(true);
         }
     }
 

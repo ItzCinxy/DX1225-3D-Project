@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class FollowTarget : MonoBehaviour
 {
-    [SerializeField] private Transform followTarget;
+    [SerializeField] private Transform followTargetThirdPerson;
+    [SerializeField] private Transform followTargetFirstPerson;
 
     [SerializeField] private float rotationalSpeed = 10f;
     [SerializeField] private float BottomClamp = -40f;
@@ -32,7 +33,8 @@ public class FollowTarget : MonoBehaviour
 
     private void ApplyRotations(float pitch, float yaw)
     {
-        followTarget.rotation = Quaternion.Euler(pitch, yaw, followTarget.eulerAngles.z);
+        followTargetThirdPerson.rotation = Quaternion.Euler(pitch, yaw, followTargetThirdPerson.eulerAngles.z);
+        followTargetFirstPerson.rotation = Quaternion.Euler(pitch, yaw, followTargetFirstPerson.eulerAngles.z);
     }
 
     private float UpdateRotation(float currentRotation, float input, float min, float max, bool isXAxis)
