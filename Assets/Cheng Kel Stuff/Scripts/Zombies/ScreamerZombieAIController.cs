@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StandardZombieAIController : MonoBehaviour
+public class ScreamerZombieAIController : MonoBehaviour
 {
     public enum EnemyState { Idle, Walk, Run, Attack, Hit, Convulsing, Dying }
     private EnemyState currentState;
