@@ -810,6 +810,21 @@ PrefabInstance:
       propertyPath: ammoDisplay
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4691890863369757174, guid: c5dfad2375a0ea140bdfb5ba261ec6c6,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.102642894
+      objectReference: {fileID: 0}
+    - target: {fileID: 4691890863369757174, guid: c5dfad2375a0ea140bdfb5ba261ec6c6,
+        type: 3}
+      propertyPath: m_Center.x
+      value: 0.00054192543
+      objectReference: {fileID: 0}
+    - target: {fileID: 4691890863369757174, guid: c5dfad2375a0ea140bdfb5ba261ec6c6,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.062597096
+      objectReference: {fileID: 0}
     - target: {fileID: 4907961253817589924, guid: c5dfad2375a0ea140bdfb5ba261ec6c6,
         type: 3}
       propertyPath: m_Name
