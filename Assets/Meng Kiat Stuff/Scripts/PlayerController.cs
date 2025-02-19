@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CinemachineFreeLook _freelookCamera;
     [SerializeField] private Transform _standLookAt;
     [SerializeField] private Transform _crouchLookAt;
+    [SerializeField] private Transform _raycastStart;
 
     [SerializeField] private Canvas _skillTreeCanvas;
     private bool isSkillTreeOpen;
@@ -111,7 +112,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleGroundCheck()
     {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+        isGrounded = Physics.Raycast(_raycastStart.position, Vector3.down, groundCheckDistance, groundLayer);
 
         if (isGrounded && velocity.y < 0)
         {
