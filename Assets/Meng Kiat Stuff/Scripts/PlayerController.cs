@@ -1,6 +1,4 @@
-﻿using Cinemachine;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -9,26 +7,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private float moveSpeed = 4f;
     [SerializeField] private float sprintSpeed;
-    [SerializeField] private float crouchSpeed; // Slower speed when crouching
+    [SerializeField] private float crouchSpeed;
     [SerializeField] private float jumpHeight = 2f;
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float groundCheckDistance = 0.3f;
     [SerializeField] private LayerMask groundLayer;
 
     [SerializeField] private PlayerInput _playerInput;
-
-    [SerializeField] private CinemachineFreeLook _freelookCamera;
-    [SerializeField] private Transform _standLookAt;
-    [SerializeField] private Transform _crouchLookAt;
+    [SerializeField] private Canvas _skillTreeCanvas;
     [SerializeField] private Transform _raycastStart;
 
-    [SerializeField] private Canvas _skillTreeCanvas;
     private bool isSkillTreeOpen;
-
     private InputActionAsset _inputActions;
     private Vector2 inputDirection;
     private Vector3 velocity;
-    [SerializeField] private bool isGrounded;
+    private bool isGrounded;
     private bool isSprinting;
     private bool isCrouching;
     private bool isMoving;
@@ -38,7 +31,6 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         _inputActions = _playerInput.actions;
-
         sprintSpeed = moveSpeed * 1.5f;
         crouchSpeed = moveSpeed * 0.5f;
 
@@ -63,7 +55,6 @@ public class PlayerController : MonoBehaviour
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             _skillTreeCanvas.gameObject.SetActive(true);
-            _freelookCamera.gameObject.SetActive(false);
 
             velocity = Vector3.zero;
             _animator.SetBool("IsWalking", false);
@@ -77,7 +68,6 @@ public class PlayerController : MonoBehaviour
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             _skillTreeCanvas.gameObject.SetActive(false);
-            _freelookCamera.gameObject.SetActive(true);
         }
 
         HandleGroundCheck();
@@ -85,30 +75,12 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
         HandleJump();
         RotateWithCamera();
-        CinemachineLookAt();
 
         if (!isMoving)
         {
             ResetMovementAnimations();
         }
     }
-
-    private void CinemachineLookAt()
-    {
-        if (_freelookCamera == null) return;
-
-        if (!isCrouching)
-        {
-            _freelookCamera.LookAt = _standLookAt; 
-            _freelookCamera.Follow = _standLookAt;
-        }
-        else
-        {
-            _freelookCamera.LookAt = _crouchLookAt;
-            _freelookCamera.Follow = _crouchLookAt;
-        }
-    }
-
 
     private void HandleGroundCheck()
     {
@@ -136,39 +108,71 @@ public class PlayerController : MonoBehaviour
     {
         inputDirection = _inputActions["Move"].ReadValue<Vector2>();
 
+        // ✅ Get camera forward and right directions
         Vector3 cameraForward = Camera.main.transform.forward;
         Vector3 cameraRight = Camera.main.transform.right;
         cameraForward.y = 0;
         cameraRight.y = 0;
-
         cameraForward.Normalize();
         cameraRight.Normalize();
 
-        Vector3 moveDirection = (cameraForward * inputDirection.y + cameraRight * inputDirection.x).normalized;
+        // ✅ Movement is relative to the camera's rotation
+        Vector3 moveDirection = (cameraForward * inputDirection.y) + (cameraRight * inputDirection.x);
+        moveDirection.Normalize();
 
         isMoving = moveDirection.magnitude > 0;
         bool isMovingForward = inputDirection.y > 0;
+        bool isMovingBackward = inputDirection.y < 0;
+        bool isMovingLeft = inputDirection.x < 0;
+        bool isMovingRight = inputDirection.x > 0;
 
         isSprinting = _inputActions["Sprint"].IsPressed() && isMovingForward && isGrounded && !isCrouching;
 
-
         float currentSpeed = isCrouching ? crouchSpeed : (isSprinting ? sprintSpeed : moveSpeed);
 
-        _animator.SetBool("IsWalking", isMoving && !isCrouching); // Walking only when not crouching
+        // ✅ NO ROTATION ON MOVEMENT (Camera controls rotation)
+        // Player only moves, it does NOT rotate itself
+
+        // ✅ Set Movement Animations
+        ResetMovementAnimations();
+
+        if (isCrouching)
+        {
+            if (isMovingForward) _animator.SetBool("CrouchForward", true);
+            if (isMovingBackward) _animator.SetBool("CrouchBackward", true);
+            if (isMovingLeft) _animator.SetBool("CrouchLeft", true);
+            if (isMovingRight) _animator.SetBool("CrouchRight", true);
+        }
+        else
+        {
+            if (isMovingForward) _animator.SetBool("WalkForward", true);
+            if (isMovingBackward) _animator.SetBool("WalkBackward", true);
+            if (isMovingLeft) _animator.SetBool("WalkLeft", true);
+            if (isMovingRight) _animator.SetBool("WalkRight", true);
+        }
+
+        _animator.SetBool("IsWalking", isMoving && !isCrouching);
         _animator.SetBool("IsSprinting", isSprinting);
         _animator.SetBool("IsCrouching", isCrouching);
-
-        if (isMoving)
-        {
-            float angle = Vector3.SignedAngle(cameraForward, moveDirection, Vector3.up);
-            PlayDirectionalAnimation(angle);
-        }
 
         Vector3 finalMove = moveDirection * currentSpeed;
         finalMove.y = velocity.y;
         _characterController.Move(finalMove * Time.deltaTime);
 
         velocity.y += gravity * Time.deltaTime;
+    }
+
+    private void RotateWithCamera()
+    {
+        Vector3 cameraForward = Camera.main.transform.forward;
+        cameraForward.y = 0;
+        cameraForward.Normalize();
+
+        if (cameraForward.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
+            transform.rotation = targetRotation; // ✅ Instantly align with camera
+        }
     }
 
     private void HandleJump()
@@ -189,46 +193,6 @@ public class PlayerController : MonoBehaviour
                 _animator.SetBool("IsJumping", false);
                 jumpTimer = 0f;
             }
-        }
-    }
-
-    private void PlayDirectionalAnimation(float angle)
-    { 
-        ResetMovementAnimations();
-
-        if (isCrouching)
-        {
-            if (angle >= -45f && angle <= 45f)
-                _animator.SetBool("CrouchForward", true);
-            else if (angle > 45f && angle <= 135f)
-                _animator.SetBool("CrouchRight", true);
-            else if (angle < -45f && angle >= -135f)
-                _animator.SetBool("CrouchLeft", true);
-            else
-                _animator.SetBool("CrouchBackward", true);
-        }
-        else
-        {
-            if (angle >= -45f && angle <= 45f)
-                _animator.SetBool("WalkForward", true);
-            else if (angle > 45f && angle <= 135f)
-                _animator.SetBool("WalkRight", true);
-            else if (angle < -45f && angle >= -135f)
-                _animator.SetBool("WalkLeft", true);
-            else
-                _animator.SetBool("WalkBackward", true);
-        }
-    }
-
-    private void RotateWithCamera()
-    {
-        Vector3 cameraForward = Camera.main.transform.forward;
-        cameraForward.y = 0;
-
-        if (cameraForward.sqrMagnitude > 0.01f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 500f);
         }
     }
 
