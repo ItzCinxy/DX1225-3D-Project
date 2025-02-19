@@ -39,6 +39,30 @@ public class WeaponRaycast : MonoBehaviour
                 target.Hit();
             }
 
+            StandardZombieAIController stdAI = hit.collider.GetComponentInChildren<StandardZombieAIController>();
+            if (stdAI != null)
+            {
+                stdAI.TakeDamage(10);
+            }
+
+            //TankZombieAIController tankAI = hit.collider.GetComponent<TankZombieAIController>();
+            //if (tankAI != null)
+            //{
+            //    tankAI.TakeDamage(10);
+            //}
+
+            //BomberZombieAIController bmbAI = hit.collider.GetComponent<BomberZombieAIController>();
+            //if (bmbAI != null)
+            //{
+            //    bmbAI.TakeDamage(10);
+            //}
+
+            //ScreamerZombieAIController scrmAI = hit.collider.GetComponent<ScreamerZombieAIController>();
+            //if (scrmAI != null)
+            //{
+            //    scrmAI.TakeDamage(10);
+            //}
+
             if (hitEffectPrefab != null)
             {
                 Instantiate(hitEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
