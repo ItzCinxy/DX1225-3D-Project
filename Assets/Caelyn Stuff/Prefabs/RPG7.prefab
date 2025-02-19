@@ -144,7 +144,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6981431416007914455}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.954, y: 1.214, z: 1.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -234,8 +234,11 @@ MonoBehaviour:
   projectilePrefab: {fileID: 3143612010013662528, guid: ec362e3c3edb68d48bf0f957b3e6dbce,
     type: 3}
   firePoint: {fileID: 3539187775488811086}
-  launchForce: 20
+  launchForce: 81.1
   upwardForce: 5
+  hitLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!65 &8138722900481861489
 BoxCollider:
   m_ObjectHideFlags: 0

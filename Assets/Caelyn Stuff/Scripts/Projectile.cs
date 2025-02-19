@@ -3,7 +3,6 @@
 public class Projectile : MonoBehaviour
 {
     [Header("Grenade Settings")]
-    [SerializeField] private float speed = 20f;
     [SerializeField] private float explosionDelay = 3f;
     [SerializeField] private float explosionRadius = 5f;
     [SerializeField] private float explosionForce = 700f;
