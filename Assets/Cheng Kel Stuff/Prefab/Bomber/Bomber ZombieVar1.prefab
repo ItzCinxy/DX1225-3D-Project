@@ -1921,7 +1921,6 @@ GameObject:
   - component: {fileID: 2836035829081893303}
   - component: {fileID: 7259453943833641976}
   - component: {fileID: 3089198454598251549}
-  - component: {fileID: 337615220465638549}
   m_Layer: 0
   m_Name: Bomber ZombieVar1
   m_TagString: Untagged
@@ -1995,36 +1994,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &337615220465638549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5825079909099566492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e98ffccd51b0ec4d8840a9c9ff44120, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roamRadius: 5
-  chaseRange: 10
-  attackRange: 1
-  idleTime: 2
-  walkTime: 3
-  walkSpeed: 1.8
-  runSpeed: 5
-  visionAngle: 60
-  rotationSpeed: 6
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  maxHealth: 80
-  currentHealth: 0
-  attackDamage: 50
-  attackCooldown: 3
-  ammoPrefab: {fileID: 0}
-  healthPrefab: {fileID: 0}
 --- !u!1 &5965322281953759808
 GameObject:
   m_ObjectHideFlags: 0

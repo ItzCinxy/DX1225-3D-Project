@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StandardZombieAIController : MonoBehaviour
 {
-    public enum EnemyState { Idle, Walk, Run, Attack, Hit, Dying }
+    public enum EnemyState { Idle, Walk, Run, Attack, Hit, Convulsing, Dying }
     private EnemyState currentState;
 
     [Header("AI Settings")]
@@ -39,7 +39,7 @@ public class StandardZombieAIController : MonoBehaviour
 
     private Transform player;
     private CharacterController playerController;
-    private PlayerHealth playerHealth;
+    private PlayerStats playerHealth;
     private Vector3 velocity;
     private Vector3 targetPosition;
     private Animator animator;
@@ -56,7 +56,7 @@ public class StandardZombieAIController : MonoBehaviour
         if (player != null)
         {
             playerController = player.GetComponent<CharacterController>();
-            playerHealth = player.GetComponent<PlayerHealth>();
+            playerHealth = player.GetComponent<PlayerStats>();
         }
 
         currentHealth = maxHealth;
@@ -92,47 +92,65 @@ public class StandardZombieAIController : MonoBehaviour
             RotateTowardsMovementDirection();
         }
     }
-
-
     void ChangeState(EnemyState newState)
     {
         if (currentState == newState || isDying) return;
         currentState = newState;
 
+        ResetAllAnimationBools(); // Ensure only one bool is active at a time
+
+        Debug.Log($"Zombie changed state to: {currentState}");
+
         switch (currentState)
         {
             case EnemyState.Idle:
                 velocity = Vector3.zero;
-                animator.SetTrigger("Idle");
+                animator.SetBool("Idle", true);
                 StartCoroutine(TransitionToWalk());
                 break;
 
             case EnemyState.Walk:
-                animator.SetTrigger("Walk");
+                animator.SetBool("Walk", true);
                 ChooseValidRandomTarget();
                 StartCoroutine(StopWalkingAfterTime());
                 break;
 
             case EnemyState.Run:
-                animator.SetTrigger("Run");
+                animator.SetBool("Run", true);
                 break;
 
             case EnemyState.Attack:
                 velocity = Vector3.zero;
-                animator.SetTrigger("Attack");
+                animator.SetBool("Attack", true);
                 StartCoroutine(PerformAttack());
                 break;
 
             case EnemyState.Hit:
-                animator.SetTrigger("Hit");
+                animator.SetBool("Hit", true);
                 StartCoroutine(RecoverFromHit());
                 break;
 
-            case EnemyState.Dying:
-                animator.SetTrigger("Die");
+            case EnemyState.Convulsing:
+                animator.SetBool("Convulsing", true);
                 StartCoroutine(ConvulseBeforeDespawn());
                 break;
+
+            case EnemyState.Dying:
+                animator.SetBool("Die", true);
+                StartCoroutine(DieAfterAnimation());
+                break;
         }
+    }
+
+    // Helper method to reset all animation bools before setting a new one
+    void ResetAllAnimationBools()
+    {
+        animator.SetBool("Idle", false);
+        animator.SetBool("Walk", false);
+        animator.SetBool("Run", false);
+        animator.SetBool("Attack", false);
+        animator.SetBool("Hit", false);
+        animator.SetBool("Die", false);
     }
 
     void Seek(Vector3 target, float speed)
@@ -183,12 +201,18 @@ public class StandardZombieAIController : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            ChangeState(EnemyState.Dying);
+            ChangeState(EnemyState.Convulsing);
         }
         else
         {
             ChangeState(EnemyState.Hit);
         }
+    }
+
+    IEnumerator DieAfterAnimation()
+    {
+        yield return new WaitForSeconds(2f);
+        Die();
     }
 
     void Die()
@@ -269,23 +293,50 @@ public class StandardZombieAIController : MonoBehaviour
         targetPosition = transform.position;
     }
 
+    public void AttackHitEvent()
+    {
+        if (player == null || isDying) return;
+
+        // Ensure the player is still in attack range before applying damage
+        if (Vector3.Distance(transform.position, player.position) <= attackRange)
+        {
+            Debug.Log("Zombie attack landed!");
+            playerHealth?.TakeDamage((float)attackDamage); // Apply damage
+        }
+    }
+
     IEnumerator PerformAttack()
     {
         if (!canAttack || isDying) yield break;
         canAttack = false;
 
-        yield return new WaitForSeconds(1f);
+        animator.SetBool("Attack", true);
 
-        if (Vector3.Distance(transform.position, player.position) <= attackRange && !isDying)
-        {
-            Debug.Log("Player hit by zombie!");
-            playerHealth?.TakeDamage(attackDamage);
-        }
+        yield return new WaitForSeconds(0.5f);
+
+        AttackHitEvent();
 
         yield return new WaitForSeconds(attackCooldown);
-        canAttack = true;
-    }
 
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        if (distanceToPlayer <= attackRange && !isDying)
+        {
+            StartCoroutine(PerformAttack());
+        }
+        else if (distanceToPlayer <= chaseRange)
+        {
+            animator.SetBool("Attack", false);
+            canAttack = true;
+            ChangeState(EnemyState.Run);
+        }
+        else
+        {
+            animator.SetBool("Attack", false);
+            canAttack = true;
+            ChangeState(EnemyState.Idle);
+        }
+    }
 
     IEnumerator RecoverFromHit()
     {
@@ -296,7 +347,7 @@ public class StandardZombieAIController : MonoBehaviour
     IEnumerator ConvulseBeforeDespawn()
     {
         yield return new WaitForSeconds(2f);
-        Die();
+        ChangeState(EnemyState.Dying);
     }
 
     IEnumerator TransitionToWalk()

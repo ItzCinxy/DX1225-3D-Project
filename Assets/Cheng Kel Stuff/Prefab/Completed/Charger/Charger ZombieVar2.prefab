@@ -929,6 +929,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2824443353157289838}
   - component: {fileID: 5222311139509935471}
+  - component: {fileID: 651043864798706301}
   m_Layer: 0
   m_Name: Zombiegirl W Kurniawan
   m_TagString: Untagged
@@ -966,7 +967,7 @@ Animator:
   m_GameObject: {fileID: 2725105248947559069}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 2add1336e95e138449b1134735a26e36, type: 3}
-  m_Controller: {fileID: 9100000, guid: cac72e00dc64e25409bd39fe767c138c, type: 2}
+  m_Controller: {fileID: 9100000, guid: 614b4f2a1e06d934ab79e7cef00c58f0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -977,6 +978,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &651043864798706301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2725105248947559069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89f061d5eb365a44ab6bbcab3f10b6d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2753860069278494925
 GameObject:
   m_ObjectHideFlags: 0

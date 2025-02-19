@@ -1559,7 +1559,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1851534937255453442}
-  - component: {fileID: 6427353727425702462}
   - component: {fileID: 6262523088042937460}
   - component: {fileID: 3559484273717044254}
   m_Layer: 0
@@ -1585,36 +1584,6 @@ Transform:
   - {fileID: 3386489245938279763}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6427353727425702462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5173902311021511660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e98ffccd51b0ec4d8840a9c9ff44120, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roamRadius: 5
-  chaseRange: 20
-  attackRange: 2
-  idleTime: 3
-  walkTime: 10
-  walkSpeed: 2.5
-  runSpeed: 8
-  visionAngle: 60
-  rotationSpeed: 5
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  maxHealth: 100
-  currentHealth: 0
-  attackDamage: 10
-  attackCooldown: 1.5
-  ammoPrefab: {fileID: 0}
-  healthPrefab: {fileID: 0}
 --- !u!54 &6262523088042937460
 Rigidbody:
   m_ObjectHideFlags: 0
