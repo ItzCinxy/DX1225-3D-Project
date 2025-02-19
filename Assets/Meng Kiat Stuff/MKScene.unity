@@ -865,6 +865,26 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8179945211209226768, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.950272
+      objectReference: {fileID: 0}
+    - target: {fileID: 8179945211209226768, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.27817643
+      objectReference: {fileID: 0}
+    - target: {fileID: 8179945211209226768, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.13436498
+      objectReference: {fileID: 0}
+    - target: {fileID: 8179945211209226768, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.039333127
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -2822,15 +2822,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce2b38e4593a63e4184aa73cca3bff24,
         type: 3}
       insertIndex: -1
+      addedObject: {fileID: 2779265911191589332}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce2b38e4593a63e4184aa73cca3bff24,
+        type: 3}
+      insertIndex: -1
       addedObject: {fileID: 7446175832902394228}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce2b38e4593a63e4184aa73cca3bff24,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3641424599579072406}
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce2b38e4593a63e4184aa73cca3bff24,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2779265911191589332}
     - targetCorrespondingSourceObject: {fileID: 234480625599603528, guid: ce2b38e4593a63e4184aa73cca3bff24,
         type: 3}
       insertIndex: -1
@@ -2898,7 +2898,7 @@ MonoBehaviour:
   crouchSpeed: 2
   jumpHeight: 0.7
   gravity: -9.81
-  groundCheckDistance: 0.3
+  groundCheckDistance: 0.8
   groundLayer:
     serializedVersion: 2
     m_Bits: 512
