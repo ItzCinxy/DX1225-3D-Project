@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             _skillTreeCanvas.gameObject.SetActive(true);
+            _freelookCamera.Priority = 0;
         }
         else
         {
