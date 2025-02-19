@@ -32,8 +32,17 @@ public class WeaponHolder : MonoBehaviour
     private void Shoot()
     {
         if (equippedWeapon == null) return;
-        equippedWeapon.Shoot();
+
+        if (equippedWeapon.TryGetComponent(out ProjectileWeapon projectileWeapon))
+        {
+            projectileWeapon.Shoot(); // ✅ Fire a grenade or projectile
+        }
+        else if (equippedWeapon.TryGetComponent(out Weapon gunWeapon))
+        {
+            gunWeapon.Shoot(); // ✅ Fire a hitscan gun
+        }
     }
+
 
     private void Reload()
     {
@@ -100,7 +109,14 @@ public class WeaponHolder : MonoBehaviour
         if (bc) bc.enabled = false;
         else equippedWeapon.gameObject.AddComponent<BoxCollider>();
 
-            Debug.Log("Equipped weapon: " + equippedWeapon.name);
+        if (equippedWeapon.TryGetComponent(out ProjectileWeapon projectileWeapon))
+        {
+            Debug.Log("Equipped a Projectile Weapon: " + equippedWeapon.name);
+        }
+        else if (equippedWeapon.TryGetComponent(out Weapon normalWeapon))
+        {
+            Debug.Log("Equipped a Normal Weapon: " + equippedWeapon.name);
+        }
 
         if (ammoDisplay != null)
         {
