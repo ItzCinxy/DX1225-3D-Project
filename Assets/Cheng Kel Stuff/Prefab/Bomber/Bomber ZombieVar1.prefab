@@ -1832,6 +1832,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1879717343484859669}
   - component: {fileID: 8010310213638960850}
+  - component: {fileID: 149268741023111178}
   m_Layer: 0
   m_Name: Parasite L Starkie
   m_TagString: Untagged
@@ -1878,6 +1879,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &149268741023111178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5515615529573567095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89f061d5eb365a44ab6bbcab3f10b6d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5781690979023530414
 GameObject:
   m_ObjectHideFlags: 0
