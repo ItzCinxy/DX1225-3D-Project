@@ -25,7 +25,7 @@ public class ChargerAIController : MonoBehaviour
 
     [Header("Health Settings")]
     private UIEnemyHealthBar healthBar;
-    [SerializeField] private int maxHealth = 80;
+    [SerializeField] private int maxHealth = 150;
     [SerializeField] private int currentHealth;
 
     [Header("Attack Settings")]
