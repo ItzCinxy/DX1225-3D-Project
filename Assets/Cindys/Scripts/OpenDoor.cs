@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.ProBuilder.Shapes;
 
 public class OpenDoor : MonoBehaviour
 {
     [SerializeField] private LayerMask layer;
     [SerializeField] private InputActionReference pickUpAction;
+
+    private Dictionary<Transform, bool> doorStates = new Dictionary<Transform, bool>(); // Track open/closed state
+    private Dictionary<Transform, Coroutine> activeRotations = new Dictionary<Transform, Coroutine>(); // Track active rotations
 
     private void Update()
     {
@@ -24,44 +26,39 @@ public class OpenDoor : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 2f, layer))
         {
             Transform door = hitInfo.transform;
-            Transform doorPivot = FindParentWithName(door, "Door Pivot");
+            Transform doorPivot = FindParentWithName(door, "Door Pivot") ?? door; // Use door if no pivot
 
-            if (doorPivot != null)
-            {
-                Debug.Log($"Rotating DoorPivot: {doorPivot.name}");
-                StartCoroutine(RotateDoor(doorPivot));
-            }
-            else
-            {
-                Debug.Log($"No DoorPivot found. Rotating Door: {door.name}");
-                StartCoroutine(RotateDoor(door)); // Rotate the door directly
-            }
+            if (activeRotations.ContainsKey(doorPivot))
+                return; // Ignore if already rotating
+
+            bool isOpen = doorStates.ContainsKey(doorPivot) && doorStates[doorPivot];
+
+            // Fixed rotation: Always add ±90 degrees
+            float angle = isOpen ? -90f : 90f;
+
+            Coroutine rotationCoroutine = StartCoroutine(RotateDoor(doorPivot, angle));
+            activeRotations[doorPivot] = rotationCoroutine;
+            doorStates[doorPivot] = !isOpen;
         }
     }
 
-    /// <summary>
-    /// Recursively searches for a parent object with a specific name.
-    /// </summary>
     private Transform FindParentWithName(Transform child, string name)
     {
         while (child != null)
         {
             if (child.name.Contains(name))
-            {
                 return child;
-            }
             child = child.parent;
         }
         return null;
     }
 
-
-    private IEnumerator RotateDoor(Transform doorTransform)
+    private IEnumerator RotateDoor(Transform doorTransform, float angle)
     {
         Quaternion startRotation = doorTransform.localRotation;
-        Quaternion targetRotation = startRotation * Quaternion.Euler(0, 90f, 0);
+        Quaternion targetRotation = startRotation * Quaternion.Euler(0, angle, 0);
         float elapsedTime = 0f;
-        float duration = 1f; // Adjust rotation speed
+        float duration = 1f;
 
         while (elapsedTime < duration)
         {
@@ -71,7 +68,6 @@ public class OpenDoor : MonoBehaviour
         }
 
         doorTransform.localRotation = targetRotation;
+        activeRotations.Remove(doorTransform);
     }
-
 }
-
