@@ -27,6 +27,10 @@ public class WeaponHolder : MonoBehaviour
         {
             Interact();
         }
+        if (_playerInput.actions["Drop"].WasPressedThisFrame())
+        {
+            DropWeapon();
+        }
     }
 
     private void Shoot()
