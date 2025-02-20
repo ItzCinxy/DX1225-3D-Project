@@ -351,10 +351,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c945eec17e6f6fc4e9d4a8b248df1647, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxMagazineSize: 10
-  totalAmmo: 100
+  maxMagazineSize: 35
+  totalAmmo: 350
   reloadTime: 2
-  ammoDisplay: {fileID: 0}
 --- !u!114 &4340371400917921381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,7 +370,8 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
-  hitEffectPrefab: {fileID: 0}
+  hitEffectPrefab: {fileID: 847188628635049040, guid: 5af574a01c8bc83419628ad64a92825d,
+    type: 3}
 --- !u!65 &4691890863369757174
 BoxCollider:
   m_ObjectHideFlags: 0

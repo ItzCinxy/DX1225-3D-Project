@@ -29,7 +29,8 @@ public class Projectile : MonoBehaviour
         // Instantiate explosion effect
         if (explosionEffect != null)
         {
-            Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            GameObject explosionInstance = Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            Destroy(explosionInstance, explosionInstance.GetComponent<ParticleSystem>().main.duration);
         }
 
         // Apply explosion force to nearby objects
