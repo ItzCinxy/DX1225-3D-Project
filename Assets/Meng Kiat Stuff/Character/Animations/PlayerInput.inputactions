@@ -190,7 +190,7 @@
                 {
                     "name": "",
                     "id": "e67b017d-bbbd-4ddf-97f1-d947ff25d04c",
-                    "path": "<Keyboard>/shift",
+                    "path": "<Keyboard>/capsLock",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -201,7 +201,7 @@
                 {
                     "name": "",
                     "id": "4ec70d68-32bf-4ba0-bc33-527b5cd27259",
-                    "path": "<Keyboard>/capsLock",
+                    "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -212,7 +212,7 @@
                 {
                     "name": "",
                     "id": "7101823d-bb15-4149-b111-8a12f5ff82e7",
-                    "path": "<Keyboard>/backquote",
+                    "path": "<Keyboard>/b",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

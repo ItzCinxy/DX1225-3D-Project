@@ -8,6 +8,7 @@ public class AnimationEventReceiver : MonoBehaviour
     {
         // Assign separately to avoid type mismatch error
         zombieController = GetComponentInParent<StandardZombieAIController>();
+        if (zombieController == null) zombieController = GetComponentInParent<ChargerAIController>();
         if (zombieController == null) zombieController = GetComponentInParent<TankZombieAIController>();
         if (zombieController == null) zombieController = GetComponentInParent<BomberZombieAIController>();
         if (zombieController == null) zombieController = GetComponentInParent<ScreamerZombieAIController>();
@@ -26,6 +27,9 @@ public class AnimationEventReceiver : MonoBehaviour
         {
             case StandardZombieAIController standard:
                 standard.AttackHitEvent();
+                break;
+            case ChargerAIController charger:
+                charger.AttackHitEvent();
                 break;
             case TankZombieAIController tank:
                 tank.AttackHitEvent();
