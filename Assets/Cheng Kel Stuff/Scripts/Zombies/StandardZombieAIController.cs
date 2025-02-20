@@ -215,7 +215,7 @@ public class StandardZombieAIController : MonoBehaviour
 
     IEnumerator DieAfterAnimation()
     {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(5f);
         Die();
     }
 
