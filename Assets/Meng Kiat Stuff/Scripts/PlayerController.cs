@@ -4,22 +4,33 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Components")]
     [SerializeField] private Animator _animator;
     [SerializeField] private CharacterController _characterController;
+    [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private Canvas _skillTreeCanvas;
+    [SerializeField] private Transform _raycastStart;
+    [SerializeField] private SkinnedMeshRenderer _skin;
+    [SerializeField] private WeaponHolder _weaponHolder;
+
+    [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 4f;
-    [SerializeField] private float sprintSpeed;
-    [SerializeField] private float crouchSpeed;
+    [SerializeField] private float sprintSpeedMultiplier = 2f;
+    [SerializeField] private float crouchSpeedMultiplier = 0.5f;
     [SerializeField] private float jumpHeight = 2f;
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float groundCheckDistance = 0.3f;
     [SerializeField] private LayerMask groundLayer;
 
-    [SerializeField] private PlayerInput _playerInput;
-    [SerializeField] private Canvas _skillTreeCanvas;
-    [SerializeField] private Transform _raycastStart;
+    [Header("Camera Settings")]
+    [SerializeField] private CinemachineVirtualCamera _thirdPersonCamera;
+    [SerializeField] private CinemachineVirtualCamera _firstPersonCamera;
 
-    private bool isSkillTreeOpen;
-    private InputActionAsset _inputActions;
+    [Header("Active Panels")]
+    [SerializeField] private GameObject GameMenu;
+
+    private bool isFirstPerson = false;
+    private bool isSkillTreeOpen = false;
     private Vector2 inputDirection;
     private Vector3 velocity;
     private bool isGrounded;
@@ -28,167 +39,101 @@ public class PlayerController : MonoBehaviour
     private bool isMoving;
     private float jumpTimer;
     private bool jumped;
-
-    [SerializeField] private WeaponHolder weaponholder;
-
-    [SerializeField] private CinemachineVirtualCamera _thirdPersonCamera;
-    [SerializeField] private CinemachineVirtualCamera _firstPersonCamera;
-    [SerializeField] private SkinnedMeshRenderer _skin;
-    private bool isFirstPerson;
+    private InputActionAsset _inputActions;
 
     private void Start()
     {
         _inputActions = _playerInput.actions;
-        sprintSpeed = moveSpeed * 2f;
-        crouchSpeed = moveSpeed * 0.5f;
-
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        _skillTreeCanvas?.gameObject.SetActive(false);
 
-        if (_skillTreeCanvas != null)
-        {
-            _skillTreeCanvas.gameObject.SetActive(false);
-        }
-
-        isFirstPerson = false;
     }
 
     private void Update()
     {
-        if (_inputActions["ToggleSkillTree"].WasPressedThisFrame())
-        {
-            isSkillTreeOpen = !isSkillTreeOpen;
-        }
+        HandleSkillTreeToggle();
+        HandleCameraToggle();
+        HandleGamePause();
 
-        if (_inputActions["ToggleCamera"].WasPressedThisFrame())
-        {
-            isFirstPerson = !isFirstPerson;
-        }
-
-        if (isSkillTreeOpen)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            _skillTreeCanvas.gameObject.SetActive(true);
-
-            velocity = Vector3.zero;
-            _animator.SetBool("IsWalking", false);
-            _animator.SetBool("IsSprinting", false);
-            _animator.SetBool("IsCrouching", false);
-            ResetMovementAnimations();
-            return;
-        }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            _skillTreeCanvas.gameObject.SetActive(false);
-        }
-
-        bool hasWeapon = weaponholder.IsWeaponEquipped();
-        _animator.SetBool("IsHoldingGun", hasWeapon);
+        if (isSkillTreeOpen) return;
 
         HandleGroundCheck();
         HandleCrouch();
         HandleMovement();
         HandleJump();
         RotateWithCamera();
-        HandleCameraSwap();
+    }
 
-        if (!isMoving)
+    private void HandleSkillTreeToggle()
+    {
+        if (_inputActions["ToggleSkillTree"].WasPressedThisFrame())
         {
-            ResetMovementAnimations();
+            isSkillTreeOpen = !isSkillTreeOpen;
         }
     }
 
-    private void HandleCameraSwap()
+    private void HandleCameraToggle()
     {
-        if (isFirstPerson)
+        if (_inputActions["ToggleCamera"].WasPressedThisFrame())
         {
-            _firstPersonCamera.Priority = 20;
-            _thirdPersonCamera.Priority = 10;
-            _skin.gameObject.SetActive(false);
+            isFirstPerson = !isFirstPerson;
+            UpdateCameraView();
+        }
+    }
+
+    private void HandleGamePause()
+    {
+        if (isSkillTreeOpen)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            _skillTreeCanvas?.gameObject.SetActive(true);
+        }
+        else if (GameMenu.activeSelf)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
         else
         {
-            _firstPersonCamera.Priority = 10;
-            _thirdPersonCamera.Priority = 20;
-            _skin.gameObject.SetActive(true);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
+
+        Debug.Log($"SkillTree: {isSkillTreeOpen}, GameMenu: {GameMenu.activeSelf}");
+    }
+
+    private void UpdateCameraView()
+    {
+        _firstPersonCamera.Priority = isFirstPerson ? 20 : 10;
+        _thirdPersonCamera.Priority = isFirstPerson ? 10 : 20;
+        _skin.gameObject.SetActive(!isFirstPerson);
     }
 
     private void HandleGroundCheck()
     {
         isGrounded = Physics.Raycast(_raycastStart.position, Vector3.down, groundCheckDistance, groundLayer);
-
-        if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -5f;
-        }
+        if (isGrounded && velocity.y < 0) velocity.y = -5f;
     }
 
     private void HandleCrouch()
     {
         isCrouching = _inputActions["Crouch"].IsPressed();
-
-        if (isCrouching)
-        {
-            isSprinting = false;
-        }
-
+        if (isCrouching) isSprinting = false;
         _animator.SetBool("IsCrouching", isCrouching);
     }
 
     private void HandleMovement()
     {
         inputDirection = _inputActions["Move"].ReadValue<Vector2>();
-
-        // ✅ Get camera forward and right directions
-        Vector3 cameraForward = Camera.main.transform.forward;
-        Vector3 cameraRight = Camera.main.transform.right;
-        cameraForward.y = 0;
-        cameraRight.y = 0;
-        cameraForward.Normalize();
-        cameraRight.Normalize();
-
-        // ✅ Movement is relative to the camera's rotation
-        Vector3 moveDirection = (cameraForward * inputDirection.y) + (cameraRight * inputDirection.x);
-        moveDirection.Normalize();
-
+        Vector3 moveDirection = CalculateMoveDirection();
         isMoving = moveDirection.magnitude > 0;
-        bool isMovingForward = inputDirection.y > 0;
-        bool isMovingBackward = inputDirection.y < 0;
-        bool isMovingLeft = inputDirection.x < 0;
-        bool isMovingRight = inputDirection.x > 0;
 
-        isSprinting = _inputActions["Sprint"].IsPressed() && isMovingForward && isGrounded && !isCrouching;
+        isSprinting = _inputActions["Sprint"].IsPressed() && inputDirection.y > 0 && isGrounded && !isCrouching;
+        float currentSpeed = isCrouching ? moveSpeed * crouchSpeedMultiplier : (isSprinting ? moveSpeed * sprintSpeedMultiplier : moveSpeed);
 
-        float currentSpeed = isCrouching ? crouchSpeed : (isSprinting ? sprintSpeed : moveSpeed);
-
-        // ✅ NO ROTATION ON MOVEMENT (Camera controls rotation)
-        // Player only moves, it does NOT rotate itself
-
-        // ✅ Set Movement Animations
         ResetMovementAnimations();
-
-        if (isCrouching)
-        {
-            if (isMovingForward) _animator.SetBool("CrouchForward", true);
-            if (isMovingBackward) _animator.SetBool("CrouchBackward", true);
-            if (isMovingLeft) _animator.SetBool("CrouchLeft", true);
-            if (isMovingRight) _animator.SetBool("CrouchRight", true);
-        }
-        else
-        {
-            if (isMovingForward) _animator.SetBool("WalkForward", true);
-            if (isMovingBackward) _animator.SetBool("WalkBackward", true);
-            if (isMovingLeft) _animator.SetBool("WalkLeft", true);
-            if (isMovingRight) _animator.SetBool("WalkRight", true);
-        }
-
-        _animator.SetBool("IsWalking", isMoving && !isCrouching);
-        _animator.SetBool("IsSprinting", isSprinting);
-        _animator.SetBool("IsCrouching", isCrouching);
+        SetMovementAnimations(inputDirection);
 
         Vector3 finalMove = moveDirection * currentSpeed;
         finalMove.y = velocity.y;
@@ -197,16 +142,24 @@ public class PlayerController : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
     }
 
+    private Vector3 CalculateMoveDirection()
+    {
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraRight = Camera.main.transform.right;
+        cameraForward.y = 0;
+        cameraRight.y = 0;
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+        return (cameraForward * inputDirection.y + cameraRight * inputDirection.x).normalized;
+    }
+
     private void RotateWithCamera()
     {
         Vector3 cameraForward = Camera.main.transform.forward;
         cameraForward.y = 0;
-        cameraForward.Normalize();
-
         if (cameraForward.sqrMagnitude > 0.01f)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
-            transform.rotation = targetRotation; // ✅ Instantly align with camera
+            transform.rotation = Quaternion.LookRotation(cameraForward);
         }
     }
 
@@ -233,13 +186,28 @@ public class PlayerController : MonoBehaviour
 
     private void ResetMovementAnimations()
     {
-        _animator.SetBool("WalkForward", false);
-        _animator.SetBool("WalkBackward", false);
-        _animator.SetBool("WalkLeft", false);
-        _animator.SetBool("WalkRight", false);
-        _animator.SetBool("CrouchForward", false);
-        _animator.SetBool("CrouchBackward", false);
-        _animator.SetBool("CrouchLeft", false);
-        _animator.SetBool("CrouchRight", false);
+        string[] animations = { "WalkForward", "WalkBackward", "WalkLeft", "WalkRight", "CrouchForward", "CrouchBackward", "CrouchLeft", "CrouchRight" };
+        foreach (string anim in animations) _animator.SetBool(anim, false);
+    }
+
+    private void SetMovementAnimations(Vector2 input)
+    {
+        if (isCrouching)
+        {
+            _animator.SetBool("CrouchForward", input.y > 0);
+            _animator.SetBool("CrouchBackward", input.y < 0);
+            _animator.SetBool("CrouchLeft", input.x < 0);
+            _animator.SetBool("CrouchRight", input.x > 0);
+        }
+        else
+        {
+            _animator.SetBool("WalkForward", input.y > 0);
+            _animator.SetBool("WalkBackward", input.y < 0);
+            _animator.SetBool("WalkLeft", input.x < 0);
+            _animator.SetBool("WalkRight", input.x > 0);
+        }
+
+        _animator.SetBool("IsWalking", isMoving && !isCrouching);
+        _animator.SetBool("IsSprinting", isSprinting);
     }
 }
