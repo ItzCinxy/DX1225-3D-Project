@@ -65,7 +65,8 @@ public class WeaponRaycast : MonoBehaviour
 
             if (hitEffectPrefab != null)
             {
-                Instantiate(hitEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
+                GameObject effectInstance = Instantiate(hitEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(effectInstance, effectInstance.GetComponent<ParticleSystem>().main.duration);
             }
         }
     }

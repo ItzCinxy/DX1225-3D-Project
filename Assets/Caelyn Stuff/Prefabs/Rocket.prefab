@@ -98,11 +98,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8dd04c3a7e94be4f85cb92ce69c1dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
   explosionDelay: 3
   explosionRadius: 5
   explosionForce: 700
-  explosionEffect: {fileID: 0}
+  explosionEffect: {fileID: 1337198075554910, guid: 25c7aa9ad705fe143a4d71c1c8deb7d4,
+    type: 3}
 --- !u!54 &9198390387850765559
 Rigidbody:
   m_ObjectHideFlags: 0
