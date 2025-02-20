@@ -28,10 +28,10 @@ public class AnimationEventReceiver : MonoBehaviour
                 standard.AttackHitEvent();
                 break;
             case TankZombieAIController tank:
-                //tank.TankJumpAttack();
+                tank.AttackHitEvent();
                 break;
             case BomberZombieAIController bomber:
-                //bomber.BomberExplodeAttack();
+                bomber.AttackHitEvent();
                 break;
             case ScreamerZombieAIController screamer:
                 //screamer.ScreamerAlert();

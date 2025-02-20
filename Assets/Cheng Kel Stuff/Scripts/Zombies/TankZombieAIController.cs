@@ -8,29 +8,29 @@ public class TankZombieAIController : MonoBehaviour
     private EnemyState currentState;
 
     [Header("AI Settings")]
-    [SerializeField] private float roamRadius = 5f;
-    [SerializeField] private float chaseRange = 10f;
-    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float roamRadius = 4f;
+    [SerializeField] private float chaseRange = 8f;
+    [SerializeField] private float attackRange = 3f;
 
-    [SerializeField] private float idleTime = 3f;
-    [SerializeField] private float walkTime = 5f;
+    [SerializeField] private float idleTime = 4f;
+    [SerializeField] private float walkTime = 6f;
 
-    [SerializeField] private float walkSpeed = 1.5f;
-    [SerializeField] private float runSpeed = 4f;
+    [SerializeField] private float walkSpeed = 1;
+    [SerializeField] private float runSpeed = 2.5f;
 
-    [SerializeField] private float visionAngle = 60f;
-    [SerializeField] private float rotationSpeed = 5f;
+    [SerializeField] private float visionAngle = 50f;
+    [SerializeField] private float rotationSpeed = 3f;
 
     [SerializeField] private LayerMask obstacleLayer;
 
     [Header("Health Settings")]
     private UIEnemyHealthBar healthBar;
-    [SerializeField] private int maxHealth = 100;
+    [SerializeField] private int maxHealth = 300;
     [SerializeField] private int currentHealth;
 
     [Header("Attack Settings")]
-    [SerializeField] private int attackDamage = 10;
-    [SerializeField] private float attackCooldown = 1.5f;
+    [SerializeField] private int attackDamage = 25;
+    [SerializeField] private float attackCooldown = 3f;
     private bool canAttack = true;
 
     [Header("Loot Drops")]
