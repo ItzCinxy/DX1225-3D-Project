@@ -1,4 +1,5 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.VFX;
 
 public class WeaponRaycast : MonoBehaviour
 {
@@ -69,10 +70,27 @@ public class WeaponRaycast : MonoBehaviour
                 chrgAI.TakeDamage(100);
             }
 
+            // for particle system
+            //if (hitEffectPrefab != null)
+            //{
+            //    GameObject effectInstance = Instantiate(hitEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
+            //    Destroy(effectInstance, effectInstance.GetComponent<ParticleSystem>().main.duration);
+            //}
+
+            // for vfx graph
             if (hitEffectPrefab != null)
             {
-                GameObject effectInstance = Instantiate(hitEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
-                Destroy(effectInstance, effectInstance.GetComponent<ParticleSystem>().main.duration);
+                GameObject vfxInstance = Instantiate(hitEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
+
+                // ✅ Get the Visual Effect component and Play it
+                VisualEffect vfx = vfxInstance.GetComponent<VisualEffect>();
+                if (vfx != null)
+                {
+                    vfx.Play();
+                }
+
+                // ✅ Destroy the effect after its lifetime (e.g., 2 seconds)
+                Destroy(vfxInstance, 2f);
             }
         }
     }
