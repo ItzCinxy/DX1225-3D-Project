@@ -47,6 +47,7 @@ public class TankZombieAIController : MonoBehaviour
     private bool isDying = false;
     private bool isConvulsing = false;
 
+    private int canStartAttack = 1;
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -321,7 +322,10 @@ public class TankZombieAIController : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        AttackHitEvent();
+        if (canStartAttack <= 0)
+        {
+            AttackHitEvent();
+        }
 
         yield return new WaitForSeconds(attackCooldown);
 
@@ -343,6 +347,8 @@ public class TankZombieAIController : MonoBehaviour
             canAttack = true;
             ChangeState(EnemyState.Idle);
         }
+
+        canStartAttack -= 1;
     }
 
     IEnumerator RecoverFromHit()

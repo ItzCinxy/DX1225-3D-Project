@@ -47,6 +47,8 @@ public class StandardZombieAIController : MonoBehaviour
     private bool isDying = false;
     private bool isConvulsing = false;
 
+    int canStartAttack = 1;
+
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -321,7 +323,10 @@ public class StandardZombieAIController : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        AttackHitEvent();
+        if (canStartAttack <= 0)
+        {
+            AttackHitEvent();
+        }
 
         yield return new WaitForSeconds(attackCooldown);
 
@@ -343,6 +348,8 @@ public class StandardZombieAIController : MonoBehaviour
             canAttack = true;
             ChangeState(EnemyState.Idle);
         }
+
+        canStartAttack -= 1;
     }
 
     IEnumerator RecoverFromHit()
