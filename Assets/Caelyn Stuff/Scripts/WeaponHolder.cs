@@ -155,4 +155,14 @@ public class WeaponHolder : MonoBehaviour
         // Draw a small sphere at the end of the ray for better visibility
         Gizmos.DrawSphere(start + direction, 0.1f);
     }
+
+    public bool IsWeaponEquipped()
+    {
+        if (equippedWeapon != null)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
