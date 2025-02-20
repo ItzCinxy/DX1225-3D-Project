@@ -2966,7 +2966,9 @@ MonoBehaviour:
     m_Bits: 64
   maxHealth: 50
   currentHealth: 0
-  attackDamage: 30
+  attackDamage: 0
+  explosionRadius: 2.5
+  explosionDamage: 30
   ammoPrefab: {fileID: 0}
   healthPrefab: {fileID: 0}
   explosionEffectPrefab: {fileID: 0}

@@ -8,29 +8,33 @@ public class BomberZombieAIController : MonoBehaviour
     private EnemyState currentState;
 
     [Header("AI Settings")]
-    [SerializeField] private float roamRadius = 5f;
-    [SerializeField] private float chaseRange = 10f;
-    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float roamRadius = 6f;
+    [SerializeField] private float chaseRange = 12f;
+    [SerializeField] private float attackRange = 2.5f;
 
-    [SerializeField] private float idleTime = 3f;
-    [SerializeField] private float walkTime = 5f;
+    [SerializeField] private float idleTime = 2f;
+    [SerializeField] private float walkTime = 4f;
 
-    [SerializeField] private float walkSpeed = 1.5f;
-    [SerializeField] private float runSpeed = 4f;
+    [SerializeField] private float walkSpeed = 1.8f;
+    [SerializeField] private float runSpeed = 5f;
 
-    [SerializeField] private float visionAngle = 60f;
-    [SerializeField] private float rotationSpeed = 5f;
+    [SerializeField] private float visionAngle = 70f;
+    [SerializeField] private float rotationSpeed = 6f;
 
     [SerializeField] private LayerMask obstacleLayer;
 
     [Header("Health Settings")]
     private UIEnemyHealthBar healthBar;
-    [SerializeField] private int maxHealth = 50;
+    [SerializeField] private int maxHealth = 150;
     [SerializeField] private int currentHealth;
 
     [Header("Attack Settings")]
     [SerializeField] private int attackDamage = 30;
     private bool canAttack = true;
+
+    [Header("Explosion Settings")]
+    [SerializeField] private float explosionRadius = 2.5f;
+    [SerializeField] private int explosionDamage = 30;
 
     [Header("Loot Drops")]
     [SerializeField] private GameObject ammoPrefab;
@@ -320,6 +324,7 @@ public class BomberZombieAIController : MonoBehaviour
 
         ChangeState(EnemyState.Convulsing);
     }
+
     IEnumerator PerformAttack()
     {
         if (!canAttack || isDying) yield break;
@@ -365,6 +370,9 @@ public class BomberZombieAIController : MonoBehaviour
     IEnumerator ConvulseBeforeDespawn()
     {
         yield return new WaitForSeconds(2f);
+
+        TriggerExplosionDamage();
+
         ChangeState(EnemyState.Dying);
     }
 
@@ -378,6 +386,25 @@ public class BomberZombieAIController : MonoBehaviour
     {
         yield return new WaitForSeconds(walkTime);
         ChangeState(EnemyState.Idle);
+    }
+
+    void TriggerExplosionDamage()
+    {
+        if (player == null) return;
+
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        if (distanceToPlayer <= explosionRadius)
+        {
+            Debug.Log($"Player hit by explosion! Taking {explosionDamage} damage.");
+            playerHealth?.TakeDamage((float)explosionDamage);
+        }
+
+        // Instantiate explosion effect
+        if (explosionEffectPrefab != null)
+        {
+            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+        }
     }
 
     void OnDrawGizmos()
