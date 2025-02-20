@@ -141,6 +141,8 @@ public class WeaponHolder : MonoBehaviour
         equippedWeapon.transform.SetParent(null);
         Debug.Log("Dropped weapon: " + equippedWeapon.name);
 
+        ammoDisplay.text = "-- / --";
+
         equippedWeapon = null;
     }
 

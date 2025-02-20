@@ -64,6 +64,11 @@ public class PlayerStats : MonoBehaviour
         UpdateHealthBar();
         UpdateUIText();
 
+        if (currentHealth <= 30)
+        {
+            currentHealth = 30;
+        }
+
         if (currentHealth <= 0)
         {
             StartCoroutine(DieWithDelay());
