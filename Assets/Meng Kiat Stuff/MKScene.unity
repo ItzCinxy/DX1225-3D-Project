@@ -135,10 +135,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChargerFemaleZombieVar1
       objectReference: {fileID: 0}
+    - target: {fileID: 5002270420393917769, guid: 1aadfe13705387148b663c469f5295a8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5677784277324122038, guid: 1aadfe13705387148b663c469f5295a8,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6497199475130240371, guid: 1aadfe13705387148b663c469f5295a8,
         type: 3}
@@ -258,10 +263,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: TankZombieVar1
       objectReference: {fileID: 0}
+    - target: {fileID: 2828529877596690705, guid: c3fff07140ad38d4f9b79001ace87a61,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6728097414583161521, guid: c3fff07140ad38d4f9b79001ace87a61,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -329,12 +339,17 @@ PrefabInstance:
     - target: {fileID: 6674619925919449354, guid: ad9a074c193501a45b95af704c3afcff,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7997650950129744345, guid: ad9a074c193501a45b95af704c3afcff,
         type: 3}
       propertyPath: m_Name
       value: StandardZombieVar1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997650950129744345, guid: ad9a074c193501a45b95af704c3afcff,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -402,7 +417,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 60.000004
+  field of view: 80
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -429,7 +444,7 @@ Transform:
   m_GameObject: {fileID: 738143781}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.000043630065, w: 1}
-  m_LocalPosition: {x: 0, y: 1.3, z: 0.6}
+  m_LocalPosition: {x: 0.507, y: 1.48, z: -0.433}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -499,7 +514,7 @@ MonoBehaviour:
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
-    m_Time: 2
+    m_Time: 0.5
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -1194,6 +1209,16 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5600730207894577220, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5600730207894577220, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 7131533075968479633, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1206,8 +1231,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7900342818560799519, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7900342818560799519, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.6
+      value: 0.059999995
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
