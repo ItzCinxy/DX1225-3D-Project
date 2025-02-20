@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3219507935610900166}
   - component: {fileID: 5095672632985199020}
   - component: {fileID: 4559549246246398321}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Link
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2627682049090555116}
   - component: {fileID: 2917849897386155581}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: StaminaBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 3309052014103352354}
   - component: {fileID: 236746039155522456}
   - component: {fileID: 6958982028747659196}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Health Bar Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 5225890016887790015}
   - component: {fileID: 4478165027885705256}
   - component: {fileID: 3202087517527976753}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: SkillTreeCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -422,7 +422,7 @@ GameObject:
   - component: {fileID: 4407188351851651921}
   - component: {fileID: 8993885218594998619}
   - component: {fileID: 1329095610145525150}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: PlayerUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -523,7 +523,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 938240497313500481}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Stamina
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -665,7 +665,7 @@ GameObject:
   - component: {fileID: 3400640029400968524}
   - component: {fileID: 7050912425710666014}
   - component: {fileID: 5714308866690521163}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -740,7 +740,7 @@ GameObject:
   - component: {fileID: 3658331195624081413}
   - component: {fileID: 4557342565005377259}
   - component: {fileID: 6390842963183016355}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Health Bar Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -879,7 +879,7 @@ GameObject:
   - component: {fileID: 2794244229041005592}
   - component: {fileID: 57270851316166144}
   - component: {fileID: 3694473904034907749}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: HealthUpgrade1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1017,7 +1017,7 @@ GameObject:
   - component: {fileID: 1046237606594797844}
   - component: {fileID: 7581865719087952628}
   - component: {fileID: 5873581112290957699}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Stamina Bar Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1092,7 +1092,7 @@ GameObject:
   - component: {fileID: 8487235644532597874}
   - component: {fileID: 398891031359389220}
   - component: {fileID: 2631761392138719324}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: SkillTreePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1169,7 +1169,7 @@ GameObject:
   - component: {fileID: 3130621286197210476}
   - component: {fileID: 2180291611935377029}
   - component: {fileID: 7421685354169416444}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Text (TMP)_Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1305,7 +1305,7 @@ GameObject:
   - component: {fileID: 2691834589123566329}
   - component: {fileID: 1346422705933058012}
   - component: {fileID: 4541369549629439104}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: StaminaUpgrade1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1443,7 +1443,7 @@ GameObject:
   - component: {fileID: 1873368819622902209}
   - component: {fileID: 5491679676492345655}
   - component: {fileID: 3804670500230771840}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Ammo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1577,7 +1577,7 @@ GameObject:
   - component: {fileID: 7131533075968479633}
   - component: {fileID: 7109168410826646133}
   - component: {fileID: 5711883926024450058}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Stamina Bar Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1721,7 +1721,7 @@ GameObject:
   - component: {fileID: 2291156708025610193}
   - component: {fileID: 2779329859150526710}
   - component: {fileID: 5318803757013659930}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1794,7 +1794,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 145346603403069205}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Ammo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1831,7 +1831,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5261615851519303189}
   - component: {fileID: 3005377749802210668}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1919,7 +1919,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6401243660817891585}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2030,7 +2030,7 @@ GameObject:
   - component: {fileID: 7507111723097036250}
   - component: {fileID: 7748703638126191427}
   - component: {fileID: 1191484341406246716}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: Text (TMP)_Stamina
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2174,7 +2174,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: ce2b38e4593a63e4184aa73cca3bff24,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ce2b38e4593a63e4184aa73cca3bff24,
         type: 3}
@@ -2666,7 +2666,7 @@ MonoBehaviour:
   groundCheckDistance: 4.83
   groundLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 4294967295
   _playerInput: {fileID: 52950440523894269}
   _skillTreeCanvas: {fileID: 5225890016887790015}
   _raycastStart: {fileID: 1889968977638582648}
