@@ -17,11 +17,33 @@ public class LuckyBox : MonoBehaviour
 
     private bool isBoxActive = false;
     private Weapon floatingWeapon = null;
-    private WeaponHolder playerWeaponHolder;
+    [SerializeField] private float interactionRange = 3f; // Adjust the distance for showing text
+    [SerializeField] private Transform playerTransform; // Assign the player's transform in the Inspector
 
-    private void Start()
+    [Header("Box Models")]
+    [SerializeField] private GameObject openBoxModel;  // ✅ Assign the open model in the Inspector
+    [SerializeField] private GameObject closedBoxModel; // ✅ Assign the closed model in the Inspector
+
+    private void Update()
     {
-        interactText.gameObject.SetActive(false); // Hide interaction UI initially
+        if (playerTransform == null || interactText == null) return;
+
+        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+
+        if (distanceToPlayer <= interactionRange)
+        {
+            interactText.gameObject.SetActive(true);
+        }
+        else
+        {
+            interactText.gameObject.SetActive(false);
+        }
+    }
+
+    private void SetBoxState(bool isOpen)
+    {
+        if (openBoxModel != null) openBoxModel.SetActive(isOpen);
+        if (closedBoxModel != null) closedBoxModel.SetActive(!isOpen);
     }
 
     public void InteractWithBox()
@@ -35,6 +57,7 @@ public class LuckyBox : MonoBehaviour
     private IEnumerator OpenBox()
     {
         isBoxActive = true;
+        SetBoxState(true); // ✅ Show open box
 
         if (interactText != null)
             interactText.text = "Rolling...";
@@ -50,6 +73,8 @@ public class LuckyBox : MonoBehaviour
         if (weaponPool == null || weaponPool.Length == 0)
         {
             Debug.LogError("Weapon Pool is empty! Add weapon prefabs in the Inspector.");
+            SetBoxState(false); // ✅ Close box if no weapon is found
+            isBoxActive = false; // ✅ Allow interaction again
             yield break;
         }
 
@@ -60,6 +85,8 @@ public class LuckyBox : MonoBehaviour
         if (weaponPrefab == null)
         {
             Debug.LogError("Weapon prefab is missing in weaponPool!");
+            SetBoxState(false); // ✅ Close box if something goes wrong
+            isBoxActive = false; // ✅ Allow interaction again
             yield break;
         }
 
@@ -78,7 +105,6 @@ public class LuckyBox : MonoBehaviour
         }
 
         weaponRb.isKinematic = true; // Disable physics
-
         floatingWeapon.gameObject.layer = LayerMask.NameToLayer("Pickup"); // ✅ Set pickup layer
 
         // ✅ Add floating effect if not already attached
@@ -87,7 +113,7 @@ public class LuckyBox : MonoBehaviour
             floatingWeapon.gameObject.AddComponent<FloatingWeapon>();
         }
 
-        interactText.text = "Press E to swap";
+        interactText.text = "Press 'E' to swap";
         Debug.Log("Weapon spawned: " + floatingWeapon.name);
 
         yield return new WaitForSeconds(weaponLifetime); // Wait before removing the weapon
@@ -97,17 +123,20 @@ public class LuckyBox : MonoBehaviour
             Debug.Log("Weapon expired: " + floatingWeapon.name);
             Destroy(floatingWeapon.gameObject);
             floatingWeapon = null;
-            interactText.text = "Press E to use";
         }
 
-        isBoxActive = false; // Box can be used again
+        yield return new WaitForSeconds(boxCooldown); // ✅ Wait before allowing interaction again
+
+        interactText.text = "Press 'E' to use";
+        SetBoxState(false);
+        isBoxActive = false; // ✅ Now the player can interact again
     }
 
     public void WeaponPickedUp(Weapon pickedWeapon)
     {
-        if (floatingWeapon == pickedWeapon) // ✅ Only clear it if it's the same weapon
+        if (floatingWeapon == pickedWeapon) // Only clear it if it's the same weapon
         {
-            floatingWeapon = null; // ✅ Clear the reference so the box no longer tracks it
+            floatingWeapon = null; // Clear the reference so the box no longer tracks it
         }
     }
 }
