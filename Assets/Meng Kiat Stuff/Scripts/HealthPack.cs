@@ -6,13 +6,16 @@ public class HealthPack : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        // Check if the object has a CharacterController (means it's a player)
+        if (other.GetComponent<CharacterController>() != null)
         {
-            PlayerStats playerStats = new PlayerStats();
+            // Get the PlayerStats component
+            PlayerStats playerStats = other.GetComponent<PlayerStats>();
+
             if (playerStats != null)
             {
-                playerStats.Heal(30);
-                Destroy(gameObject);
+                playerStats.Heal(30); // Heal the player
+                Destroy(gameObject); // Remove the health pack
             }
         }
     }
