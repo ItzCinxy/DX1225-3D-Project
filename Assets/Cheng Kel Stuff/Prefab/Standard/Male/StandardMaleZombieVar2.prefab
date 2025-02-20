@@ -2542,7 +2542,7 @@ GameObject:
   - component: {fileID: 3937127813726708870}
   - component: {fileID: 30888778058747467}
   - component: {fileID: 4527785291907671667}
-  - component: {fileID: 9141434904774239891}
+  - component: {fileID: 8567391848769719329}
   m_Layer: 3
   m_Name: StandardMaleZombieVar2
   m_TagString: Untagged
@@ -2616,7 +2616,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &9141434904774239891
+--- !u!114 &8567391848769719329
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2625,7 +2625,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7997650950129744345}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e98ffccd51b0ec4d8840a9c9ff44120, type: 3}
+  m_Script: {fileID: 11500000, guid: 79852d4e5a570ba499c900ce5c1b6f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   roamRadius: 5
