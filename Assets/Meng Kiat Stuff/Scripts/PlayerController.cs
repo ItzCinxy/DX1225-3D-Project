@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour
     private float jumpTimer;
     private bool jumped;
 
+    [SerializeField] private WeaponHolder weaponholder;
+
     [SerializeField] private CinemachineVirtualCamera _thirdPersonCamera;
     [SerializeField] private CinemachineVirtualCamera _firstPersonCamera;
     [SerializeField] private SkinnedMeshRenderer _skin;
@@ -37,7 +39,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         _inputActions = _playerInput.actions;
-        sprintSpeed = moveSpeed * 1.5f;
+        sprintSpeed = moveSpeed * 2f;
         crouchSpeed = moveSpeed * 0.5f;
 
         Cursor.visible = false;
@@ -82,6 +84,9 @@ public class PlayerController : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             _skillTreeCanvas.gameObject.SetActive(false);
         }
+
+        bool hasWeapon = weaponholder.IsWeaponEquipped();
+        _animator.SetBool("IsHoldingGun", hasWeapon);
 
         HandleGroundCheck();
         HandleCrouch();

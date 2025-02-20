@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7fb076b9ae35dbf4993fe052a00254d9
+guid: e7602d810f0961945882aeaea7440e3f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Breathing Idle
+      name: Crouch Walk Back
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 298
+      lastFrame: 41
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
