@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BomberZombieAIController : MonoBehaviour
 {
-    public enum EnemyState { Idle, Walk, Run, Attack, Hit, Exploding, Dying }
+    public enum EnemyState { Idle, Walk, Run, Attack, Hit, Convulsing, Dying }
     private EnemyState currentState;
 
     [Header("AI Settings")]
@@ -35,6 +35,7 @@ public class BomberZombieAIController : MonoBehaviour
     [Header("Loot Drops")]
     [SerializeField] private GameObject ammoPrefab;
     [SerializeField] private GameObject healthPrefab;
+    [SerializeField] private GameObject explosionEffectPrefab;
 
     private Transform player;
     private CharacterController playerController;
@@ -44,8 +45,9 @@ public class BomberZombieAIController : MonoBehaviour
     private Animator animator;
 
     private bool isDying = false;
-    private bool isExploding = false;
+    private bool isConvulsing = false;
 
+    int canStartAttack = 1;
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -71,7 +73,7 @@ public class BomberZombieAIController : MonoBehaviour
 
     void Update()
     {
-        if (isDying || isExploding) return;
+        if (isDying || isConvulsing) return;
 
         switch (currentState)
         {
@@ -82,7 +84,7 @@ public class BomberZombieAIController : MonoBehaviour
             case EnemyState.Hit: break;
         }
 
-        if (!isDying && !isExploding)
+        if (!isDying || !isConvulsing)
         {
             transform.position += velocity * Time.deltaTime;
         }
@@ -92,13 +94,12 @@ public class BomberZombieAIController : MonoBehaviour
             RotateTowardsMovementDirection();
         }
     }
-
     void ChangeState(EnemyState newState)
     {
-        if (currentState == newState || isDying || isExploding) return;
+        if (currentState == newState || isDying) return;
         currentState = newState;
 
-        ResetAllAnimationBools();
+        ResetAllAnimationBools(); // Ensure only one bool is active at a time
 
         Debug.Log($"Zombie changed state to: {currentState}");
 
@@ -131,11 +132,11 @@ public class BomberZombieAIController : MonoBehaviour
                 StartCoroutine(RecoverFromHit());
                 break;
 
-            case EnemyState.Exploding:
-                isExploding = true;
+            case EnemyState.Convulsing:
+                isConvulsing = true;
                 velocity = Vector3.zero;
-                animator.SetTrigger("Explode");
-                StartCoroutine(Explode());
+                animator.SetBool("Convulsing", true);
+                StartCoroutine(ConvulseBeforeDespawn());
                 break;
 
             case EnemyState.Dying:
@@ -146,6 +147,7 @@ public class BomberZombieAIController : MonoBehaviour
         }
     }
 
+    // Helper method to reset all animation bools before setting a new one
     void ResetAllAnimationBools()
     {
         animator.SetBool("Idle", false);
@@ -159,6 +161,12 @@ public class BomberZombieAIController : MonoBehaviour
     void Seek(Vector3 target, float speed)
     {
         Vector3 desiredVelocity = (target - transform.position).normalized * speed;
+        if (Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward, out RaycastHit hit, 1.5f, obstacleLayer))
+        {
+            Vector3 avoidDirection = Vector3.Cross(Vector3.up, hit.normal).normalized;
+            desiredVelocity = avoidDirection * speed;
+        }
+
         Vector3 steering = (desiredVelocity - velocity) * 2f;
         velocity += steering * Time.deltaTime;
         velocity = Vector3.ClampMagnitude(velocity, speed);
@@ -186,7 +194,7 @@ public class BomberZombieAIController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (isDying || isExploding) return;
+        if (isDying || isConvulsing) return;
 
         currentHealth -= damage;
         Debug.Log($"{gameObject.name} took {damage} damage! HP: {currentHealth}");
@@ -198,7 +206,7 @@ public class BomberZombieAIController : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            ChangeState(EnemyState.Exploding);
+            ChangeState(EnemyState.Convulsing);
         }
         else
         {
@@ -206,35 +214,29 @@ public class BomberZombieAIController : MonoBehaviour
         }
     }
 
-    public void AttackHitEvent() 
-    {
-        if (player == null || isDying) return;
-
-        if (Vector3.Distance(transform.position, player.position) <= attackRange)
-        {
-            Debug.Log("Bomber attack landed!");
-            playerHealth?.TakeDamage(attackDamage);
-        }
-    }
-
-    IEnumerator Explode()
-    {
-        yield return new WaitForSeconds(1f); // Explosion animation delay
-        ChangeState(EnemyState.Dying);
-    }
-
     IEnumerator DieAfterAnimation()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(10.5f);
         Die();
     }
 
     void Die()
     {
+        if (ammoPrefab != null)
+        {
+            Instantiate(ammoPrefab, transform.position, Quaternion.identity);
+        }
+        if (healthPrefab != null)
+        {
+            Instantiate(healthPrefab, transform.position, Quaternion.identity);
+        }
+
         if (healthBar != null)
         {
             Destroy(healthBar.gameObject);
         }
+
+
         Destroy(gameObject);
     }
 
@@ -256,16 +258,32 @@ public class BomberZombieAIController : MonoBehaviour
     void HandleWalkState()
     {
         Seek(targetPosition, walkSpeed);
-        if (Vector3.Distance(transform.position, targetPosition) < 1f) ChangeState(EnemyState.Idle);
+        if (Vector3.Distance(transform.position, targetPosition) < 1f)
+            ChangeState(EnemyState.Idle);
+
         if (CanSeePlayer()) ChangeState(EnemyState.Run);
     }
 
     void HandleRunState()
     {
         if (player == null) return;
+
         Seek(player.position, runSpeed);
-        if (Vector3.Distance(transform.position, player.position) <= attackRange) ChangeState(EnemyState.Attack);
+
+        if (Vector3.Distance(transform.position, player.position) <= attackRange)
+            ChangeState(EnemyState.Attack);
+
         if (!CanSeePlayer()) ChangeState(EnemyState.Idle);
+    }
+
+    void HandleAttackState()
+    {
+        transform.LookAt(player);
+
+        if (Vector3.Distance(transform.position, player.position) <= attackRange)
+            return;
+
+        ChangeState(EnemyState.Run);
     }
 
     void ChooseValidRandomTarget()
@@ -283,24 +301,59 @@ public class BomberZombieAIController : MonoBehaviour
 
         targetPosition = transform.position;
     }
-    void HandleAttackState()
-    {
-        transform.LookAt(player);
-        if (Vector3.Distance(transform.position, player.position) > attackRange) ChangeState(EnemyState.Run);
-    }
 
+    public void AttackHitEvent()
+    {
+        if (player == null || isDying) return;
+
+        // Ensure the player is still in attack range before applying damage
+        if (Vector3.Distance(transform.position, player.position) <= attackRange)
+        {
+            Debug.Log("Zombie attack landed!");
+            playerHealth?.TakeDamage((float)attackDamage); // Apply damage
+        }
+
+        if (explosionEffectPrefab != null)
+        {
+            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+        }
+
+        ChangeState(EnemyState.Convulsing);
+    }
     IEnumerator PerformAttack()
     {
         if (!canAttack || isDying) yield break;
         canAttack = false;
 
         animator.SetBool("Attack", true);
-        yield return new WaitForSeconds(0.5f);
-
-        AttackHitEvent();
 
         yield return new WaitForSeconds(0.5f);
-        ChangeState(EnemyState.Exploding);
+
+        if (canStartAttack <= 0)
+        {
+            AttackHitEvent();
+        }
+
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        if (distanceToPlayer <= attackRange && !isDying)
+        {
+            StartCoroutine(PerformAttack());
+        }
+        else if (distanceToPlayer <= chaseRange)
+        {
+            animator.SetBool("Attack", false);
+            canAttack = true;
+            ChangeState(EnemyState.Run);
+        }
+        else
+        {
+            animator.SetBool("Attack", false);
+            canAttack = true;
+            ChangeState(EnemyState.Idle);
+        }
+
+        canStartAttack -= 1;
     }
 
     IEnumerator RecoverFromHit()
@@ -309,9 +362,15 @@ public class BomberZombieAIController : MonoBehaviour
         ChangeState(EnemyState.Run);
     }
 
+    IEnumerator ConvulseBeforeDespawn()
+    {
+        yield return new WaitForSeconds(2f);
+        ChangeState(EnemyState.Dying);
+    }
+
     IEnumerator TransitionToWalk()
     {
-        yield return new WaitForSeconds(idleTime);
+        yield return new WaitForSeconds(Random.Range(2, idleTime));
         ChangeState(EnemyState.Walk);
     }
 
