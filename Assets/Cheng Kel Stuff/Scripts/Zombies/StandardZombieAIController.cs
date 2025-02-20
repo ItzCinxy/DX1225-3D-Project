@@ -25,7 +25,7 @@ public class StandardZombieAIController : MonoBehaviour
 
     [Header("Health Settings")]
     private UIEnemyHealthBar healthBar;
-    [SerializeField] private int maxHealth = 100;
+    [SerializeField] private int maxHealth = 200;
     [SerializeField] private int currentHealth;
 
     [Header("Attack Settings")]
