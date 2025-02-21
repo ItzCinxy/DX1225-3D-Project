@@ -10,7 +10,7 @@ public class StandardZombieAIController : MonoBehaviour
     [Header("AI Settings")]
     [SerializeField] private float roamRadius = 5f;
     [SerializeField] private float chaseRange = 10f;
-    [SerializeField] private float attackRange = 0.5f;
+    [SerializeField] private float attackRange = 2f;
 
     [SerializeField] private float idleTime = 3f;
     [SerializeField] private float walkTime = 5f;
@@ -49,6 +49,14 @@ public class StandardZombieAIController : MonoBehaviour
 
     int canStartAttack = 1;
 
+    [Header("Flocking")]
+    private List<StandardZombieAIController> zombies;
+    [SerializeField][Range(0, 1)] private float _separationWeight = 0.5f;
+    [SerializeField][Range(0, 1)] private float _cohesionWeight = 0.5f;
+    [SerializeField][Range(0, 1)] private float _alignmentWeight = 0.5f;
+    [SerializeField] private float _neighbourRadius = 5f;
+
+
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -68,6 +76,7 @@ public class StandardZombieAIController : MonoBehaviour
         {
             healthBar.SetMaxHealth(maxHealth);
         }
+        zombies = new List<StandardZombieAIController>(FindObjectsOfType<StandardZombieAIController>());
 
         ChangeState(EnemyState.Walk);
     }
@@ -169,7 +178,7 @@ public class StandardZombieAIController : MonoBehaviour
         }
 
         Vector3 steering = (desiredVelocity - velocity) * 2f;
-        velocity += steering * Time.deltaTime;
+        velocity = Vector3.Lerp(velocity, velocity + steering * Time.deltaTime, 0.3f);
         velocity = Vector3.ClampMagnitude(velocity, speed);
     }
 
@@ -260,6 +269,8 @@ public class StandardZombieAIController : MonoBehaviour
 
     void HandleWalkState()
     {
+        Vector3 flockingForce = ComputeFlocking();
+        velocity += flockingForce;
         Seek(targetPosition, walkSpeed);
         if (Vector3.Distance(transform.position, targetPosition) < 1f)
             ChangeState(EnemyState.Idle);
@@ -271,6 +282,8 @@ public class StandardZombieAIController : MonoBehaviour
     {
         if (player == null) return;
 
+        Vector3 flockingForce = ComputeFlocking(); // Weaker flocking influence
+        velocity += flockingForce;
         Seek(player.position, runSpeed);
 
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
@@ -279,14 +292,54 @@ public class StandardZombieAIController : MonoBehaviour
         if (!CanSeePlayer()) ChangeState(EnemyState.Idle);
     }
 
+    Vector3 ComputeFlocking()
+    {
+        Vector3 separation = Vector3.zero;
+        Vector3 cohesion = Vector3.zero;
+        Vector3 alignment = Vector3.zero;
+        int neighborCount = 0;
+
+        foreach (StandardZombieAIController zombie in zombies)
+        {
+            if (zombie != this)
+            {
+                float distance = Vector3.Distance(transform.position, zombie.transform.position);
+                if (distance < _neighbourRadius)
+                {
+                    separation += (transform.position - zombie.transform.position).normalized / distance;
+                    cohesion += zombie.transform.position;
+                    alignment += zombie.velocity;
+                    neighborCount++;
+                }
+            }
+        }
+
+        if (neighborCount > 0)
+        {
+            cohesion /= neighborCount;
+            alignment /= neighborCount;
+            cohesion = (cohesion - transform.position).normalized;
+            alignment = alignment.normalized;
+        }
+
+        return (separation * _separationWeight) + (cohesion * _cohesionWeight) + (alignment * _alignmentWeight);
+    }
+
+
     void HandleAttackState()
     {
-        transform.LookAt(player);
+        Vector3 lookDirection = player.position - transform.position;
+        lookDirection.y = 0; // Ignore vertical rotation
 
-        if (Vector3.Distance(transform.position, player.position) <= attackRange)
-            return;
+        if (lookDirection.magnitude > 0.1f)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDirection), rotationSpeed * Time.deltaTime);
+        }
 
-        ChangeState(EnemyState.Run);
+        if (Vector3.Distance(transform.position, player.position) > attackRange)
+        {
+            ChangeState(EnemyState.Run);
+        }
     }
 
     void ChooseValidRandomTarget()
