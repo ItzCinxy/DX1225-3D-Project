@@ -2969,6 +2969,12 @@ MonoBehaviour:
   attackDamage: 0
   explosionRadius: 2.5
   explosionDamage: 30
+  firePrefab: {fileID: 9014088529870822324, guid: f45dcc5787dc0ba4d9fd56f880dad9c3,
+    type: 3}
+  fireRadius: 5
+  fireDuration: 15
+  fireDamage: 10
+  fireTickRate: 1
   ammoPrefab: {fileID: 794305810215856843, guid: 306453e79aaf5574daa3db745708c34f,
     type: 3}
   healthPrefab: {fileID: 6477114811567125893, guid: 1188a74ac345e70499c4a52c498df245,
