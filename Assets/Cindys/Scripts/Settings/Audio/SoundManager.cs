@@ -27,9 +27,6 @@ public class SoundManager : MonoBehaviour
     [Header("Overworld BGM (Plays when in empty areas)")]
     public AudioClip overworldBGM;
 
-    [Header("Region BGMs (Set in Inspector)")]
-    public List<RegionBGM> regionBGMs = new List<RegionBGM>();
-
     private Dictionary<string, AudioClip> regionBGM = new Dictionary<string, AudioClip>();
     private Dictionary<string, AudioClip> regionBattleBGM = new Dictionary<string, AudioClip>();
 
@@ -56,17 +53,6 @@ public class SoundManager : MonoBehaviour
         regionBGM = new Dictionary<string, AudioClip>();
         regionBattleBGM = new Dictionary<string, AudioClip>();
 
-        foreach (RegionBGM region in regionBGMs)
-        {
-            if (!regionBGM.ContainsKey(region.regionName))
-            {
-                regionBGM[region.regionName] = region.normalBGM;
-            }
-            if (!regionBattleBGM.ContainsKey(region.regionName))
-            {
-                regionBattleBGM[region.regionName] = region.battleBGM;
-            }
-        }
     }
 
     private void Start()
@@ -90,13 +76,7 @@ public class SoundManager : MonoBehaviour
         Collider[] colliders = Physics.OverlapSphere(player.transform.position, 1f);
         foreach (Collider collider in colliders)
         {
-            RegionTrigger regionTrigger = collider.GetComponent<RegionTrigger>();
-            if (regionTrigger != null)
-            {
-                Debug.Log("Player spawned inside region: " + regionTrigger.regionName);
-                ChangeRegion(regionTrigger.regionName);
-                return;
-            }
+
         }
 
         Debug.Log("Player spawned in empty area (Overworld). Playing Overworld BGM.");
