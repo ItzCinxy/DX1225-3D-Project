@@ -6,6 +6,7 @@ public class WeaponRaycast : MonoBehaviour
     [Header("Raycast Settings")]
     [SerializeField] private float shootRange = 100f;
     [SerializeField] private LayerMask targetLayer;
+    [SerializeField] private int weaponDmg;
 
     [Header("Effects")]
     [SerializeField] private GameObject hitEffectPrefab;
@@ -43,31 +44,31 @@ public class WeaponRaycast : MonoBehaviour
             StandardZombieAIController stdAI = hit.collider.GetComponentInChildren<StandardZombieAIController>();
             if (stdAI != null)
             {
-                stdAI.TakeDamage(100);
+                stdAI.TakeDamage(weaponDmg);
             }
 
             TankZombieAIController tankAI = hit.collider.GetComponent<TankZombieAIController>();
             if (tankAI != null)
             {
-                tankAI.TakeDamage(100);
+                tankAI.TakeDamage(weaponDmg);
             }
 
             BomberZombieAIController bmbAI = hit.collider.GetComponent<BomberZombieAIController>();
             if (bmbAI != null)
             {
-                bmbAI.TakeDamage(100);
+                bmbAI.TakeDamage(weaponDmg);
             }
 
             ScreamerZombieAIController scrmAI = hit.collider.GetComponent<ScreamerZombieAIController>();
             if (scrmAI != null)
             {
-                scrmAI.TakeDamage(10);
+                scrmAI.TakeDamage(weaponDmg);
             }
 
             ChargerAIController chrgAI = hit.collider.GetComponent<ChargerAIController>();
             if (chrgAI != null)
             {
-                chrgAI.TakeDamage(100);
+                chrgAI.TakeDamage(weaponDmg);
             }
 
             // for particle system
