@@ -210,7 +210,7 @@ Transform:
   m_GameObject: {fileID: 1704353}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -0.507, y: 1.48, z: 15.433001}
+  m_LocalPosition: {x: -0.707, y: 1.9309996, z: 15.694}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -951,6 +951,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TankZombieVar2
       objectReference: {fileID: 0}
+    - target: {fileID: 6152807240969163700, guid: 9485bb5c7c5c15442b2ec37a09efebb5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1024,6 +1029,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BomberZombie
       objectReference: {fileID: 0}
+    - target: {fileID: 9077664502667527570, guid: 6db799c7467254742a8f8c85e54b4bcb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1082,6 +1092,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ChargerFemaleZombieVar2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3803621759454471370, guid: fa6b154a63e0db5478ec253a8cda23db,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8714473538696650253, guid: fa6b154a63e0db5478ec253a8cda23db,
         type: 3}
@@ -1201,6 +1216,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: StandardMaleCopZombieVar1
       objectReference: {fileID: 0}
+    - target: {fileID: 6779471332613274318, guid: 72307dcf76dd17e42a5170ab8420e60e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8022013502018758579, guid: 72307dcf76dd17e42a5170ab8420e60e,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1223,6 +1243,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: StandardMaleCopZombieVar2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2152291129376313345, guid: 04dd90fe7f7254544869d6241e5458fe,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2489626664782571738, guid: 04dd90fe7f7254544869d6241e5458fe,
         type: 3}
@@ -1415,6 +1440,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TankZombieVar1
       objectReference: {fileID: 0}
+    - target: {fileID: 2828529877596690705, guid: c3fff07140ad38d4f9b79001ace87a61,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6728097414583161521, guid: c3fff07140ad38d4f9b79001ace87a61,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1437,6 +1467,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ChargerFemaleZombieVar1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5002270420393917769, guid: 1aadfe13705387148b663c469f5295a8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5677784277324122038, guid: 1aadfe13705387148b663c469f5295a8,
         type: 3}
