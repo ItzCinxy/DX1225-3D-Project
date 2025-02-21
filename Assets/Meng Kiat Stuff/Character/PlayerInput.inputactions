@@ -69,6 +69,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Drop",
+                    "type": "Button",
+                    "id": "a790c45e-c6b3-4b1b-960e-9011d45423fb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "ToggleSkillTree",
                     "type": "Button",
                     "id": "3df03fb1-be3a-4b59-a601-9bdd4e4dad07",
@@ -87,9 +96,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Drop",
+                    "name": "ToggleNightVision",
                     "type": "Button",
-                    "id": "a790c45e-c6b3-4b1b-960e-9011d45423fb",
+                    "id": "2caabafa-5c31-4151-b61f-2289bea0533b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Throw",
+                    "type": "Button",
+                    "id": "ab9fa74a-cc44-4b23-84be-3ff54239d8a5",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -248,6 +266,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Drop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "68a318de-996c-4d50-b9fa-11152feeff05",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleNightVision",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b9bb7ec0-8252-495c-b1a6-3f6dcf306a21",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Throw",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

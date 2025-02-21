@@ -22,6 +22,12 @@ public abstract class WeaponBase : MonoBehaviour
         UpdateAmmoDisplay();
     }
 
+    private void Update()
+    {
+        if (currentAmmoInMag <= 0)
+            Reload();
+    }
+
     public abstract void Shoot();
 
     public virtual void Reload()
