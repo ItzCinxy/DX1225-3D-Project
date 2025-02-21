@@ -317,10 +317,10 @@ public class BomberZombieAIController : MonoBehaviour
             playerHealth?.TakeDamage((float)attackDamage); // Apply damage
         }
 
-        if (explosionEffectPrefab != null)
-        {
-            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
-        }
+        //if (explosionEffectPrefab != null)
+        //{
+        //    Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+        //}
 
         ChangeState(EnemyState.Convulsing);
     }
@@ -403,7 +403,8 @@ public class BomberZombieAIController : MonoBehaviour
         // Instantiate explosion effect
         if (explosionEffectPrefab != null)
         {
-            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+            GameObject explosionInstance = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(explosionInstance, explosionInstance.GetComponent<ParticleSystem>().main.duration);
         }
     }
 

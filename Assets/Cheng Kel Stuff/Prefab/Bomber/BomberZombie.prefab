@@ -2973,4 +2973,5 @@ MonoBehaviour:
     type: 3}
   healthPrefab: {fileID: 6477114811567125893, guid: 1188a74ac345e70499c4a52c498df245,
     type: 3}
-  explosionEffectPrefab: {fileID: 0}
+  explosionEffectPrefab: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
+    type: 3}
