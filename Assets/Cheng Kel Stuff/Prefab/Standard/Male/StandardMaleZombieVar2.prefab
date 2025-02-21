@@ -2542,7 +2542,7 @@ GameObject:
   - component: {fileID: 3937127813726708870}
   - component: {fileID: 30888778058747467}
   - component: {fileID: 4527785291907671667}
-  - component: {fileID: 2599493434780120495}
+  - component: {fileID: -6460173948576667345}
   m_Layer: 3
   m_Name: StandardMaleZombieVar2
   m_TagString: Untagged
@@ -2616,7 +2616,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &2599493434780120495
+--- !u!114 &-6460173948576667345
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2639,7 +2639,7 @@ MonoBehaviour:
   rotationSpeed: 5
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   maxHealth: 200
   currentHealth: 0
   attackDamage: 10
