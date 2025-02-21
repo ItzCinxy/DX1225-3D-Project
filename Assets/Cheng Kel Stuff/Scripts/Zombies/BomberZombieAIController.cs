@@ -36,6 +36,13 @@ public class BomberZombieAIController : MonoBehaviour
     [SerializeField] private float explosionRadius = 4f;
     [SerializeField] private int explosionDamage = 30;
 
+    [Header("Fire Settings")]
+    [SerializeField] private GameObject firePrefab;
+    [SerializeField] private float fireRadius = 5f;
+    [SerializeField] private float fireDuration = 15f;
+    [SerializeField] private int fireDamage = 10;
+    [SerializeField] private float fireTickRate = 1f;
+
     [Header("Loot Drops")]
     [SerializeField] private GameObject ammoPrefab;
     [SerializeField] private GameObject healthPrefab;
@@ -227,8 +234,7 @@ public class BomberZombieAIController : MonoBehaviour
     void Die()
     {
         // Randomly decide whether to drop health or ammo (50% chance for each)
-        int dropChance = Random.Range(0, 2); // Generates either 0 or 1
-
+        int dropChance = Random.Range(0, 2);
         if (dropChance == 0 && ammoPrefab != null)
         {
             Instantiate(ammoPrefab, transform.position, Quaternion.identity);
@@ -238,12 +244,47 @@ public class BomberZombieAIController : MonoBehaviour
             Instantiate(healthPrefab, transform.position, Quaternion.identity);
         }
 
+        // Spawn fire area effect
+        SpawnFireAroundDeathLocation();
+
         if (healthBar != null)
         {
             Destroy(healthBar.gameObject);
         }
 
         Destroy(gameObject);
+    }
+
+    void SpawnFireAroundDeathLocation()
+    {
+        if (firePrefab == null) return;
+
+        int fireCount = Random.Range(3, 6); // Spawn between 3 to 6 fire patches
+
+        for (int i = 0; i < fireCount; i++)
+        {
+            Vector3 randomOffset = new Vector3(
+                Random.Range(-fireRadius, fireRadius),
+                0,
+                Random.Range(-fireRadius, fireRadius)
+            );
+
+            Vector3 firePosition = transform.position + randomOffset;
+
+            // Ensure fire is grounded
+            if (Physics.Raycast(firePosition + Vector3.up * 5, Vector3.down, out RaycastHit hit, 10f))
+            {
+                firePosition = hit.point;
+            }
+
+            GameObject fireInstance = Instantiate(firePrefab, firePosition, Quaternion.identity);
+            Destroy(fireInstance, fireDuration); // Remove fire after 15 seconds
+
+            // Attach fire damage script
+            FireDamage fireDamageScript = fireInstance.AddComponent<FireDamage>();
+            fireDamageScript.damage = fireDamage;
+            fireDamageScript.tickRate = fireTickRate;
+        }
     }
 
     void RotateTowardsMovementDirection()
