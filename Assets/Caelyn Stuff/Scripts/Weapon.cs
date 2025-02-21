@@ -25,6 +25,12 @@ public class Weapon : MonoBehaviour
         UpdateAmmoDisplay();
     }
 
+    private void Update()
+    {
+        if (currentAmmoInMag <= 0)
+            Reload();
+    }
+
     public void Shoot()
     {
         if (isReloading || currentAmmoInMag <= 0) return;
