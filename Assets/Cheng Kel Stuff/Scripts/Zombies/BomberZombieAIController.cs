@@ -244,8 +244,8 @@ public class BomberZombieAIController : MonoBehaviour
             Instantiate(healthPrefab, transform.position, Quaternion.identity);
         }
 
-        // Spawn fire area effect
-        SpawnFireAroundDeathLocation();
+        // Spawn fire exactly at death spot
+        SpawnFireOnDeathSpot();
 
         if (healthBar != null)
         {
@@ -255,36 +255,21 @@ public class BomberZombieAIController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void SpawnFireAroundDeathLocation()
+
+    void SpawnFireOnDeathSpot()
     {
         if (firePrefab == null) return;
 
-        int fireCount = Random.Range(3, 6); // Spawn between 3 to 6 fire patches
+        // Spawn fire at the exact death position
+        GameObject fireInstance = Instantiate(firePrefab, transform.position, Quaternion.identity);
 
-        for (int i = 0; i < fireCount; i++)
-        {
-            Vector3 randomOffset = new Vector3(
-                Random.Range(-fireRadius, fireRadius),
-                0,
-                Random.Range(-fireRadius, fireRadius)
-            );
+        // Destroy fire after the set duration
+        Destroy(fireInstance, fireDuration);
 
-            Vector3 firePosition = transform.position + randomOffset;
-
-            // Ensure fire is grounded
-            if (Physics.Raycast(firePosition + Vector3.up * 5, Vector3.down, out RaycastHit hit, 10f))
-            {
-                firePosition = hit.point;
-            }
-
-            GameObject fireInstance = Instantiate(firePrefab, firePosition, Quaternion.identity);
-            Destroy(fireInstance, fireDuration); // Remove fire after 15 seconds
-
-            // Attach fire damage script
-            FireDamage fireDamageScript = fireInstance.AddComponent<FireDamage>();
-            fireDamageScript.damage = fireDamage;
-            fireDamageScript.tickRate = fireTickRate;
-        }
+        // Attach fire damage script
+        FireDamage fireDamageScript = fireInstance.AddComponent<FireDamage>();
+        fireDamageScript.damage = fireDamage;
+        fireDamageScript.tickRate = fireTickRate;
     }
 
     void RotateTowardsMovementDirection()
