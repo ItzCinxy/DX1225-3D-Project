@@ -7,7 +7,7 @@ public class HomingMissile : MonoBehaviour
     public float rotationSpeed = 5f;
     public float explosionRadius = 2.5f;
     public GameObject explosionEffectPrefab;
-    private Action<Vector3> explosionCallback; // Callback to apply damage
+    private Action<Vector3> explosionCallback;
 
     public void SetExplosionCallback(Action<Vector3> callback)
     {
@@ -59,19 +59,28 @@ public class HomingMissile : MonoBehaviour
             Explode();
         }
     }
-
     void Explode()
     {
         if (explosionEffectPrefab != null)
         {
             GameObject explosionEffect = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
 
-            Destroy(explosionEffect, 3f);
+            // Get the ParticleSystem component
+            ParticleSystem ps = explosionEffect.GetComponent<ParticleSystem>();
+            if (ps != null)
+            {
+                // Get the duration of the particle system and destroy after it completes
+                Destroy(explosionEffect, ps.main.duration);
+            }
+            else
+            {
+                // Fallback: Destroy after 3 seconds if no ParticleSystem is found
+                Destroy(explosionEffect, 3f);
+            }
         }
 
         explosionCallback?.Invoke(transform.position);
 
         Destroy(gameObject);
     }
-
 }

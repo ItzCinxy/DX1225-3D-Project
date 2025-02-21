@@ -6,7 +6,7 @@ public class DroneAITYPE2 : MonoBehaviour
     [Header("Drone Settings")]
     public Transform player; // Player reference
     public float followRange = 3f; // Max distance from player
-    public float attackRange = 6f; // Attack range
+    public float attackRange = 4f; // Attack range
     public float speed = 5f; // Movement speed
     public float rotationSpeed = 5f;
     public float floatSpeed = 0.5f; // Speed of floating movement

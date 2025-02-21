@@ -14,7 +14,7 @@ public class DroneAITYPE1 : MonoBehaviour
 
     [Header("Attack Settings")]
     public float attackSpeed = 0.5f; // Attack cooldown
-    public int damage = 5; // Damage per shot
+    public int damage = 15; // Damage per shot
 
     [Header("Shooting Settings")]
     public Transform firePoint; // Where bullets are fired from
