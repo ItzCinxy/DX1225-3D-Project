@@ -2699,10 +2699,10 @@ MonoBehaviour:
   crouchSpeedMultiplier: 0.5
   jumpHeight: 1.3
   gravity: -9.81
-  groundCheckDistance: 4.83
+  groundCheckDistance: 1.7
   groundLayer:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 576
   _thirdPersonCamera: {fileID: 6312921078682969431}
   _firstPersonCamera: {fileID: 5147289899934294052}
   activePanels: []

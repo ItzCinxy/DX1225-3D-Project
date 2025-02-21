@@ -2869,7 +2869,7 @@ GameObject:
   - component: {fileID: 1227850350953027412}
   m_Layer: 3
   m_Name: BomberZombie
-  m_TagString: Untagged
+  m_TagString: Zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

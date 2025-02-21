@@ -15,6 +15,8 @@ public class WeaponHolder : MonoBehaviour
 
     [SerializeField] private Animator animator;
 
+    public static Transform currentTarget; // Shared target for drone @ck
+
     private void Update()
     {
         if (_playerInput.actions["Shoot"].WasPressedThisFrame())
@@ -35,6 +37,21 @@ public class WeaponHolder : MonoBehaviour
         }
     }
 
+    //private void Shoot()
+    //{
+    //    if (equippedWeapon == null) return;
+
+    //    if (equippedWeapon.TryGetComponent(out ProjectileWeapon projectileWeapon))
+    //    {
+    //        projectileWeapon.Shoot(); // ✅ Fire a grenade or projectile
+    //    }
+    //    else if (equippedWeapon.TryGetComponent(out Weapon gunWeapon))
+    //    {
+    //        gunWeapon.Shoot(); // ✅ Fire a hitscan gun
+    //    }
+    //}
+
+    //ck chanaged
     private void Shoot()
     {
         if (equippedWeapon == null) return;
@@ -46,6 +63,17 @@ public class WeaponHolder : MonoBehaviour
         else if (equippedWeapon.TryGetComponent(out Weapon gunWeapon))
         {
             gunWeapon.Shoot(); // ✅ Fire a hitscan gun
+
+            // ✅ Check for zombie hit and update the drone's target
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 100f))
+            {
+                if (hit.collider.CompareTag("Zombie"))
+                {
+                    currentTarget = hit.transform; // ✅ Drone will target this zombie
+                    hit.collider.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
+                }
+            }
         }
     }
 

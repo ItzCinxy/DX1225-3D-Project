@@ -2688,7 +2688,7 @@ GameObject:
   - component: {fileID: 8137506803434130630}
   m_Layer: 3
   m_Name: StandardMaleCopZombieVar1
-  m_TagString: Untagged
+  m_TagString: Zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2791,6 +2791,10 @@ MonoBehaviour:
     type: 3}
   healthPrefab: {fileID: 6477114811567125893, guid: 1188a74ac345e70499c4a52c498df245,
     type: 3}
+  _separationWeight: 0.5
+  _cohesionWeight: 0.5
+  _alignmentWeight: 0.5
+  _neighbourRadius: 5
 --- !u!1 &7065884196299369448
 GameObject:
   m_ObjectHideFlags: 0
