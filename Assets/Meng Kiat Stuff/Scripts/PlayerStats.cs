@@ -5,6 +5,7 @@ using TMPro;
 
 public class PlayerStats : MonoBehaviour
 {
+    [SerializeField] private PlayerController _playerController;
     [Header("Health Settings")]
     private float maxHealth = 100f;
     [SerializeField] private float currentHealth;
@@ -12,6 +13,9 @@ public class PlayerStats : MonoBehaviour
     [Header("Stamina Settings")]
     private float maxStamina = 100f;
     [SerializeField] private float currentStamina;
+
+    [Header("Regen Stuff")]
+    private float healthRegenSpeed = 0f;
 
     [Header("UI Settings")]
     [SerializeField] private Slider healthBar;
@@ -44,14 +48,17 @@ public class PlayerStats : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
+        PassiveRegen();
+    }
+
+    private void PassiveRegen()
+    {
+        if (!_playerController.GetIsSprinting())
         {
-            TakeDamage(10);
+            RecoverStamina(0.1f);
         }
-        if (Input.GetKey(KeyCode.J))
-        {
-            UseStamina(0.1f);
-        }
+
+        Heal(healthRegenSpeed);
     }
 
     public void TakeDamage(float damage)
@@ -63,11 +70,6 @@ public class PlayerStats : MonoBehaviour
 
         UpdateHealthBar();
         UpdateUIText();
-
-        if (currentHealth <= 30)
-        {
-            currentHealth = 30;
-        }
 
         if (currentHealth <= 0)
         {
@@ -141,19 +143,19 @@ public class PlayerStats : MonoBehaviour
     {
         if (healthText != null)
         {
-            healthText.text = $"{currentHealth} / {maxHealth}";
+            healthText.text = $"{Mathf.RoundToInt(currentHealth)} / {Mathf.RoundToInt(maxHealth)}";
         }
 
         if (staminaText != null)
         {
-            staminaText.text = $"{currentStamina} / {maxStamina}";
+            staminaText.text = $"{Mathf.RoundToInt(currentStamina)} / {Mathf.RoundToInt(maxStamina)}";
         }
     }
 
     private IEnumerator SmoothHealthBarUpdate()
     {
         float elapsedTime = 0f;
-        float duration = 0.5f;
+        float duration = 0.3f;
         float startValue = healthBar.value;
 
         while (elapsedTime < duration)
@@ -169,7 +171,7 @@ public class PlayerStats : MonoBehaviour
     private IEnumerator SmoothStaminaBarUpdate()
     {
         float elapsedTime = 0f;
-        float duration = 0.5f;
+        float duration = 0.3f;
         float startValue = staminaBar.value;
 
         while (elapsedTime < duration)
@@ -228,5 +230,10 @@ public class PlayerStats : MonoBehaviour
         }
 
         UpdateUIText();
+    }
+
+    public void IncreaseHealthRegen(float amountToIncrease)
+    {
+        healthRegenSpeed += amountToIncrease;
     }
 }
