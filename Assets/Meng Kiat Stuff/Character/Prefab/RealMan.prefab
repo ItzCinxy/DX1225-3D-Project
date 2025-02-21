@@ -251,7 +251,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3641424599579072406
 RectTransform:
   m_ObjectHideFlags: 0
@@ -885,7 +885,7 @@ Transform:
   m_GameObject: {fileID: 2638375442298049031}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03, y: 1.3599999, z: 0.059999995}
+  m_LocalPosition: {x: -0.03, y: 1.3599999, z: 0.06000001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1942,7 +1942,7 @@ Transform:
   m_GameObject: {fileID: 3609045760200546474}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.2999999, y: 1.6810001, z: -0.7}
+  m_LocalPosition: {x: 0.3, y: 1.681, z: -0.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3107,7 +3107,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: ce2b38e4593a63e4184aa73cca3bff24,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ce2b38e4593a63e4184aa73cca3bff24,
         type: 3}
@@ -3697,11 +3697,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponHolder: {fileID: 8280104596190241485}
   equippedWeapon: {fileID: 0}
+  equippedThrowable: {fileID: 0}
   _playerInput: {fileID: 52950440523894269}
   pickupRange: 6
   pickupLayer:
     serializedVersion: 2
     m_Bits: 128
+  throwPoint: {fileID: 0}
+  throwForce: 15
+  upwardForce: 5
   ammoDisplay: {fileID: 3804670500230771840}
   animator: {fileID: 5935726549204480247}
 --- !u!114 &55025328860115417
