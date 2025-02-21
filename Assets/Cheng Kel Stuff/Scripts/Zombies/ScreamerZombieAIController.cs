@@ -10,7 +10,7 @@ public class ScreamerZombieAIController : MonoBehaviour
     [Header("AI Settings")]
     [SerializeField] private float roamRadius = 5f;
     [SerializeField] private float chaseRange = 10f;
-    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float attackRange = 0.5f;
 
     [SerializeField] private float idleTime = 3f;
     [SerializeField] private float walkTime = 5f;

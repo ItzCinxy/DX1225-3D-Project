@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FireDamage : MonoBehaviour
 {
-    public int damage = 10; // Fire damage per tick
+    public int damage = 3; // Fire damage per tick
     public float tickRate = 1f; // Damage interval
 
     private void OnTriggerEnter(Collider other)
