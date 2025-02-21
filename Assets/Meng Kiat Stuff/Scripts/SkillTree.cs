@@ -18,6 +18,7 @@ public class SkillTree : MonoBehaviour
 
     public void UpgradeStamina() => playerStats.IncreaseMaxStamina(5);
     public void UpgradeHealth() => playerStats.IncreaseMaxHealth(20);
+    public void UpgradeHealthRegen() => playerStats.IncreaseHealthRegen(0.002f);
 
     public int GetSkillPoints() => skillPoints;
 }
