@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -27,7 +28,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera _firstPersonCamera;
 
     [Header("Active Panels")]
-    [SerializeField] private GameObject GameMenu;
+    [SerializeField] private List<GameObject> activePanels;
 
     private bool isFirstPerson = false;
     private bool isSkillTreeOpen = false;
@@ -86,12 +87,14 @@ public class PlayerController : MonoBehaviour
 
     private void HandleGamePause()
     {
+        bool isAnyPanelActive = activePanels.Exists(panel => panel.activeSelf);
+
         if (isSkillTreeOpen)
         {
             Cursor.lockState = CursorLockMode.None;
             _skillTreeCanvas?.gameObject.SetActive(true);
         }
-        else if (GameMenu.activeSelf)
+        else if (isAnyPanelActive) // Check if any panel is active
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -102,7 +105,7 @@ public class PlayerController : MonoBehaviour
             Cursor.visible = false;
         }
 
-        Debug.Log($"SkillTree: {isSkillTreeOpen}, GameMenu: {GameMenu.activeSelf}");
+        Debug.Log($"SkillTree: {isSkillTreeOpen}, AnyPanelActive: {isAnyPanelActive}");
     }
 
     private void UpdateCameraView()
