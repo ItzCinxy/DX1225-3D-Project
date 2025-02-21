@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class DroneAI : MonoBehaviour
+public class DroneAITYPE1 : MonoBehaviour
 {
     [Header("Drone Settings")]
     public Transform player; // Player reference
@@ -16,6 +16,9 @@ public class DroneAI : MonoBehaviour
     public float attackSpeed = 0.5f; // Attack cooldown
     public int damage = 5; // Damage per shot
 
+    [Header("Shooting Settings")]
+    public Transform firePoint; // Where bullets are fired from
+
     private Transform currentTarget;
     private float lastAttackTime;
     private Vector3 randomWanderTarget;
@@ -25,6 +28,14 @@ public class DroneAI : MonoBehaviour
     void Start()
     {
         SetRandomWanderTarget();
+
+        // If the drone has a Rigidbody, disable gravity and physics influence
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.useGravity = false;
+            rb.isKinematic = true;
+        }
     }
 
     void Update()
@@ -151,16 +162,21 @@ public class DroneAI : MonoBehaviour
     void ApplyFloatingMotion()
     {
         float floatOffset = Mathf.Sin(Time.time * floatSpeed) * floatHeight;
-        transform.position += new Vector3(0, floatOffset * Time.deltaTime, 0);
+
+        // Prevent drone from sinking into the ground
+        float minHeight = player.position.y + 1.5f; // Keep at least 1.5 units above the player
+        float targetHeight = Mathf.Max(transform.position.y + (floatOffset * Time.deltaTime), minHeight);
+
+        transform.position = new Vector3(transform.position.x, targetHeight, transform.position.z);
     }
 
     void Shoot()
     {
-        if (currentTarget == null) return;
+        if (currentTarget == null || firePoint == null) return;
 
-        // Raycast for instant damage
+        // Raycast from fire point for instant damage
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit, attackRange))
+        if (Physics.Raycast(firePoint.position, (currentTarget.position - firePoint.position).normalized, out hit, attackRange))
         {
             if (hit.collider.CompareTag("Zombie"))
             {
