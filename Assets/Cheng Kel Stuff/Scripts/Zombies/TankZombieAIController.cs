@@ -10,7 +10,7 @@ public class TankZombieAIController : MonoBehaviour
     [Header("AI Settings")]
     [SerializeField] private float roamRadius = 4f;
     [SerializeField] private float chaseRange = 8f;
-    [SerializeField] private float attackRange = 3f;
+    [SerializeField] private float attackRange = 0.5f;
 
     [SerializeField] private float idleTime = 4f;
     [SerializeField] private float walkTime = 6f;
