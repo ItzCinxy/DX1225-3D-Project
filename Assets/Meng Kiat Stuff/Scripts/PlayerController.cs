@@ -130,19 +130,19 @@ public class PlayerController : MonoBehaviour
             isSprinting = false;
             _characterController.height = 0.9f;
             _characterController.center = new Vector3(0, 0.65f, 0);
-            targetShoulderOffset = new Vector3(0.5f, -1f, 0f);
+            targetShoulderOffset = new Vector3(0.2f, -1f, 0f);
         }
         else
         {
             _characterController.height = 1.7f;
             _characterController.center = new Vector3(0, 1.1f, 0);
-            targetShoulderOffset = new Vector3(0.5f, -0.5f, 0f);
+            targetShoulderOffset = new Vector3(0.2f, -0.5f, 0f);
         }
 
         Cinemachine3rdPersonFollow followComponent = _thirdPersonCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         if (followComponent != null)
         {
-            followComponent.ShoulderOffset = Vector3.Lerp(followComponent.ShoulderOffset, targetShoulderOffset, Time.deltaTime * 8f);
+            followComponent.ShoulderOffset = Vector3.Lerp(followComponent.ShoulderOffset, targetShoulderOffset, Time.deltaTime * 5f);
         }
 
         _animator.SetBool("IsCrouching", isCrouching);
