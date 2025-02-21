@@ -1138,7 +1138,7 @@ MonoBehaviour:
   currentHealth: 0
   attackDamage: 10
   attackCooldown: 1.5
-  ammoPrefab: {fileID: 6115443849584106826, guid: ae85d92fdee9ef04dbae70d8758b09e8,
+  ammoPrefab: {fileID: 794305810215856843, guid: 306453e79aaf5574daa3db745708c34f,
     type: 3}
   healthPrefab: {fileID: 6477114811567125893, guid: 1188a74ac345e70499c4a52c498df245,
     type: 3}

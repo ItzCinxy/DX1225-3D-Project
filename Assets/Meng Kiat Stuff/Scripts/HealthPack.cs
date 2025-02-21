@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HealthPack : MonoBehaviour
 {
+    [SerializeField] private int incHealthAmt;
     private void OnTriggerEnter(Collider other)
     {
         // Check if the object has a CharacterController (means it's a player)
@@ -14,7 +15,7 @@ public class HealthPack : MonoBehaviour
 
             if (playerStats != null)
             {
-                playerStats.Heal(30); // Heal the player
+                playerStats.Heal(incHealthAmt); // Heal the player
                 Destroy(gameObject); // Remove the health pack
             }
         }

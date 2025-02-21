@@ -63,4 +63,10 @@ public class Weapon : MonoBehaviour
         ammoDisplay = newDisplay;
         UpdateAmmoDisplay();
     }
+
+    public void IncreaseTotalAmmo(int ammoInc)
+    {
+        totalAmmo += ammoInc;
+        UpdateAmmoDisplay();
+    }
 }
