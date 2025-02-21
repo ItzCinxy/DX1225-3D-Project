@@ -226,11 +226,14 @@ public class BomberZombieAIController : MonoBehaviour
 
     void Die()
     {
-        if (ammoPrefab != null)
+        // Randomly decide whether to drop health or ammo (50% chance for each)
+        int dropChance = Random.Range(0, 2); // Generates either 0 or 1
+
+        if (dropChance == 0 && ammoPrefab != null)
         {
             Instantiate(ammoPrefab, transform.position, Quaternion.identity);
         }
-        if (healthPrefab != null)
+        else if (dropChance == 1 && healthPrefab != null)
         {
             Instantiate(healthPrefab, transform.position, Quaternion.identity);
         }
@@ -239,7 +242,6 @@ public class BomberZombieAIController : MonoBehaviour
         {
             Destroy(healthBar.gameObject);
         }
-
 
         Destroy(gameObject);
     }

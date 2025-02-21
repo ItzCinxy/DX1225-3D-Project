@@ -25,7 +25,7 @@ public class ScreamerZombieAIController : MonoBehaviour
 
     [Header("Health Settings")]
     private UIEnemyHealthBar healthBar;
-    [SerializeField] private int maxHealth = 100;
+    [SerializeField] private int maxHealth = 200;
     [SerializeField] private int currentHealth;
 
     [Header("Attack Settings")]
@@ -45,6 +45,9 @@ public class ScreamerZombieAIController : MonoBehaviour
     private Animator animator;
 
     private bool isDying = false;
+    private bool isConvulsing = false;
+
+    int canStartAttack = 1;
 
     void Start()
     {
@@ -71,7 +74,7 @@ public class ScreamerZombieAIController : MonoBehaviour
 
     void Update()
     {
-        if (isDying) return;
+        if (isDying || isConvulsing) return;
 
         switch (currentState)
         {
@@ -82,7 +85,7 @@ public class ScreamerZombieAIController : MonoBehaviour
             case EnemyState.Hit: break;
         }
 
-        if (!isDying)
+        if (!isDying || !isConvulsing)
         {
             transform.position += velocity * Time.deltaTime;
         }
@@ -131,11 +134,14 @@ public class ScreamerZombieAIController : MonoBehaviour
                 break;
 
             case EnemyState.Convulsing:
+                isConvulsing = true;
+                velocity = Vector3.zero;
                 animator.SetBool("Convulsing", true);
                 StartCoroutine(ConvulseBeforeDespawn());
                 break;
 
             case EnemyState.Dying:
+                isDying = true;
                 animator.SetBool("Die", true);
                 StartCoroutine(DieAfterAnimation());
                 break;
@@ -189,7 +195,7 @@ public class ScreamerZombieAIController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (isDying) return;
+        if (isDying || isConvulsing) return;
 
         currentHealth -= damage;
         Debug.Log($"{gameObject.name} took {damage} damage! HP: {currentHealth}");
@@ -211,17 +217,23 @@ public class ScreamerZombieAIController : MonoBehaviour
 
     IEnumerator DieAfterAnimation()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(5f);
         Die();
     }
 
     void Die()
     {
-        if (isDying) return;
-        isDying = true;
+        // Randomly decide whether to drop health or ammo (50% chance for each)
+        int dropChance = Random.Range(0, 2); // Generates either 0 or 1
 
-        Instantiate(ammoPrefab, transform.position, Quaternion.identity);
-        Instantiate(healthPrefab, transform.position, Quaternion.identity);
+        if (dropChance == 0 && ammoPrefab != null)
+        {
+            Instantiate(ammoPrefab, transform.position, Quaternion.identity);
+        }
+        else if (dropChance == 1 && healthPrefab != null)
+        {
+            Instantiate(healthPrefab, transform.position, Quaternion.identity);
+        }
 
         if (healthBar != null)
         {
@@ -230,6 +242,7 @@ public class ScreamerZombieAIController : MonoBehaviour
 
         Destroy(gameObject);
     }
+
 
     void RotateTowardsMovementDirection()
     {
@@ -314,7 +327,10 @@ public class ScreamerZombieAIController : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        AttackHitEvent();
+        if (canStartAttack <= 0)
+        {
+            AttackHitEvent();
+        }
 
         yield return new WaitForSeconds(attackCooldown);
 
@@ -336,6 +352,8 @@ public class ScreamerZombieAIController : MonoBehaviour
             canAttack = true;
             ChangeState(EnemyState.Idle);
         }
+
+        canStartAttack -= 1;
     }
 
     IEnumerator RecoverFromHit()
