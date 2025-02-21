@@ -39,7 +39,7 @@ public class BomberZombieAIController : MonoBehaviour
     [Header("Fire Settings")]
     [SerializeField] private GameObject firePrefab;
     [SerializeField] private float fireRadius = 5f;
-    [SerializeField] private float fireDuration = 15f;
+    [SerializeField] private float fireDuration = 5f;
     [SerializeField] private int fireDamage = 3;
     [SerializeField] private float fireTickRate = 1f;
 
