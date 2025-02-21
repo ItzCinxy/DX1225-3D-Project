@@ -6,7 +6,7 @@ public class DroneAITYPE1 : MonoBehaviour
     [Header("Drone Settings")]
     public Transform player; // Player reference
     public float followRange = 3f; // Max distance from player
-    public float attackRange = 2.5f; // Attack range
+    public float attackRange = 6f; // Attack range
     public float speed = 5f; // Movement speed
     public float rotationSpeed = 5f;
     public float floatSpeed = 0.5f; // Speed of floating movement
@@ -14,7 +14,7 @@ public class DroneAITYPE1 : MonoBehaviour
 
     [Header("Attack Settings")]
     public float attackSpeed = 0.5f; // Attack cooldown
-    public int damage = 5; // Damage per shot
+    public int damage = 15; // Damage per shot
 
     [Header("Shooting Settings")]
     public Transform firePoint; // Where bullets are fired from
