@@ -309,7 +309,7 @@ GameObject:
   - component: {fileID: 233304102}
   - component: {fileID: 233304101}
   - component: {fileID: 233304100}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -411,12 +411,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4340371400917921381, guid: c5dfad2375a0ea140bdfb5ba261ec6c6,
-        type: 3}
-      propertyPath: hitEffectPrefab
-      value: 
-      objectReference: {fileID: 1000086091172172093, guid: 3874f034f6c65574f9eb2652e6b937ff,
-        type: 3}
     - target: {fileID: 4907961253817589924, guid: c5dfad2375a0ea140bdfb5ba261ec6c6,
         type: 3}
       propertyPath: m_Name
@@ -538,7 +532,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 80
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -565,7 +559,7 @@ Transform:
   m_GameObject: {fileID: 600399202}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.707, y: 1.6809996, z: -0.694}
+  m_LocalPosition: {x: -0.03, y: 1.3599999, z: 0.06000001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -721,6 +715,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4118439427652136163, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4118439427652136163, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.681
+      objectReference: {fileID: 0}
+    - target: {fileID: 4118439427652136163, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.7
       objectReference: {fileID: 0}
     - target: {fileID: 7131533075968479633, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
@@ -1059,6 +1068,12 @@ PrefabInstance:
       propertyPath: playerTransform
       value: 
       objectReference: {fileID: 1514026221}
+    - target: {fileID: 8504259784528394106, guid: e172d113a3539af44bd9f6d9d93113a2,
+        type: 3}
+      propertyPath: weaponPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 6055461160669010065, guid: bd43cf8928203974686db5a800b8652a,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1072,11 +1087,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6055461160669010065, guid: bd43cf8928203974686db5a800b8652a,
-        type: 3}
-      propertyPath: launchForce
-      value: 81.1
-      objectReference: {fileID: 0}
     - target: {fileID: 6981431416007914455, guid: bd43cf8928203974686db5a800b8652a,
         type: 3}
       propertyPath: m_Name

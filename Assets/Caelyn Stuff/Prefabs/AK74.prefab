@@ -370,8 +370,8 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
-  weaponDmg: 0
-  hitEffectPrefab: {fileID: 847188628635049040, guid: 5af574a01c8bc83419628ad64a92825d,
+  weaponDmg: 50
+  hitEffectPrefab: {fileID: 1000086091172172093, guid: 3874f034f6c65574f9eb2652e6b937ff,
     type: 3}
 --- !u!65 &4691890863369757174
 BoxCollider:

@@ -5,7 +5,7 @@ using TMPro;
 public class LuckyBox : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private Weapon[] weaponPool; // Array of weapons that can be obtained
+    [SerializeField] private WeaponBase[] weaponPool; // Array of weapons that can be obtained
     [SerializeField] private Transform weaponSpawnPoint; // Where the weapon appears
     [SerializeField] private float boxCooldown = 3f; // Cooldown time before using the box again
     [SerializeField] private float weaponLifetime = 10f; // Time before weapon disappears
@@ -16,7 +16,7 @@ public class LuckyBox : MonoBehaviour
     [SerializeField] private AudioClip receiveWeaponSound;
 
     private bool isBoxActive = false;
-    private Weapon floatingWeapon = null;
+    private WeaponBase floatingWeapon = null;
     [SerializeField] private float interactionRange = 3f; // Adjust the distance for showing text
     [SerializeField] private Transform playerTransform; // Assign the player's transform in the Inspector
 
@@ -80,7 +80,7 @@ public class LuckyBox : MonoBehaviour
 
         // ✅ Select a random weapon prefab
         int randomIndex = Random.Range(0, weaponPool.Length);
-        Weapon weaponPrefab = weaponPool[randomIndex];
+        WeaponBase weaponPrefab = weaponPool[randomIndex];
 
         if (weaponPrefab == null)
         {
@@ -132,7 +132,7 @@ public class LuckyBox : MonoBehaviour
         isBoxActive = false; // ✅ Now the player can interact again
     }
 
-    public void WeaponPickedUp(Weapon pickedWeapon)
+    public void WeaponPickedUp(WeaponBase pickedWeapon)
     {
         if (floatingWeapon == pickedWeapon) // Only clear it if it's the same weapon
         {
