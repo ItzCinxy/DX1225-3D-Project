@@ -657,6 +657,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 76525652064397418, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1584181737}
     - target: {fileID: 342206559525137037, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -722,6 +727,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: RealMan
       objectReference: {fileID: 0}
+    - target: {fileID: 3287674359219554678, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: GameMenu
+      value: 
+      objectReference: {fileID: 5325513907530110543, guid: 5ba6bc435148e934ea7704899ac19764,
+        type: 3}
     - target: {fileID: 3658331195624081413, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -780,6 +791,12 @@ PrefabInstance:
 --- !u!4 &1514026221 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 342206559525137037, guid: 98a54c0b062ae494493f13bddc03aa78,
+    type: 3}
+  m_PrefabInstance: {fileID: 717263048}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1584181737 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5935726549204480247, guid: 98a54c0b062ae494493f13bddc03aa78,
     type: 3}
   m_PrefabInstance: {fileID: 717263048}
   m_PrefabAsset: {fileID: 0}

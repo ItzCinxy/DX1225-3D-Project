@@ -13,6 +13,8 @@ public class WeaponHolder : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private TMP_Text ammoDisplay;
 
+    [SerializeField] private Animator animator;
+
     private void Update()
     {
         if (_playerInput.actions["Shoot"].WasPressedThisFrame())
@@ -112,6 +114,8 @@ public class WeaponHolder : MonoBehaviour
             BoxCollider bc = equippedWeapon.GetComponent<BoxCollider>();
         if (bc) bc.enabled = false;
         else equippedWeapon.gameObject.AddComponent<BoxCollider>();
+
+        animator.SetBool("IsHoldingGun", true);
 
         if (equippedWeapon.TryGetComponent(out ProjectileWeapon projectileWeapon))
         {
