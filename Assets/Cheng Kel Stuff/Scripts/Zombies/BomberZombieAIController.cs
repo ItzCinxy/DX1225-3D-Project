@@ -10,7 +10,7 @@ public class BomberZombieAIController : MonoBehaviour
     [Header("AI Settings")]
     [SerializeField] private float roamRadius = 6f;
     [SerializeField] private float chaseRange = 12f;
-    [SerializeField] private float attackRange = 4f;
+    [SerializeField] private float attackRange = 0.5f;
 
     [SerializeField] private float idleTime = 2f;
     [SerializeField] private float walkTime = 4f;
@@ -33,14 +33,14 @@ public class BomberZombieAIController : MonoBehaviour
     private bool canAttack = true;
 
     [Header("Explosion Settings")]
-    [SerializeField] private float explosionRadius = 4f;
+    [SerializeField] private float explosionRadius = 5f;
     [SerializeField] private int explosionDamage = 30;
 
     [Header("Fire Settings")]
     [SerializeField] private GameObject firePrefab;
     [SerializeField] private float fireRadius = 5f;
-    [SerializeField] private float fireDuration = 15f;
-    [SerializeField] private int fireDamage = 10;
+    [SerializeField] private float fireDuration = 5f;
+    [SerializeField] private int fireDamage = 3;
     [SerializeField] private float fireTickRate = 1f;
 
     [Header("Loot Drops")]

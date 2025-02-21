@@ -10,7 +10,7 @@ public class ChargerAIController : MonoBehaviour
     [Header("AI Settings")]
     [SerializeField] private float roamRadius = 3f;
     [SerializeField] private float chaseRange = 15f;
-    [SerializeField] private float attackRange = 1.5f;
+    [SerializeField] private float attackRange = 0.5f;
 
     [SerializeField] private float idleTime = 2f;
     [SerializeField] private float walkTime = 3f;
