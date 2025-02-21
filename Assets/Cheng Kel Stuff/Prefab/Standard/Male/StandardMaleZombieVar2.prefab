@@ -2542,7 +2542,7 @@ GameObject:
   - component: {fileID: 3937127813726708870}
   - component: {fileID: 30888778058747467}
   - component: {fileID: 4527785291907671667}
-  - component: {fileID: 8567391848769719329}
+  - component: {fileID: -6460173948576667345}
   m_Layer: 3
   m_Name: StandardMaleZombieVar2
   m_TagString: Untagged
@@ -2616,7 +2616,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &8567391848769719329
+--- !u!114 &-6460173948576667345
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2625,7 +2625,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7997650950129744345}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79852d4e5a570ba499c900ce5c1b6f64, type: 3}
+  m_Script: {fileID: 11500000, guid: 23fc7f6eb5a020d4aaf6b3eec0c54805, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   roamRadius: 5
@@ -2640,12 +2640,14 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
-  maxHealth: 100
+  maxHealth: 200
   currentHealth: 0
   attackDamage: 10
   attackCooldown: 1.5
-  ammoPrefab: {fileID: 0}
-  healthPrefab: {fileID: 0}
+  ammoPrefab: {fileID: 6115443849584106826, guid: ae85d92fdee9ef04dbae70d8758b09e8,
+    type: 3}
+  healthPrefab: {fileID: 6477114811567125893, guid: 1188a74ac345e70499c4a52c498df245,
+    type: 3}
 --- !u!1 &8019132013188661222
 GameObject:
   m_ObjectHideFlags: 0

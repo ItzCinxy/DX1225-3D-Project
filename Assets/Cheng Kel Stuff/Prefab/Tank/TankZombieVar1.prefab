@@ -1345,8 +1345,10 @@ MonoBehaviour:
   currentHealth: 0
   attackDamage: 25
   attackCooldown: 3
-  ammoPrefab: {fileID: 0}
-  healthPrefab: {fileID: 0}
+  ammoPrefab: {fileID: 794305810215856843, guid: 306453e79aaf5574daa3db745708c34f,
+    type: 3}
+  healthPrefab: {fileID: 6477114811567125893, guid: 1188a74ac345e70499c4a52c498df245,
+    type: 3}
 --- !u!1 &2998164125300561446
 GameObject:
   m_ObjectHideFlags: 0
