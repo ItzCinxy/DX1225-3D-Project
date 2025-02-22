@@ -3,6 +3,7 @@ using UnityEngine;
 public class Weapon : WeaponBase
 {
     private WeaponRaycast weaponRaycast;
+    private float firingRateTimer;
 
     protected override void Start()
     {
@@ -13,8 +14,13 @@ public class Weapon : WeaponBase
     public override void Shoot()
     {
         if (isReloading || currentAmmoInMag <= 0) return;
-        currentAmmoInMag--;
-        UpdateAmmoDisplay();
-        weaponRaycast?.FireRaycast();
+        firingRateTimer += Time.deltaTime;
+        if (firingRateTimer >= firingRate)
+        {
+            currentAmmoInMag--;
+            UpdateAmmoDisplay();
+            weaponRaycast?.FireRaycast();
+            firingRateTimer = 0f;
+        }
     }
 }

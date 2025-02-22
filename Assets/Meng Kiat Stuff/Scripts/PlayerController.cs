@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SkinnedMeshRenderer _skin;
     [SerializeField] private WeaponHolder _weaponHolder;
     [SerializeField] private PlayerStats _playerStats;
+    [SerializeField] private Abilities _abilities;
 
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 4f;
@@ -67,6 +68,15 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
         HandleJump();
         RotateWithCamera();
+        HandleAbilities();
+    }
+
+    private void HandleAbilities()
+    {
+        if (_inputActions["Ability1"].WasPressedThisFrame())
+        {
+            _abilities.ActivatePush();
+        }
     }
 
     private void HandleSkillTreeToggle()

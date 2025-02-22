@@ -442,6 +442,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3287674359219554678, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
+      propertyPath: _abilities
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3287674359219554678, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
       propertyPath: activePanels.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -517,7 +522,7 @@ PrefabInstance:
     - target: {fileID: 7149194267296629632, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: ShoulderOffset.y
-      value: -0.5000001
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7933524078577000175, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}

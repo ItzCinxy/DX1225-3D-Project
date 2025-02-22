@@ -7,6 +7,7 @@ public abstract class WeaponBase : MonoBehaviour
     [Header("Ammo System")]
     [SerializeField] protected int maxMagazineSize = 10;
     [SerializeField] protected int totalAmmo = 100;
+    [SerializeField] protected float firingRate = 1f;
     protected int currentAmmoInMag;
     protected bool isReloading = false;
 
