@@ -4,18 +4,28 @@ using UnityEngine;
 
 public class AmmoPack : MonoBehaviour
 {
-    [SerializeField] private int incAmmoAmt;
+    [SerializeField] private int increaseAmmoAmt;
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<WeaponHolder>() != null)
+        // Check if the collider belongs to the player
+        if (other.CompareTag("Player"))
         {
-            // Get the PlayerStats component
-            Weapon ammoStats = other.GetComponent<Weapon>();
+            // Get the WeaponHolder component from the player
+            WeaponHolder weaponHolder = other.GetComponent<WeaponHolder>();
 
-            if (ammoStats != null)
+            // Ensure WeaponHolder exists and has an equipped weapon
+            if (weaponHolder != null && weaponHolder.GetIsWeaponEquipped())
             {
-                ammoStats.IncreaseTotalAmmo(incAmmoAmt);
-                Destroy(gameObject); 
+                // Get the equipped weapon
+                Weapon equippedWeapon = weaponHolder.GetEquippedWeapon() as Weapon;
+
+                if (equippedWeapon != null)
+                {
+                    equippedWeapon.IncreaseTotalAmmo(increaseAmmoAmt);
+
+                    Destroy(gameObject);
+                }
             }
         }
     }

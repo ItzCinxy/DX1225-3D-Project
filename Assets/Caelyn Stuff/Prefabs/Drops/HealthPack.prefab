@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2690540265235318783}
   - component: {fileID: 9125150030035183959}
+  - component: {fileID: 220971076580903694}
   m_Layer: 0
   m_Name: HealthPack
   m_TagString: Untagged
@@ -46,6 +47,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   incHealthAmt: 30
+--- !u!65 &220971076580903694
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6477114811567125893}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.8179188, y: 0.7349764, z: 1.222147}
+  m_Center: {x: -0.043923378, y: 0.34121847, z: 0.03434086}
 --- !u!1 &8696550420235683081
 GameObject:
   m_ObjectHideFlags: 0
