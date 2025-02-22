@@ -66,8 +66,6 @@ public class PlayerStats : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
-        Debug.Log($"Player took {damage} damage! Current health: {currentHealth}");
-
         UpdateHealthBar();
         UpdateUIText();
 
@@ -82,8 +80,6 @@ public class PlayerStats : MonoBehaviour
         currentHealth += amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
-        Debug.Log($"Player healed by {amount}! Current health: {currentHealth}");
-
         UpdateHealthBar();
         UpdateUIText();
     }
@@ -92,8 +88,6 @@ public class PlayerStats : MonoBehaviour
     {
         currentStamina -= amount;
         currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
-
-        Debug.Log($"Player used {amount} stamina! Current stamina: {currentStamina}");
 
         UpdateStaminaBar();
         UpdateUIText();
@@ -108,8 +102,6 @@ public class PlayerStats : MonoBehaviour
     {
         currentStamina += amount;
         currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
-
-        Debug.Log($"Player recovered {amount} stamina! Current stamina: {currentStamina}");
 
         UpdateStaminaBar();
         UpdateUIText();
