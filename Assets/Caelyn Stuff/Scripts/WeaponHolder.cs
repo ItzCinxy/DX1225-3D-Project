@@ -30,6 +30,8 @@ public class WeaponHolder : MonoBehaviour
 
         equippedWeapon.Shoot();
 
+        SoundManager.Instance.PlayWeaponShootSound();
+
         // Check if the weapon is a hitscan weapon
         if (equippedWeapon is Weapon)
         {

@@ -12,39 +12,41 @@ public class AudioSettings : MonoBehaviour, ISaveable
 
     private void Start()
     {
-        if (PlayerPrefs.HasKey("BGMVolume"))
-            Load();
-        SetBGMMusicVol();
-
-        if (PlayerPrefs.HasKey("SFXVolume"))
-            Load();
-        SetSFXMusicVol();
+        Load();
     }
 
     public void SetBGMMusicVol()
     {
-        float bgmvol = BGMSlider.value;
+        float bgmvol = Mathf.Max(BGMSlider.value, 0.0001f); // Avoid log(0) issue
         audioMixer.SetFloat("BGM", Mathf.Log10(bgmvol) * 20);
         PlayerPrefs.SetFloat("BGMVolume", bgmvol);
+        PlayerPrefs.Save(); // Ensure changes are saved
     }
 
     public void SetSFXMusicVol()
     {
-        float sfxvol = SFXSlider.value;
+        float sfxvol = Mathf.Max(SFXSlider.value, 0.0001f); // Avoid log(0) issue
         audioMixer.SetFloat("SFX", Mathf.Log10(sfxvol) * 20);
         PlayerPrefs.SetFloat("SFXVolume", sfxvol);
+        PlayerPrefs.Save(); // Ensure changes are saved
     }
 
     public void Save()
     {
-
+        PlayerPrefs.SetFloat("BGMVolume", BGMSlider.value);
+        PlayerPrefs.SetFloat("SFXVolume", SFXSlider.value);
+        PlayerPrefs.Save();
     }
 
     public void Load()
     {
-        BGMSlider.value = PlayerPrefs.GetFloat("BGMVolume");
+        if (PlayerPrefs.HasKey("BGMVolume"))
+            BGMSlider.value = PlayerPrefs.GetFloat("BGMVolume");
+
+        if (PlayerPrefs.HasKey("SFXVolume"))
+            SFXSlider.value = PlayerPrefs.GetFloat("SFXVolume");
+
         SetBGMMusicVol();
-        SFXSlider.value = PlayerPrefs.GetFloat("SFXVolume");
         SetSFXMusicVol();
     }
 }
