@@ -43,16 +43,14 @@ public class SkillNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         if (isUnlocked) return false;
 
-        // If any skill in skillThatBlock is unlocked, this skill CANNOT be unlocked
         foreach (SkillNode skill in skillThatBlock)
         {
             if (skill != null && skill.IsUnlocked)
             {
-                return false; // Blocked from unlocking
+                return false;
             }
         }
 
-        // If all required skills are NOT unlocked, this skill cannot be unlocked
         foreach (SkillNode skill in requiredSkills)
         {
             if (skill != null && !skill.IsUnlocked)
@@ -61,7 +59,7 @@ public class SkillNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             }
         }
 
-        return true; // Can unlock if no blocked skills are active and all required skills are unlocked
+        return true;
     }
 
 
@@ -70,6 +68,8 @@ public class SkillNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (gameObject.name.Contains("MaxHealth")) skillTree.UpgradeHealth();
         if (gameObject.name.Contains("MaxStamina")) skillTree.UpgradeStamina();
         if (gameObject.name.Contains("HealthRegen")) skillTree.UpgradeHealthRegen();
+        if (gameObject.name.Contains("StaminaRegen")) skillTree.UpgradeStaminaRegen();
+        if (gameObject.name.Contains("FireResistance")) skillTree.UpgradeFireResistance();
     }
 
     public void UpdateUI()
@@ -84,7 +84,7 @@ public class SkillNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         }
         else
         {
-            skillImage.color = new Color(0.3f, 0.3f, 0.3f, 0.3f);
+            skillImage.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
         }
     }
 
@@ -93,7 +93,7 @@ public class SkillNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (skillNameText != null && CanUnlock())
         {
             skillNameText.text = GetSkillName();
-            skillNameText.gameObject.SetActive(true); // Show the text
+            skillNameText.gameObject.SetActive(true);
         }
     }
 
@@ -101,7 +101,7 @@ public class SkillNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         if (skillNameText != null)
         {
-            skillNameText.gameObject.SetActive(false); // Hide the text
+            skillNameText.gameObject.SetActive(false);
         }
     }
 
@@ -110,6 +110,8 @@ public class SkillNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (gameObject.name.Contains("MaxHealth")) return "Max HP Up";
         if (gameObject.name.Contains("MaxStamina")) return "Max Stamina Up";
         if (gameObject.name.Contains("HealthRegen")) return "Health Regen Up";
+        if (gameObject.name.Contains("StaminaRegen")) return "Stamina Regen Up";
+        if (gameObject.name.Contains("FireResistance")) return "Fire Resistance Up";
         return "Unknown Skill";
     }
 }

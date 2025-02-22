@@ -11,11 +11,16 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float currentHealth;
 
     [Header("Stamina Settings")]
+    private float baseStaminaRegen = 0.01f;
     private float maxStamina = 100f;
     [SerializeField] private float currentStamina;
 
+    [Header("Fire Resistance Settings")]
+    private float fireResistance = 0f;
+
     [Header("Regen Stuff")]
     private float healthRegenSpeed = 0f;
+    private float staminaRegenSpeed = 0f;
 
     [Header("UI Settings")]
     [SerializeField] private Slider healthBar;
@@ -55,7 +60,7 @@ public class PlayerStats : MonoBehaviour
     {
         if (!_playerController.GetIsSprinting())
         {
-            RecoverStamina(0.1f);
+            RecoverStamina(staminaRegenSpeed + baseStaminaRegen);
         }
 
         Heal(healthRegenSpeed);
@@ -227,5 +232,15 @@ public class PlayerStats : MonoBehaviour
     public void IncreaseHealthRegen(float amountToIncrease)
     {
         healthRegenSpeed += amountToIncrease;
+    }
+
+    public void IncreaseStaminaRegen(float amountToIncrease)
+    {
+        staminaRegenSpeed += amountToIncrease;
+    }
+
+    public void IncreaseFireResistance(float amountToIncrease)
+    {
+        fireResistance += amountToIncrease;
     }
 }
