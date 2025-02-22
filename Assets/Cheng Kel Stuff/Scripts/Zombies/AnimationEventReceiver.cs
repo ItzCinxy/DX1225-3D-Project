@@ -11,7 +11,6 @@ public class AnimationEventReceiver : MonoBehaviour
         if (zombieController == null) zombieController = GetComponentInParent<ChargerAIController>();
         if (zombieController == null) zombieController = GetComponentInParent<TankZombieAIController>();
         if (zombieController == null) zombieController = GetComponentInParent<BomberZombieAIController>();
-        if (zombieController == null) zombieController = GetComponentInParent<ScreamerZombieAIController>();
 
         if (zombieController == null)
         {
@@ -36,9 +35,6 @@ public class AnimationEventReceiver : MonoBehaviour
                 break;
             case BomberZombieAIController bomber:
                 bomber.AttackHitEvent();
-                break;
-            case ScreamerZombieAIController screamer:
-                //screamer.ScreamerAlert();
                 break;
             default:
                 Debug.LogError($"No attack function found for {zombieController.GetType()}!");

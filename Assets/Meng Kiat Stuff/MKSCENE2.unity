@@ -359,31 +359,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RealMan
       objectReference: {fileID: 0}
-    - target: {fileID: 3658331195624081413, guid: 98a54c0b062ae494493f13bddc03aa78,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3658331195624081413, guid: 98a54c0b062ae494493f13bddc03aa78,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7131533075968479633, guid: 98a54c0b062ae494493f13bddc03aa78,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7131533075968479633, guid: 98a54c0b062ae494493f13bddc03aa78,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7149194267296629632, guid: 98a54c0b062ae494493f13bddc03aa78,
-        type: 3}
-      propertyPath: ShoulderOffset.y
-      value: -0.5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -450,7 +425,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 80
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -477,7 +452,7 @@ Transform:
   m_GameObject: {fileID: 943027645}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.707, y: 1.9309996, z: -0.694}
+  m_LocalPosition: {x: -0.03, y: 1.6099999, z: 0.06000001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -919,6 +894,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: StandardMaleZombieVar1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8489701392533120944, guid: ad9a074c193501a45b95af704c3afcff,
+        type: 3}
+      propertyPath: visionAngle
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8489701392533120944, guid: ad9a074c193501a45b95af704c3afcff,
+        type: 3}
+      propertyPath: _cohesionWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8489701392533120944, guid: ad9a074c193501a45b95af704c3afcff,
+        type: 3}
+      propertyPath: _alignmentWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8489701392533120944, guid: ad9a074c193501a45b95af704c3afcff,
+        type: 3}
+      propertyPath: _neighbourRadius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8489701392533120944, guid: ad9a074c193501a45b95af704c3afcff,
+        type: 3}
+      propertyPath: _separationWeight
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

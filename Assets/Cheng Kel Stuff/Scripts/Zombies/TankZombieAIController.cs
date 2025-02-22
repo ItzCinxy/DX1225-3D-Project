@@ -10,7 +10,7 @@ public class TankZombieAIController : MonoBehaviour
     [Header("AI Settings")]
     [SerializeField] private float roamRadius = 4f;
     [SerializeField] private float chaseRange = 8f;
-    [SerializeField] private float attackRange = 3f;
+    [SerializeField] private float attackRange = 0.5f;
 
     [SerializeField] private float idleTime = 4f;
     [SerializeField] private float walkTime = 6f;
@@ -222,11 +222,14 @@ public class TankZombieAIController : MonoBehaviour
 
     void Die()
     {
-        if (ammoPrefab != null)
+        // Randomly decide whether to drop health or ammo (50% chance for each)
+        int dropChance = Random.Range(0, 2); // Generates either 0 or 1
+
+        if (dropChance == 0 && ammoPrefab != null)
         {
             Instantiate(ammoPrefab, transform.position, Quaternion.identity);
         }
-        if (healthPrefab != null)
+        else if (dropChance == 1 && healthPrefab != null)
         {
             Instantiate(healthPrefab, transform.position, Quaternion.identity);
         }
@@ -238,6 +241,7 @@ public class TankZombieAIController : MonoBehaviour
 
         Destroy(gameObject);
     }
+
 
     void RotateTowardsMovementDirection()
     {

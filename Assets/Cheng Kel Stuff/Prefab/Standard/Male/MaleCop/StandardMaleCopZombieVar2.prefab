@@ -862,7 +862,7 @@ GameObject:
   - component: {fileID: 3032123111615145176}
   m_Layer: 3
   m_Name: StandardMaleCopZombieVar2
-  m_TagString: Untagged
+  m_TagString: Zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

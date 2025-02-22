@@ -10,7 +10,7 @@ public class BomberZombieAIController : MonoBehaviour
     [Header("AI Settings")]
     [SerializeField] private float roamRadius = 6f;
     [SerializeField] private float chaseRange = 12f;
-    [SerializeField] private float attackRange = 4f;
+    [SerializeField] private float attackRange = 0.5f;
 
     [SerializeField] private float idleTime = 2f;
     [SerializeField] private float walkTime = 4f;
@@ -33,8 +33,15 @@ public class BomberZombieAIController : MonoBehaviour
     private bool canAttack = true;
 
     [Header("Explosion Settings")]
-    [SerializeField] private float explosionRadius = 4f;
+    [SerializeField] private float explosionRadius = 5f;
     [SerializeField] private int explosionDamage = 30;
+
+    [Header("Fire Settings")]
+    [SerializeField] private GameObject firePrefab;
+    [SerializeField] private float fireRadius = 5f;
+    [SerializeField] private float fireDuration = 5f;
+    [SerializeField] private int fireDamage = 3;
+    [SerializeField] private float fireTickRate = 1f;
 
     [Header("Loot Drops")]
     [SerializeField] private GameObject ammoPrefab;
@@ -226,22 +233,43 @@ public class BomberZombieAIController : MonoBehaviour
 
     void Die()
     {
-        if (ammoPrefab != null)
+        // Randomly decide whether to drop health or ammo (50% chance for each)
+        int dropChance = Random.Range(0, 2);
+        if (dropChance == 0 && ammoPrefab != null)
         {
             Instantiate(ammoPrefab, transform.position, Quaternion.identity);
         }
-        if (healthPrefab != null)
+        else if (dropChance == 1 && healthPrefab != null)
         {
             Instantiate(healthPrefab, transform.position, Quaternion.identity);
         }
+
+        // Spawn fire exactly at death spot
+        SpawnFireOnDeathSpot();
 
         if (healthBar != null)
         {
             Destroy(healthBar.gameObject);
         }
 
-
         Destroy(gameObject);
+    }
+
+
+    void SpawnFireOnDeathSpot()
+    {
+        if (firePrefab == null) return;
+
+        // Spawn fire at the exact death position
+        GameObject fireInstance = Instantiate(firePrefab, transform.position, Quaternion.identity);
+
+        // Destroy fire after the set duration
+        Destroy(fireInstance, fireDuration);
+
+        // Attach fire damage script
+        FireDamage fireDamageScript = fireInstance.AddComponent<FireDamage>();
+        fireDamageScript.damage = fireDamage;
+        fireDamageScript.tickRate = fireTickRate;
     }
 
     void RotateTowardsMovementDirection()

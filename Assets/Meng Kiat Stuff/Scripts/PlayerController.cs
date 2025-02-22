@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _raycastStart;
     [SerializeField] private SkinnedMeshRenderer _skin;
     [SerializeField] private WeaponHolder _weaponHolder;
+    [SerializeField] private PlayerStats _playerStats;
 
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 4f;
@@ -92,6 +93,7 @@ public class PlayerController : MonoBehaviour
         if (isSkillTreeOpen)
         {
             Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             _skillTreeCanvas?.gameObject.SetActive(true);
         }
         else if (isAnyPanelActive) // Check if any panel is active
@@ -103,6 +105,7 @@ public class PlayerController : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            _skillTreeCanvas?.gameObject.SetActive(false);
         }
 
         Debug.Log($"SkillTree: {isSkillTreeOpen}, AnyPanelActive: {isAnyPanelActive}");
@@ -130,19 +133,19 @@ public class PlayerController : MonoBehaviour
             isSprinting = false;
             _characterController.height = 0.9f;
             _characterController.center = new Vector3(0, 0.65f, 0);
-            targetShoulderOffset = new Vector3(0.5f, -1f, 0f);
+            targetShoulderOffset = new Vector3(0.2f, -1f, 0f);
         }
         else
         {
             _characterController.height = 1.7f;
             _characterController.center = new Vector3(0, 1.1f, 0);
-            targetShoulderOffset = new Vector3(0.5f, -0.5f, 0f);
+            targetShoulderOffset = new Vector3(0.2f, -0.5f, 0f);
         }
 
         Cinemachine3rdPersonFollow followComponent = _thirdPersonCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         if (followComponent != null)
         {
-            followComponent.ShoulderOffset = Vector3.Lerp(followComponent.ShoulderOffset, targetShoulderOffset, Time.deltaTime * 8f);
+            followComponent.ShoulderOffset = Vector3.Lerp(followComponent.ShoulderOffset, targetShoulderOffset, Time.deltaTime * 5f);
         }
 
         _animator.SetBool("IsCrouching", isCrouching);
@@ -154,8 +157,26 @@ public class PlayerController : MonoBehaviour
         Vector3 moveDirection = CalculateMoveDirection();
         isMoving = moveDirection.magnitude > 0;
 
-        isSprinting = _inputActions["Sprint"].IsPressed() && inputDirection.y > 0 && isGrounded && !isCrouching;
-        float currentSpeed = isCrouching ? moveSpeed * crouchSpeedMultiplier : (isSprinting ? moveSpeed * sprintSpeedMultiplier : moveSpeed);
+        if (_playerStats.GetCurrentStamina() > 0)
+        {
+            isSprinting = _inputActions["Sprint"].IsPressed() && inputDirection.y > 0 && isGrounded && !isCrouching;
+        }
+        else
+        {
+            isSprinting = false;
+        }
+
+        float currentSpeed = moveSpeed;
+
+        if (isCrouching)
+        {
+            currentSpeed *= crouchSpeedMultiplier;
+        }
+        else if (isSprinting)
+        {
+            currentSpeed *= sprintSpeedMultiplier;
+            _playerStats.UseStamina(0.1f);
+        }
 
         ResetMovementAnimations();
         SetMovementAnimations(inputDirection);
@@ -234,5 +255,10 @@ public class PlayerController : MonoBehaviour
 
         _animator.SetBool("IsWalking", isMoving && !isCrouching);
         _animator.SetBool("IsSprinting", isSprinting);
+    }
+
+    public bool GetIsSprinting()
+    {
+        return isSprinting;
     }
 }
