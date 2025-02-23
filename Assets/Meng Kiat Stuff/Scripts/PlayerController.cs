@@ -249,6 +249,7 @@ public class PlayerController : MonoBehaviour
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             _animator.SetBool("IsJumping", true);
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.playerJump);
             jumped = true;
         }
 

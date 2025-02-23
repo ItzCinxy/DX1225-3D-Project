@@ -22,6 +22,7 @@ public class Weapon : WeaponBase
             currentAmmoInMag--;
             UpdateAmmoDisplay();
             weaponRaycast?.FireRaycast();
+            PlayShootSound();
             fireRateTimer = 0f;
         }
     }

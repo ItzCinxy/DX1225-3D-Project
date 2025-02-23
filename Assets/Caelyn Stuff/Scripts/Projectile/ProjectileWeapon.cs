@@ -29,6 +29,7 @@ public class ProjectileWeapon : WeaponBase
             return;
         }
 
+        PlayShootSound();
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         RaycastHit hit;
 

@@ -10,15 +10,10 @@ public class SoundManager : MonoBehaviour
     public AudioSource bgmChannel;
     public AudioSource sfxChannel;
 
-    [Header("Weapon Sounds")]
-    public AudioClip[] shootingSounds;
-    private float lastShootTime;
-    private int shootSoundIndex = 0;
-    public float resetTime = 1.0f;
-
     [Header("Player SFX")]
     public AudioClip playerHurt;
     public AudioClip playerDie;
+    public AudioClip playerJump;
 
     private void Awake()
     {
@@ -33,7 +28,6 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    // General method to play SFX (can be used for any sound)
     public void PlaySFX(AudioClip clip)
     {
         if (clip != null && sfxChannel != null)
@@ -42,28 +36,9 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    // Play weapon shooting sounds directly to allow overlap
-    public void PlayWeaponShootSound()
-    {
-        if (shootingSounds.Length == 0 || sfxChannel == null)
-            return;
-
-        // Play the current shooting sound directly
-        sfxChannel.PlayOneShot(shootingSounds[shootSoundIndex]);
-
-        // Move to the next sound, loop back after the last one
-        shootSoundIndex = (shootSoundIndex + 1) % shootingSounds.Length;
-
-        // Update the time of the last shot
-        lastShootTime = Time.time;
-    }
 
     private void Update()
     {
-        // Reset the shooting sound index if no shots have been fired for the defined reset time
-        if (Time.time - lastShootTime > resetTime)
-        {
-            shootSoundIndex = 0;
-        }
+
     }
 }
