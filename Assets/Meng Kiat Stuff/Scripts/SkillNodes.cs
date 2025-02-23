@@ -70,7 +70,12 @@ public class SkillNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (gameObject.name.Contains("HealthRegen")) skillTree.UpgradeHealthRegen();
         if (gameObject.name.Contains("StaminaRegen")) skillTree.UpgradeStaminaRegen();
         if (gameObject.name.Contains("FireResistance")) skillTree.UpgradeFireResistance();
+
+        // ?? Unlocking Active Abilities
+        if (gameObject.name.Contains("UnlockPush")) skillTree.UnlockPush();
+        if (gameObject.name.Contains("UnlockFrenzy")) skillTree.UnlockFrenzy();
     }
+
 
     public void UpdateUI()
     {
@@ -112,6 +117,8 @@ public class SkillNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (gameObject.name.Contains("HealthRegen")) return "Health Regen Up";
         if (gameObject.name.Contains("StaminaRegen")) return "Stamina Regen Up";
         if (gameObject.name.Contains("FireResistance")) return "Fire Resistance Up";
+        if (gameObject.name.Contains("UnlockPush")) return "Unlock Push Ability";
+        if (gameObject.name.Contains("UnlockFrenzy")) return "Unlock Frenzy Ability";
         return "Unknown Skill";
     }
 }

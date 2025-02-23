@@ -7,6 +7,7 @@ public abstract class WeaponBase : MonoBehaviour
     [Header("Ammo System")]
     [SerializeField] protected int maxMagazineSize = 10;
     [SerializeField] protected int totalAmmo = 100;
+    [SerializeField] protected float fireRate = 1f;
     protected int currentAmmoInMag;
     protected bool isReloading = false;
 
@@ -66,4 +67,24 @@ public abstract class WeaponBase : MonoBehaviour
         totalAmmo += ammoInc;
         UpdateAmmoDisplay();
     }
+    public float GetFireRate()
+    {
+        return fireRate;
+    }
+
+    public void SetFireRate(float newRate)
+    {
+        fireRate = Mathf.Max(0.1f, newRate); // Ensure fire rate is never zero
+    }
+
+    public float GetReloadTime()
+    {
+        return reloadTime;
+    }
+
+    public void SetReloadTime(float newTime)
+    {
+        reloadTime = Mathf.Max(0.1f, newTime); // Ensure reload time is never zero
+    }
+
 }

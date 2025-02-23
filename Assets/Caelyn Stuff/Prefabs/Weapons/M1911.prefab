@@ -51,6 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxMagazineSize: 15
   totalAmmo: 50
+  fireRate: 0.2
   reloadTime: 1
 --- !u!114 &7580760144774843520
 MonoBehaviour:

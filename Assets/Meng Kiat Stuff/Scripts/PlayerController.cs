@@ -77,6 +77,11 @@ public class PlayerController : MonoBehaviour
         {
             _abilities.ActivatePush();
         }
+
+        if (_inputActions["Ability2"].WasPressedThisFrame())
+        {
+            _abilities.ActivateFrenzyMode();
+        }
     }
 
     private void HandleSkillTreeToggle()

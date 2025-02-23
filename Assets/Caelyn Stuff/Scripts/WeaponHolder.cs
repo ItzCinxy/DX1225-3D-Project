@@ -18,7 +18,7 @@ public class WeaponHolder : MonoBehaviour
 
     private void Update()
     {
-        if (_playerInput.actions["Shoot"].WasPressedThisFrame()) Shoot();
+        if (_playerInput.actions["Shoot"].IsPressed()) Shoot();
         if (_playerInput.actions["Reload"].IsPressed()) Reload();
         if (_playerInput.actions["Interact"].WasPressedThisFrame()) Interact();
         if (_playerInput.actions["Drop"].WasPressedThisFrame()) DropWeapon();
@@ -30,7 +30,7 @@ public class WeaponHolder : MonoBehaviour
 
         equippedWeapon.Shoot();
 
-        SoundManager.Instance.PlayWeaponShootSound();
+        //SoundManager.Instance.PlayWeaponShootSound();
 
         // Check if the weapon is a hitscan weapon
         if (equippedWeapon is Weapon)
