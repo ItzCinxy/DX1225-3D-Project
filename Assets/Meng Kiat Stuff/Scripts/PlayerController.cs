@@ -44,7 +44,12 @@ public class PlayerController : MonoBehaviour
     private bool jumped;
     private InputActionAsset _inputActions;
 
-    private Vector3 targetShoulderOffset; 
+    private Vector3 targetShoulderOffset;
+
+
+
+    private float knockbackTimer = 0f;
+    private float knockbackDuration = 2f;
 
     private void Start()
     {
@@ -65,10 +70,24 @@ public class PlayerController : MonoBehaviour
 
         HandleGroundCheck();
         HandleCrouch();
-        HandleMovement();
+
+        if (knockbackTimer > 0)
+        {
+            knockbackTimer -= Time.deltaTime; // Countdown knockback duration
+
+            velocity = Vector3.Lerp(velocity, Vector3.zero, Time.deltaTime * 5f);
+        }
+        else
+        {
+            HandleMovement(); // Allow normal movement again
+        }
+
         HandleJump();
         RotateWithCamera();
         HandleAbilities();
+
+        velocity.y += gravity * 2 * Time.deltaTime;
+        _characterController.Move(velocity * Time.deltaTime);
     }
 
     private void HandleAbilities()
@@ -275,5 +294,19 @@ public class PlayerController : MonoBehaviour
     public bool GetIsSprinting()
     {
         return isSprinting;
+    }
+
+    public void ApplyKnockback(Vector3 enemyPosition, float knockbackForce, float upwardForce = 1f)
+    {
+        // Calculate knockback direction away from enemy
+        Vector3 knockbackDirection = (transform.position - enemyPosition).normalized;
+
+        // Apply knockback velocity
+        velocity = knockbackDirection * knockbackForce + Vector3.up * upwardForce;
+
+        // Start knockback timer
+        knockbackTimer = knockbackDuration;
+
+        Debug.Log("Player knocked back!");
     }
 }

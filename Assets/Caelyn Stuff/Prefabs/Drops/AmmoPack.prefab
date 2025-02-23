@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3352666520567182353}
   - component: {fileID: 6117700825327497113}
   - component: {fileID: 8058272368119815460}
+  - component: {fileID: 5286886559096435671}
   m_Layer: 0
   m_Name: AmmoPack
   m_TagString: Untagged
@@ -46,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b5250bfd7d646b489382efdc3c544d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  increaseAmmoAmt: 0
+  increaseAmmoAmt: 30
 --- !u!65 &8058272368119815460
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -68,6 +69,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.38580036, y: 0.30200347, z: 0.5507164}
   m_Center: {x: 0.015305996, y: 0.15194668, z: -0.0028686523}
+--- !u!114 &5286886559096435671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794305810215856843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5aa29def152d254dbd74747975a2271, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 50
+  floatSpeed: 1
+  floatHeight: 0.2
 --- !u!1001 &1245673723818212318
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -44,6 +44,8 @@ public class TankZombieAIController : MonoBehaviour
     private Vector3 targetPosition;
     private Animator animator;
 
+    private PlayerController _player;
+
     private bool isDying = false;
     private bool isConvulsing = false;
 
@@ -52,6 +54,8 @@ public class TankZombieAIController : MonoBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         healthBar = GetComponentInChildren<UIEnemyHealthBar>();
+
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
@@ -314,6 +318,7 @@ public class TankZombieAIController : MonoBehaviour
         {
             Debug.Log("Zombie attack landed!");
             playerHealth?.TakeDamage((float)attackDamage); // Apply damage
+            _player.ApplyKnockback(transform.position, 10, 10);
         }
     }
 

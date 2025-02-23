@@ -1331,7 +1331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roamRadius: 4
   chaseRange: 8
-  attackRange: 3
+  attackRange: 6
   idleTime: 4
   walkTime: 6
   walkSpeed: 1
