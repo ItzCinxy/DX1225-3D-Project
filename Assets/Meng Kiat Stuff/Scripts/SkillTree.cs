@@ -39,6 +39,8 @@ public class SkillTree : MonoBehaviour
     public void UpgradeHealthRegen() => playerStats.IncreaseHealthRegen(0.002f);
     public void UpgradeStaminaRegen() => playerStats.IncreaseStaminaRegen(0.005f);
     public void UpgradeFireResistance() => playerStats.IncreaseFireResistance(1f);
+    public void SpawnNormalDrone() => playerStats.SpawnNormalDrone();
+    public void SpawnRocketDrone() => playerStats.SpawnRocketDrone();
 
     // ?? Unlock Active Skills
     public void UnlockPush()

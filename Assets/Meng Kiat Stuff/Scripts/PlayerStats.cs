@@ -22,6 +22,10 @@ public class PlayerStats : MonoBehaviour
     private float healthRegenSpeed = 0f;
     private float staminaRegenSpeed = 0f;
 
+    [Header("Drone Thing")]
+    [SerializeField] private GameObject normalDronePrefab;
+    [SerializeField] private GameObject rocketDronePrefab;
+
     [Header("UI Settings")]
     [SerializeField] private Slider healthBar;
     [SerializeField] private TMP_Text healthText;
@@ -187,6 +191,7 @@ public class PlayerStats : MonoBehaviour
         Debug.Log("Player died!");
         Destroy(gameObject);
     }
+
     private IEnumerator ExhaustWithDelay()
     {
         yield return new WaitForSeconds(0.3f);
@@ -242,5 +247,21 @@ public class PlayerStats : MonoBehaviour
     public void IncreaseFireResistance(float amountToIncrease)
     {
         fireResistance += amountToIncrease;
+    }
+
+    public void SpawnNormalDrone()
+    {
+        if (normalDronePrefab != null)
+        {
+            Instantiate(normalDronePrefab, transform.position, Quaternion.identity);
+        }
+    }
+
+    public void SpawnRocketDrone()
+    {
+        if (rocketDronePrefab != null)
+        {
+            Instantiate(rocketDronePrefab, transform.position, Quaternion.identity);
+        }
     }
 }
