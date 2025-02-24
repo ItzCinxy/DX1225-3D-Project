@@ -188,14 +188,14 @@ public class PlayerStats : MonoBehaviour
     private IEnumerator DieWithDelay()
     {
         yield return new WaitForSeconds(0.3f);
-        Debug.Log("Player died!");
+        //Debug.Log("Player died!");
         Destroy(gameObject);
     }
 
     private IEnumerator ExhaustWithDelay()
     {
         yield return new WaitForSeconds(0.3f);
-        Debug.Log("Player is exhausted!");
+        //Debug.Log("Player is exhausted!");
     }
 
     public float GetCurrentHealth()

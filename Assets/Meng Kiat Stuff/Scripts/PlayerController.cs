@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour
             _skillTreeCanvas?.gameObject.SetActive(false);
         }
 
-        Debug.Log($"SkillTree: {isSkillTreeOpen}, AnyPanelActive: {isAnyPanelActive}");
+        //Debug.Log($"SkillTree: {isSkillTreeOpen}, AnyPanelActive: {isAnyPanelActive}");
     }
 
     private void UpdateCameraView()
