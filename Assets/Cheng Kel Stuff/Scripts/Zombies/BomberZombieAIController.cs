@@ -48,6 +48,10 @@ public class BomberZombieAIController : MonoBehaviour
     [SerializeField] private GameObject healthPrefab;
     [SerializeField] private GameObject explosionEffectPrefab;
 
+    [Header("Zombie Audio")]
+    public AudioClip ZombieSounds;
+    [SerializeField] AudioSource AudioSource;
+
     private Transform player;
     private CharacterController playerController;
     private PlayerStats playerHealth;
@@ -153,6 +157,7 @@ public class BomberZombieAIController : MonoBehaviour
             case EnemyState.Dying:
                 isDying = true;
                 animator.SetBool("Die", true);
+                PlaySound();
                 StartCoroutine(DieAfterAnimation());
                 break;
         }
@@ -233,6 +238,7 @@ public class BomberZombieAIController : MonoBehaviour
 
     void Die()
     {
+        ObjectiveManager.Instance.ZombieKilled();
         // Randomly decide whether to drop health or ammo (50% chance for each)
         int dropChance = Random.Range(0, 2);
         if (dropChance == 0 && ammoPrefab != null)
@@ -251,6 +257,7 @@ public class BomberZombieAIController : MonoBehaviour
         {
             Destroy(healthBar.gameObject);
         }
+
 
         Destroy(gameObject);
     }
@@ -486,5 +493,27 @@ public class BomberZombieAIController : MonoBehaviour
         mesh.RecalculateNormals();
 
         return mesh;
+    }
+
+    public void PlaySound()
+    {
+        // Create a new GameObject just for the sound
+        GameObject audioHolder = new GameObject("DeathSound");
+
+        // Set the position of the new GameObject to the zombie's current position
+        audioHolder.transform.position = transform.position; // Position at the zombie's location
+
+        AudioSource newAudioSource = audioHolder.AddComponent<AudioSource>();
+
+        // Set up the sound clip and other settings (assuming ZombieSounds is assigned correctly)
+        newAudioSource.clip = ZombieSounds;
+        newAudioSource.volume = 1f;  // Adjust as needed
+        newAudioSource.pitch = 1f;   // Adjust as needed
+
+        // Play the sound
+        newAudioSource.Play();
+
+        // Destroy the audio holder after the sound finishes playing
+        Destroy(audioHolder, ZombieSounds.length); // Destroy the sound object after the clip length
     }
 }
