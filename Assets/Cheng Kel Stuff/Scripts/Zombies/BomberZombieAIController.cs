@@ -513,7 +513,7 @@ public class BomberZombieAIController : MonoBehaviour
         // Set up the sound clip and other settings (assuming ZombieSounds is assigned correctly)
         newAudioSource.clip = ZombieSounds;
         newAudioSource.volume = 1f;  // Adjust as needed
-        newAudioSource.pitch = 1.5f;   // Adjust as needed
+        newAudioSource.pitch = 1f;   // Adjust as needed
 
         // Play the sound
         newAudioSource.Play();
