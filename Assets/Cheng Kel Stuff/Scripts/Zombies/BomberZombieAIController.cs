@@ -92,7 +92,7 @@ public class BomberZombieAIController : MonoBehaviour
             case EnemyState.Walk: HandleWalkState(); break;
             case EnemyState.Run: HandleRunState(); break;
             case EnemyState.Attack: HandleAttackState(); break;
-            case EnemyState.Hit: break;
+            case EnemyState.Hit: HandleHitState(); break;
         }
 
         if (!isDying || !isConvulsing)
@@ -339,6 +339,14 @@ public class BomberZombieAIController : MonoBehaviour
 
         targetPosition = transform.position;
     }
+    void HandleHitState()
+    {
+        velocity = Vector3.zero; // Stop movement
+        animator.SetBool("Hit", true); // Trigger hit animation
+
+        // Transition back to Run or Idle after a short time
+        StartCoroutine(RecoverFromHit());
+    }
 
     public void AttackHitEvent()
     {
@@ -357,6 +365,20 @@ public class BomberZombieAIController : MonoBehaviour
         //}
 
         ChangeState(EnemyState.Convulsing);
+    }
+
+    IEnumerator RecoverFromHit()
+    {
+        yield return new WaitForSeconds(0.5f); // Adjust if needed
+
+        if (CanSeePlayer())
+        {
+            ChangeState(EnemyState.Run); // Resume chasing player
+        }
+        else
+        {
+            ChangeState(EnemyState.Idle); // Return to idle if player is out of sight
+        }
     }
 
     IEnumerator PerformAttack()
@@ -393,12 +415,6 @@ public class BomberZombieAIController : MonoBehaviour
         }
 
         canStartAttack -= 1;
-    }
-
-    IEnumerator RecoverFromHit()
-    {
-        yield return new WaitForSeconds(0.5f);
-        ChangeState(EnemyState.Run);
     }
 
     IEnumerator ConvulseBeforeDespawn()
