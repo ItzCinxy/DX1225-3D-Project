@@ -1,0 +1,11 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.3.0)
+
+newmtl material_1
+Kd 1 1 1
+Ks 1 1 1
+Ke 0 0 0
+Ns 11.31369972229004
+illum 2
+map_Kd keycard2.jpg
+

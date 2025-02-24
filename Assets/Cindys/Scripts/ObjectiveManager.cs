@@ -8,7 +8,7 @@ public class ObjectiveManager : MonoBehaviour
 
     private bool hasKey = false;
     private int zombiesKilled = 0;
-    public int zombiesToKill = 10;
+    public int zombiesToKill = 5;
     private bool objectivesCompleted = false;
 
     private void Awake()
@@ -36,7 +36,6 @@ public class ObjectiveManager : MonoBehaviour
         if (hasKey && zombiesKilled >= zombiesToKill && !objectivesCompleted)
         {
             objectivesCompleted = true;
-            Debug.Log("Objectives Completed! The door is unlocked.");
             OpenDoor();
         }
     }

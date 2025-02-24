@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainDoor : MonoBehaviour
 {
@@ -20,7 +21,6 @@ public class MainDoor : MonoBehaviour
 
     private void OpenDoor()
     {
-        Debug.Log("Door Opened! Proceed to next level.");
-        gameObject.SetActive(false); // Hide the door
+        SceneManager.LoadScene("Map2.1");
     }
 }

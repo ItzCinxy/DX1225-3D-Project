@@ -4688,6 +4688,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6310755380772379362}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &983920522 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7848385301643726618, guid: 8dd250c2dea12b54ab4a2f6f2c4248ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 6310755380772379362}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983920521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d326518da57e764abf877b00bee6a13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &998339664 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7596890258216423615, guid: d78ec700785d7dc4f84638f1552b6f9a,
@@ -5614,6 +5626,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3287674359219554678, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: activePanels.Array.size
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3287674359219554678, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
@@ -14544,11 +14561,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
+      objectReference: {fileID: 983920522}
+    - target: {fileID: 1771621434350999004, guid: 8dd250c2dea12b54ab4a2f6f2c4248ff,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetBGMMusicVol
       objectReference: {fileID: 0}
     - target: {fileID: 3492187516823111650, guid: 8dd250c2dea12b54ab4a2f6f2c4248ff,
         type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
+      objectReference: {fileID: 983920522}
+    - target: {fileID: 3492187516823111650, guid: 8dd250c2dea12b54ab4a2f6f2c4248ff,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetSFXMusicVol
       objectReference: {fileID: 0}
     - target: {fileID: 4940907287519688987, guid: 8dd250c2dea12b54ab4a2f6f2c4248ff,
         type: 3}
