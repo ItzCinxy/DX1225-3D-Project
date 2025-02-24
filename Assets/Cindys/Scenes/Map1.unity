@@ -122,6 +122,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &32152930 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5475768059160308471, guid: 98a54c0b062ae494493f13bddc03aa78,
+    type: 3}
+  m_PrefabInstance: {fileID: 1332284297}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &32231475
 GameObject:
   m_ObjectHideFlags: 0
@@ -2332,6 +2344,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainDoor: {fileID: 1956443127}
+  questKeyDisplay: {fileID: 32152930}
+  questZombieDisplay: {fileID: 999895907}
   zombiesToKill: 5
 --- !u!1 &708771963
 GameObject:
@@ -3377,6 +3391,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 247221656}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &999895907 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6885641618685617613, guid: 98a54c0b062ae494493f13bddc03aa78,
+    type: 3}
+  m_PrefabInstance: {fileID: 1332284297}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1022946684
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4213,11 +4239,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3287674359219554678, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
-      propertyPath: activePanels.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3287674359219554678, guid: 98a54c0b062ae494493f13bddc03aa78,
-        type: 3}
       propertyPath: activePanels.Array.data[0]
       value: 
       objectReference: {fileID: 2004568887}
@@ -4240,21 +4261,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4118439427652136163, guid: 98a54c0b062ae494493f13bddc03aa78,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.29999995
-      objectReference: {fileID: 0}
-    - target: {fileID: 4118439427652136163, guid: 98a54c0b062ae494493f13bddc03aa78,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.6810002
-      objectReference: {fileID: 0}
-    - target: {fileID: 4118439427652136163, guid: 98a54c0b062ae494493f13bddc03aa78,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.3887396
       objectReference: {fileID: 0}
     - target: {fileID: 7131533075968479633, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
@@ -11885,6 +11891,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7708013090833069323, guid: 8dd250c2dea12b54ab4a2f6f2c4248ff,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8843262995588316003, guid: 8dd250c2dea12b54ab4a2f6f2c4248ff,
         type: 3}
