@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,7 @@ public class Key : MonoBehaviour
         // Perform the raycast
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 2f, layer))
         {
+            ObjectiveManager.Instance.PickUpKey();
             Destroy(hitInfo.collider.gameObject);
             Debug.Log("Key picked up!");
         }
