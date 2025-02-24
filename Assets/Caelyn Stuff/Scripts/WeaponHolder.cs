@@ -1,42 +1,64 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class WeaponHolder : MonoBehaviour
 {
     [SerializeField] private Transform weaponHolder;
-    public WeaponBase equippedWeapon;
+    public List<WeaponBase> equippedWeapons = new List<WeaponBase>(); // Supports up to 2 weapons
+    private int currentWeaponIndex = 0;
+
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private float pickupRange = 3f;
     [SerializeField] private LayerMask pickupLayer;
 
     [Header("UI References")]
     [SerializeField] private TMP_Text ammoDisplay;
+    [SerializeField] private TMP_Text weaponListText;  // New text field for weapon list
     [SerializeField] private Animator animator;
 
-    public static Transform currentTarget; // Shared target for drone @ck
+    public static Transform currentTarget; // Shared target for drone
 
     private void Update()
     {
-        if (_playerInput.actions["Shoot"].IsPressed() && equippedWeapon is Weapon)
+        // Check for mouse scroll wheel input (using Input.GetAxis, not InputControl scroll)
+        float scrollDelta = Input.GetAxis("Mouse ScrollWheel");
+        if (Mathf.Abs(scrollDelta) > 0.01f && equippedWeapons.Count > 1)
         {
-            equippedWeapon.Shoot();
-            ProcessHitscanEffects();
-
-            AlertNearbyZombies(transform.position, 2.5f);
+            if (scrollDelta > 0)
+                SwapWeaponNext();
+            else
+                SwapWeaponPrevious();
         }
 
-        if (_playerInput.actions["Shoot"].WasPressedThisFrame() && equippedWeapon is ProjectileWeapon)
+        if (equippedWeapons.Count > 0)
         {
-            equippedWeapon.Shoot();
-            ProcessHitscanEffects();
+            WeaponBase currentWeapon = equippedWeapons[currentWeaponIndex];
 
-            AlertNearbyZombies(transform.position, 6.5f);
+            if (_playerInput.actions["Shoot"].IsPressed() && currentWeapon is Weapon)
+            {
+                currentWeapon.Shoot();
+                ProcessHitscanEffects();
+                AlertNearbyZombies(transform.position, 2.5f);
+            }
+
+            if (_playerInput.actions["Shoot"].WasPressedThisFrame() && currentWeapon is ProjectileWeapon)
+            {
+                currentWeapon.Shoot();
+                ProcessHitscanEffects();
+                AlertNearbyZombies(transform.position, 6.5f);
+            }
+
+            if (_playerInput.actions["Reload"].IsPressed())
+                currentWeapon.Reload();
         }
 
-        if (_playerInput.actions["Reload"].IsPressed()) Reload();
-        if (_playerInput.actions["Interact"].WasPressedThisFrame()) Interact();
-        if (_playerInput.actions["Drop"].WasPressedThisFrame()) DropWeapon();
+        if (_playerInput.actions["Interact"].WasPressedThisFrame())
+            Interact();
+
+        if (_playerInput.actions["Drop"].WasPressedThisFrame())
+            DropWeapon();
     }
 
     private void ProcessHitscanEffects()
@@ -51,11 +73,6 @@ public class WeaponHolder : MonoBehaviour
                 hit.collider.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
             }
         }
-    }
-
-    private void Reload()
-    {
-        equippedWeapon?.Reload();
     }
 
     private void Interact()
@@ -78,81 +95,169 @@ public class WeaponHolder : MonoBehaviour
 
     public void EquipWeapon(WeaponBase newWeapon)
     {
-        if (equippedWeapon != null) DropWeapon();
+        // Prevent duplicate pickups
+        if (equippedWeapons.Contains(newWeapon))
+            return;
 
-        equippedWeapon = newWeapon;
-
-        if (equippedWeapon.TryGetComponent(out FloatingWeapon floatingEffect))
+        // Remove floating effect if present
+        if (newWeapon.TryGetComponent(out FloatingWeapon floatingEffect))
             Destroy(floatingEffect);
 
         if (FindObjectOfType<LuckyBox>() is LuckyBox luckyBox)
-            luckyBox.WeaponPickedUp(equippedWeapon);
+            luckyBox.WeaponPickedUp(newWeapon);
 
-        equippedWeapon.transform.SetParent(weaponHolder);
-        equippedWeapon.transform.localPosition = Vector3.zero;
-        equippedWeapon.transform.localRotation = Quaternion.identity;
+        newWeapon.transform.SetParent(weaponHolder);
+        newWeapon.transform.localPosition = Vector3.zero;
+        newWeapon.transform.localRotation = Quaternion.identity;
 
-        Rigidbody rb = equippedWeapon.GetComponent<Rigidbody>();
-        if (rb) rb.isKinematic = true;
-        else equippedWeapon.gameObject.AddComponent<Rigidbody>();
+        Rigidbody rb = newWeapon.GetComponent<Rigidbody>();
+        if (rb)
+            rb.isKinematic = true;
+        else
+            newWeapon.gameObject.AddComponent<Rigidbody>();
 
-        BoxCollider bc = equippedWeapon.GetComponent<BoxCollider>();
-        if (bc) bc.enabled = false;
-        else equippedWeapon.gameObject.AddComponent<BoxCollider>();
+        BoxCollider bc = newWeapon.GetComponent<BoxCollider>();
+        if (bc)
+            bc.enabled = false;
+        else
+            newWeapon.gameObject.AddComponent<BoxCollider>();
+
+        // If you have less than 2 weapons, add the new one
+        if (equippedWeapons.Count < 2)
+        {
+            equippedWeapons.Add(newWeapon);
+            // If it's the first weapon, activate it; otherwise, keep it inactive.
+            if (equippedWeapons.Count == 1)
+            {
+                currentWeaponIndex = 0;
+                newWeapon.gameObject.SetActive(true);
+            }
+            else
+            {
+                newWeapon.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            // Already holding 2 weapons: drop the current one and replace it
+            DropWeapon();
+            equippedWeapons.Add(newWeapon);
+            currentWeaponIndex = equippedWeapons.Count - 1;
+            newWeapon.gameObject.SetActive(true);
+        }
 
         animator.SetBool("IsHoldingGun", true);
 
         if (ammoDisplay != null)
-        {
-            equippedWeapon.SetAmmoDisplay(ammoDisplay);
-        }
+            newWeapon.SetAmmoDisplay(ammoDisplay);
+
+        UpdateWeaponListUI();
     }
 
     public void DropWeapon()
     {
-        if (equippedWeapon == null) return;
+        if (equippedWeapons.Count == 0)
+            return;
 
-        Rigidbody rb = equippedWeapon.GetComponent<Rigidbody>();
-        if (rb) rb.isKinematic = false;
+        WeaponBase currentWeapon = equippedWeapons[currentWeaponIndex];
 
-        BoxCollider bc = equippedWeapon.GetComponent<BoxCollider>();
-        if (bc) bc.enabled = true;
+        Rigidbody rb = currentWeapon.GetComponent<Rigidbody>();
+        if (rb)
+            rb.isKinematic = false;
 
-        equippedWeapon.transform.SetParent(null);
+        BoxCollider bc = currentWeapon.GetComponent<BoxCollider>();
+        if (bc)
+            bc.enabled = true;
+
+        currentWeapon.transform.SetParent(null);
         ammoDisplay.text = "-- / --";
-        equippedWeapon = null;
-        animator.SetBool("IsHoldingGun", false);
+
+        // Remove the dropped weapon from the list
+        equippedWeapons.RemoveAt(currentWeaponIndex);
+
+        // Activate the remaining weapon, if any
+        if (equippedWeapons.Count > 0)
+        {
+            currentWeaponIndex = 0;
+            equippedWeapons[currentWeaponIndex].gameObject.SetActive(true);
+        }
+        else
+        {
+            animator.SetBool("IsHoldingGun", false);
+        }
+
+        UpdateWeaponListUI();
+    }
+
+    private void SwapWeaponNext()
+    {
+        equippedWeapons[currentWeaponIndex].gameObject.SetActive(false);
+        currentWeaponIndex = (currentWeaponIndex + 1) % equippedWeapons.Count;
+        equippedWeapons[currentWeaponIndex].gameObject.SetActive(true);
+        UpdateUI();
+        UpdateWeaponListUI();
+    }
+
+    private void SwapWeaponPrevious()
+    {
+        equippedWeapons[currentWeaponIndex].gameObject.SetActive(false);
+        currentWeaponIndex--;
+        if (currentWeaponIndex < 0)
+            currentWeaponIndex = equippedWeapons.Count - 1;
+        equippedWeapons[currentWeaponIndex].gameObject.SetActive(true);
+        UpdateUI();
+        UpdateWeaponListUI();
+    }
+
+    private void UpdateUI()
+    {
+        if (equippedWeapons.Count > 0)
+        {
+            animator.SetBool("IsHoldingGun", true);
+            equippedWeapons[currentWeaponIndex].SetAmmoDisplay(ammoDisplay);
+        }
+        else
+        {
+            animator.SetBool("IsHoldingGun", false);
+            ammoDisplay.text = "-- / --";
+        }
+    }
+
+    // This method updates the UI text to show your current weapons.
+    private void UpdateWeaponListUI()
+    {
+        if (weaponListText == null)
+            return;
+
+        string text = "Weapons:\n";
+        for (int i = 0; i < equippedWeapons.Count; i++)
+        {
+            // Mark the active weapon with a ">" symbol.
+            text += (i == currentWeaponIndex ? "> " : "  ") + equippedWeapons[i].gameObject.name + "\n";
+        }
+        weaponListText.text = text;
     }
 
     private void OnDrawGizmos()
     {
         if (Camera.main == null) return;
-
-        // Set color
         Gizmos.color = Color.green;
-
-        // Draw a ray from the camera forward
         Vector3 start = Camera.main.transform.position;
         Vector3 direction = Camera.main.transform.forward * pickupRange;
         Gizmos.DrawRay(start, direction);
-
-        // Draw a small sphere at the end of the ray for better visibility
         Gizmos.DrawSphere(start + direction, 0.1f);
     }
 
     public bool GetIsWeaponEquipped()
     {
-        if (equippedWeapon != null)
-        {
-            return true;
-        }
-
-        return false;
+        return equippedWeapons.Count > 0;
     }
 
     public WeaponBase GetEquippedWeapon()
     {
-        return equippedWeapon;
+        if (equippedWeapons.Count > 0)
+            return equippedWeapons[currentWeaponIndex];
+        return null;
     }
 
     void AlertNearbyZombies(Vector3 position, float alertRange)
@@ -206,5 +311,4 @@ public class WeaponHolder : MonoBehaviour
             //}
         }
     }
-
 }
