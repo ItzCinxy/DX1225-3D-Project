@@ -378,8 +378,57 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1990729841384258915, guid: 928ee2e689354804ea93b8e1e0542c8d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7848385301643726618}
   m_SourcePrefab: {fileID: 100100000, guid: 928ee2e689354804ea93b8e1e0542c8d, type: 3}
+--- !u!114 &1771621434350999004 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6608442963085320362, guid: 928ee2e689354804ea93b8e1e0542c8d,
+    type: 3}
+  m_PrefabInstance: {fileID: 4837982633240884598}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3492187516823111650 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8310629609777361556, guid: 928ee2e689354804ea93b8e1e0542c8d,
+    type: 3}
+  m_PrefabInstance: {fileID: 4837982633240884598}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &6378092869997987861 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1990729841384258915, guid: 928ee2e689354804ea93b8e1e0542c8d,
+    type: 3}
+  m_PrefabInstance: {fileID: 4837982633240884598}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7848385301643726618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6378092869997987861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d326518da57e764abf877b00bee6a13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: db4f4c0e2ea55984797b52f35c73091a, type: 2}
+  BGMSlider: {fileID: 1771621434350999004}
+  SFXSlider: {fileID: 3492187516823111650}
 --- !u!224 &7506619708953326905 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3102744061720592463, guid: 928ee2e689354804ea93b8e1e0542c8d,
