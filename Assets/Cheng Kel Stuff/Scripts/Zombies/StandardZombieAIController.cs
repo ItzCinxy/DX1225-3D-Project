@@ -37,6 +37,11 @@ public class StandardZombieAIController : MonoBehaviour
     [SerializeField] private GameObject ammoPrefab;
     [SerializeField] private GameObject healthPrefab;
 
+    [Header("Zombie Audio")]
+    public AudioClip ZombieSounds;
+    [SerializeField] AudioSource AudioSource;
+
+
     private Transform player;
     private CharacterController playerController;
     private PlayerStats playerHealth;
