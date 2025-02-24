@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9125150030035183959}
   - component: {fileID: 220971076580903694}
   - component: {fileID: 6280902208684628952}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HealthPack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 8785078568489500116}
   - component: {fileID: 6640751060818701606}
   - component: {fileID: 8814450903900254950}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Aid Kit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
