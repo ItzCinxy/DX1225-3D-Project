@@ -39,7 +39,7 @@ public class ChargerAIController : MonoBehaviour
 
     private Transform player;
     private CharacterController playerController;
-    private PlayerStats playerHealth;
+    private PlayerStats playerstats;
     private Vector3 velocity;
     private Vector3 targetPosition;
     private Animator animator;
@@ -58,7 +58,7 @@ public class ChargerAIController : MonoBehaviour
         if (player != null)
         {
             playerController = player.GetComponent<CharacterController>();
-            playerHealth = player.GetComponent<PlayerStats>();
+            playerstats = player.GetComponent<PlayerStats>();
         }
 
         currentHealth = maxHealth;
@@ -74,6 +74,8 @@ public class ChargerAIController : MonoBehaviour
     void Update()
     {
         if (isDying || isConvulsing) return;
+
+        zombies.RemoveAll(z => z == null);
 
         switch (currentState)
         {
@@ -216,7 +218,10 @@ public class ChargerAIController : MonoBehaviour
 
     IEnumerator DieAfterAnimation()
     {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(5f);
+
+        if (this == null) yield break;
+
         Die();
     }
 
@@ -239,6 +244,10 @@ public class ChargerAIController : MonoBehaviour
         {
             Destroy(healthBar.gameObject);
         }
+
+        playerstats.IncreaseCoin(100);
+
+        zombies.Remove(this);
 
         Destroy(gameObject);
     }
@@ -313,7 +322,7 @@ public class ChargerAIController : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
         {
             Debug.Log("Zombie attack landed!");
-            playerHealth?.TakeDamage((float)attackDamage); // Apply damage
+            playerstats?.TakeDamage((float)attackDamage); // Apply damage
         }
     }
 

@@ -39,7 +39,7 @@ public class TankZombieAIController : MonoBehaviour
 
     private Transform player;
     private CharacterController playerController;
-    private PlayerStats playerHealth;
+    private PlayerStats playerstats;
     private Vector3 velocity;
     private Vector3 targetPosition;
     private Animator animator;
@@ -50,6 +50,7 @@ public class TankZombieAIController : MonoBehaviour
     private bool isConvulsing = false;
 
     private int canStartAttack = 1;
+
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -62,7 +63,7 @@ public class TankZombieAIController : MonoBehaviour
         if (player != null)
         {
             playerController = player.GetComponent<CharacterController>();
-            playerHealth = player.GetComponent<PlayerStats>();
+            playerstats = player.GetComponent<PlayerStats>();
         }
 
         currentHealth = maxHealth;
@@ -78,6 +79,8 @@ public class TankZombieAIController : MonoBehaviour
     void Update()
     {
         if (isDying || isConvulsing) return;
+
+        zombies.RemoveAll(z => z == null);
 
         switch (currentState)
         {
@@ -221,6 +224,9 @@ public class TankZombieAIController : MonoBehaviour
     IEnumerator DieAfterAnimation()
     {
         yield return new WaitForSeconds(5f);
+
+        if (this == null) yield break;
+
         Die();
     }
 
@@ -243,6 +249,10 @@ public class TankZombieAIController : MonoBehaviour
         {
             Destroy(healthBar.gameObject);
         }
+
+        playerstats.IncreaseCoin(100);
+
+        zombies.Remove(this);
 
         Destroy(gameObject);
     }
@@ -318,7 +328,7 @@ public class TankZombieAIController : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
         {
             Debug.Log("Zombie attack landed!");
-            playerHealth?.TakeDamage((float)attackDamage); // Apply damage
+            playerstats?.TakeDamage((float)attackDamage); // Apply damage
             _player.ApplyKnockback(transform.position, 10, 10);
         }
     }
@@ -363,7 +373,7 @@ public class TankZombieAIController : MonoBehaviour
 
     IEnumerator RecoverFromHit()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.8f);
         ChangeState(EnemyState.Run);
     }
 

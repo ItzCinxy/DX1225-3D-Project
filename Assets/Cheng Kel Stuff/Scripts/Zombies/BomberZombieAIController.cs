@@ -54,7 +54,7 @@ public class BomberZombieAIController : MonoBehaviour
 
     private Transform player;
     private CharacterController playerController;
-    private PlayerStats playerHealth;
+    private PlayerStats playerstats;
     private Vector3 velocity;
     private Vector3 targetPosition;
     private Animator animator;
@@ -73,7 +73,7 @@ public class BomberZombieAIController : MonoBehaviour
         if (player != null)
         {
             playerController = player.GetComponent<CharacterController>();
-            playerHealth = player.GetComponent<PlayerStats>();
+            playerstats = player.GetComponent<PlayerStats>();
         }
 
         currentHealth = maxHealth;
@@ -89,6 +89,8 @@ public class BomberZombieAIController : MonoBehaviour
     void Update()
     {
         if (isDying || isConvulsing) return;
+
+        zombies.RemoveAll(z => z == null);
 
         switch (currentState)
         {
@@ -232,7 +234,10 @@ public class BomberZombieAIController : MonoBehaviour
 
     IEnumerator DieAfterAnimation()
     {
-        yield return new WaitForSeconds(10.5f);
+        yield return new WaitForSeconds(5f);
+
+        if (this == null) yield break;
+
         Die();
     }
 
@@ -258,6 +263,9 @@ public class BomberZombieAIController : MonoBehaviour
             Destroy(healthBar.gameObject);
         }
 
+        playerstats.IncreaseCoin(100);
+
+        zombies.Remove(this);
 
         Destroy(gameObject);
     }
@@ -349,7 +357,7 @@ public class BomberZombieAIController : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
         {
             Debug.Log("Zombie attack landed!");
-            playerHealth?.TakeDamage((float)attackDamage); // Apply damage
+            playerstats?.TakeDamage((float)attackDamage); // Apply damage
         }
 
         //if (explosionEffectPrefab != null)
@@ -432,7 +440,7 @@ public class BomberZombieAIController : MonoBehaviour
         if (distanceToPlayer <= explosionRadius)
         {
             Debug.Log($"Player hit by explosion! Taking {explosionDamage} damage.");
-            playerHealth?.TakeDamage((float)explosionDamage);
+            playerstats?.TakeDamage((float)explosionDamage);
         }
 
         // Instantiate explosion effect

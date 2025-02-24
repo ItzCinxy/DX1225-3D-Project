@@ -44,7 +44,7 @@ public class StandardZombieAIController : MonoBehaviour
 
     private Transform player;
     private CharacterController playerController;
-    private PlayerStats playerHealth;
+    private PlayerStats playerstats;
     private Vector3 velocity;
     private Vector3 targetPosition;
     private Animator animator;
@@ -72,7 +72,7 @@ public class StandardZombieAIController : MonoBehaviour
         if (player != null)
         {
             playerController = player.GetComponent<CharacterController>();
-            playerHealth = player.GetComponent<PlayerStats>();
+            playerstats = player.GetComponent<PlayerStats>();
         }
 
         currentHealth = maxHealth;
@@ -89,6 +89,8 @@ public class StandardZombieAIController : MonoBehaviour
     void Update()
     {
         if (isDying || isConvulsing) return;
+
+        zombies.RemoveAll(z => z == null);
 
         switch (currentState)
         {
@@ -232,6 +234,9 @@ public class StandardZombieAIController : MonoBehaviour
     IEnumerator DieAfterAnimation()
     {
         yield return new WaitForSeconds(5f);
+
+        if (this == null) yield break;
+
         Die();
     }
     void Die()
@@ -253,6 +258,10 @@ public class StandardZombieAIController : MonoBehaviour
         {
             Destroy(healthBar.gameObject);
         }
+
+        playerstats.IncreaseCoin(100);
+
+        zombies.Remove(this);
 
         Destroy(gameObject);
     }
@@ -372,7 +381,7 @@ public class StandardZombieAIController : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
         {
             Debug.Log("Zombie attack landed!");
-            playerHealth?.TakeDamage((float)attackDamage); // Apply damage
+            playerstats?.TakeDamage((float)attackDamage); // Apply damage
         }
     }
 
@@ -416,7 +425,7 @@ public class StandardZombieAIController : MonoBehaviour
 
     IEnumerator RecoverFromHit()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.8f);
         ChangeState(EnemyState.Run);
     }
 
