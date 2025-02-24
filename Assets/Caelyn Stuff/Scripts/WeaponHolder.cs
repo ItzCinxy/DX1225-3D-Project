@@ -93,8 +93,6 @@ public class WeaponHolder : MonoBehaviour
         newWeapon.transform.localPosition = Vector3.zero;
         newWeapon.transform.localRotation = Quaternion.identity;
 
-        if (newWeapon == null) return;
-
         Rigidbody rb = newWeapon.GetComponent<Rigidbody>();
         if (rb) rb.isKinematic = true;
 
@@ -182,11 +180,8 @@ public class WeaponHolder : MonoBehaviour
     {
         if (equippedWeapons.Count > 0)
             ammoDisplay.text = $"{GetCurrentWeapon().GetCurrentAmmo()} / {GetCurrentWeapon().GetTotalAmmo()}";
-        else if (GetCurrentWeapon() == null)
-        {
+        else
             ammoDisplay.text = "-- / --";
-            return;
-        }
 
         weapon1Display.text = equippedWeapons.Count > 0 ? equippedWeapons[0].name : "Empty";
         weapon2Display.text = equippedWeapons.Count > 1 ? equippedWeapons[1].name : "Empty";
@@ -195,22 +190,6 @@ public class WeaponHolder : MonoBehaviour
     private WeaponBase GetCurrentWeapon()
     {
         return equippedWeapons.Count > 0 ? equippedWeapons[currentWeaponIndex] : null;
-    }
-
-    public bool GetIsWeaponEquipped()
-    {
-        return equippedWeapons.Count > 0;
-    }
-
-    public WeaponBase GetEquippedWeapon()
-    {
-        if (equippedWeapons.Count == 0) return null;
-        return equippedWeapons[currentWeaponIndex];
-    }
-
-    public bool CanPickupWeapon()
-    {
-        return equippedWeapons.Count < 2;
     }
 
     private void OnDrawGizmos()
@@ -222,5 +201,16 @@ public class WeaponHolder : MonoBehaviour
         Vector3 direction = Camera.main.transform.forward * pickupRange;
         Gizmos.DrawRay(start, direction);
         Gizmos.DrawSphere(start + direction, 0.1f);
+    }
+
+    public bool GetIsWeaponEquipped()
+    {
+        return equippedWeapons.Count > 0;
+    }
+
+    public WeaponBase GetEquippedWeapon()
+    {
+        if (equippedWeapons.Count == 0) return null;
+        return equippedWeapons[currentWeaponIndex];
     }
 }

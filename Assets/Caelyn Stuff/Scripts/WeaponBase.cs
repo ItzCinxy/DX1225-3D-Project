@@ -55,7 +55,7 @@ public abstract class WeaponBase : MonoBehaviour
         totalAmmo -= ammoToReload;
 
         isReloading = false;
-        UpdateAmmoDisplay(); 
+        UpdateAmmoDisplay(); // ✅ Ensure UI updates when done
     }
 
     protected virtual void UpdateAmmoDisplay()
