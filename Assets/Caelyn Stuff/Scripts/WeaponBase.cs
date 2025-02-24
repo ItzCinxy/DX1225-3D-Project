@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -20,7 +20,7 @@ public abstract class WeaponBase : MonoBehaviour
     [SerializeField] AudioSource weaponAudioSource;
 
     [Header("UI Elements")]
-    protected TMP_Text ammoDisplay; // ✅ Only declared ONCE here, removed duplicate
+    protected TMP_Text ammoDisplay;
 
     protected virtual void Start()
     {
@@ -28,40 +28,37 @@ public abstract class WeaponBase : MonoBehaviour
         UpdateAmmoDisplay();
     }
 
+    private void Update()
+    {
+        if (currentAmmoInMag <= 0)
+            Reload();
+    }
+
     public abstract void Shoot();
 
     public virtual void Reload()
     {
         if (isReloading || totalAmmo <= 0) return;
-
-        isReloading = true;
-
-        if (ammoDisplay != null)
-            ammoDisplay.text = "Reloading..."; 
-
         StartCoroutine(ReloadRoutine());
     }
 
     protected virtual IEnumerator ReloadRoutine()
     {
         isReloading = true;
-
-        if (ammoDisplay != null) ammoDisplay.text = "Reloading..."; 
-
+        if (ammoDisplay != null) ammoDisplay.text = "Reloading...";
         yield return new WaitForSeconds(reloadTime);
 
         int ammoToReload = Mathf.Min(maxMagazineSize - currentAmmoInMag, totalAmmo);
         currentAmmoInMag += ammoToReload;
         totalAmmo -= ammoToReload;
-
         isReloading = false;
-        UpdateAmmoDisplay(); // ✅ Ensure UI updates when done
+        UpdateAmmoDisplay();
     }
 
     protected virtual void UpdateAmmoDisplay()
     {
         if (ammoDisplay != null)
-            ammoDisplay.text = isReloading ? "Reloading..." : $"{currentAmmoInMag} / {totalAmmo}"; 
+            ammoDisplay.text = $"{currentAmmoInMag} / {totalAmmo}";
     }
 
     public void SetAmmoDisplay(TMP_Text newDisplay)
@@ -70,22 +67,26 @@ public abstract class WeaponBase : MonoBehaviour
         UpdateAmmoDisplay();
     }
 
-    public int GetCurrentAmmo() => currentAmmoInMag;
-    public int GetTotalAmmo() => totalAmmo;
     public void IncreaseTotalAmmo(int ammoInc)
     {
         totalAmmo += ammoInc;
         UpdateAmmoDisplay();
     }
-
-    public float GetFireRate() => fireRate;
+    public float GetFireRate()
+    {
+        return fireRate;
+    }
 
     public void SetFireRate(float newRate)
     {
         fireRate = Mathf.Max(0.1f, newRate); // Ensure fire rate is never zero
     }
 
-    public float GetReloadTime() => reloadTime;
+    public float GetReloadTime()
+    {
+        return reloadTime;
+    }
+
     public void SetReloadTime(float newTime)
     {
         reloadTime = Mathf.Max(0.1f, newTime); // Ensure reload time is never zero
