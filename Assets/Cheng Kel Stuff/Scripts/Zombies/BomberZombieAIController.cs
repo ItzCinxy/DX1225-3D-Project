@@ -59,7 +59,7 @@ public class BomberZombieAIController : MonoBehaviour
     private Vector3 targetPosition;
     private Animator animator;
 
-    private bool isDying = false;
+    public bool isDying = false;
     private bool isConvulsing = false;
 
     int canStartAttack = 1;
@@ -120,7 +120,7 @@ public class BomberZombieAIController : MonoBehaviour
             RotateTowardsMovementDirection();
         }
     }
-    void ChangeState(EnemyState newState)
+    public void ChangeState(EnemyState newState)
     {
         if (currentState == newState || isDying) return;
         currentState = newState;
@@ -231,6 +231,8 @@ public class BomberZombieAIController : MonoBehaviour
             healthBar.SetHealth(currentHealth);
         }
 
+        RotateTowardPlayer();
+
         if (currentHealth <= 0)
         {
             ChangeState(EnemyState.Convulsing);
@@ -240,6 +242,18 @@ public class BomberZombieAIController : MonoBehaviour
             ChangeState(EnemyState.Hit);
         }
     }
+
+    public void RotateTowardPlayer()
+    {
+        if (player == null) return;
+
+        Vector3 directionToPlayer = (player.position - transform.position).normalized;
+        directionToPlayer.y = 0; // Ignore vertical rotation
+
+        Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
 
     IEnumerator DieAfterAnimation()
     {

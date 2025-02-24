@@ -44,7 +44,7 @@ public class ChargerAIController : MonoBehaviour
     private Vector3 targetPosition;
     private Animator animator;
 
-    private bool isDying = false;
+    public bool isDying = false;
     private bool isConvulsing = false;
 
     int canStartAttack = 1;
@@ -55,6 +55,7 @@ public class ChargerAIController : MonoBehaviour
     [SerializeField][Range(0, 1)] private float _cohesionWeight = 0.5f;
     [SerializeField][Range(0, 1)] private float _alignmentWeight = 0.5f;
     [SerializeField] private float _neighbourRadius = 5f;
+
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -105,7 +106,7 @@ public class ChargerAIController : MonoBehaviour
             RotateTowardsMovementDirection();
         }
     }
-    void ChangeState(EnemyState newState)
+    public void ChangeState(EnemyState newState)
     {
         if (currentState == newState || isDying) return;
         currentState = newState;
@@ -215,6 +216,8 @@ public class ChargerAIController : MonoBehaviour
             healthBar.SetHealth(currentHealth);
         }
 
+        RotateTowardPlayer();
+
         if (currentHealth <= 0)
         {
             ChangeState(EnemyState.Convulsing);
@@ -224,6 +227,18 @@ public class ChargerAIController : MonoBehaviour
             ChangeState(EnemyState.Hit);
         }
     }
+
+    public void RotateTowardPlayer()
+    {
+        if (player == null) return;
+
+        Vector3 directionToPlayer = (player.position - transform.position).normalized;
+        directionToPlayer.y = 0; // Ignore vertical rotation
+
+        Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
 
     IEnumerator DieAfterAnimation()
     {

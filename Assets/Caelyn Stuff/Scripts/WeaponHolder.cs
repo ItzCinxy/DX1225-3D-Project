@@ -22,11 +22,16 @@ public class WeaponHolder : MonoBehaviour
         {
             equippedWeapon.Shoot();
             ProcessHitscanEffects();
+
+            AlertNearbyZombies(transform.position, 2.5f);
         }
 
         if (_playerInput.actions["Shoot"].WasPressedThisFrame() && equippedWeapon is ProjectileWeapon)
         {
             equippedWeapon.Shoot();
+            ProcessHitscanEffects();
+
+            AlertNearbyZombies(transform.position, 6.5f);
         }
 
         if (_playerInput.actions["Reload"].IsPressed()) Reload();
@@ -149,4 +154,57 @@ public class WeaponHolder : MonoBehaviour
     {
         return equippedWeapon;
     }
+
+    void AlertNearbyZombies(Vector3 position, float alertRange)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(position, alertRange);
+        foreach (Collider hitCollider in hitColliders)
+        {
+            // Check each type of zombie and alert them
+            StandardZombieAIController standardZombie = hitCollider.GetComponent<StandardZombieAIController>();
+            TankZombieAIController tankZombie = hitCollider.GetComponent<TankZombieAIController>();
+            ChargerAIController chargerZombie = hitCollider.GetComponent<ChargerAIController>();
+            BomberZombieAIController bomberZombie = hitCollider.GetComponent<BomberZombieAIController>();
+            //ScreamerZombieAIController screamerZombie = hitCollider.GetComponent<ScreamerZombieAIController>();
+            //ToxicroakZombieAIController toxicroakZombie = hitCollider.GetComponent<ToxicroakZombieAIController>();
+            //SpitterZombieAIController spitterZombie = hitCollider.GetComponent<SpitterZombieAIController>();
+
+            if (standardZombie != null && !standardZombie.isDying)
+            {
+                standardZombie.RotateTowardPlayer();
+                standardZombie.ChangeState(StandardZombieAIController.EnemyState.Run);
+            }
+            else if (tankZombie != null && !tankZombie.isDying)
+            {
+                tankZombie.RotateTowardPlayer();
+                tankZombie.ChangeState(TankZombieAIController.EnemyState.Run);
+            }
+            else if (chargerZombie != null && !chargerZombie.isDying)
+            {
+                chargerZombie.RotateTowardPlayer();
+                chargerZombie.ChangeState(ChargerAIController.EnemyState.Run);
+            }
+            else if (bomberZombie != null && !bomberZombie.isDying)
+            {
+                bomberZombie.RotateTowardPlayer();
+                bomberZombie.ChangeState(BomberZombieAIController.EnemyState.Run);
+            }
+            //else if (screamerZombie != null && !screamerZombie.isDying)
+            //{
+            //    screamerZombie.RotateTowardPlayer();
+            //    screamerZombie.ChangeState(ScreamerZombieAIController.EnemyState.Run);
+            //}
+            //else if (toxicroakZombie != null && !toxicroakZombie.isDying)
+            //{
+            //    toxicroakZombie.RotateTowardPlayer();
+            //    toxicroakZombie.ChangeState(ToxicroakZombieAIController.EnemyState.Run);
+            //}
+            //else if (spitterZombie != null && !spitterZombie.isDying)
+            //{
+            //    spitterZombie.RotateTowardPlayer();
+            //    spitterZombie.ChangeState(SpitterZombieAIController.EnemyState.Run);
+            //}
+        }
+    }
+
 }

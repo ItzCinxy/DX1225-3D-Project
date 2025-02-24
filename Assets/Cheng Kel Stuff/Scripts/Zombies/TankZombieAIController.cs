@@ -46,7 +46,7 @@ public class TankZombieAIController : MonoBehaviour
 
     private PlayerController _player;
 
-    private bool isDying = false;
+    public bool isDying = false;
     private bool isConvulsing = false;
 
     private int canStartAttack = 1;
@@ -110,7 +110,7 @@ public class TankZombieAIController : MonoBehaviour
             RotateTowardsMovementDirection();
         }
     }
-    void ChangeState(EnemyState newState)
+    public void ChangeState(EnemyState newState)
     {
         if (currentState == newState || isDying) return;
         currentState = newState;
@@ -220,6 +220,8 @@ public class TankZombieAIController : MonoBehaviour
             healthBar.SetHealth(currentHealth);
         }
 
+        RotateTowardPlayer();
+
         if (currentHealth <= 0)
         {
             ChangeState(EnemyState.Convulsing);
@@ -229,6 +231,18 @@ public class TankZombieAIController : MonoBehaviour
             ChangeState(EnemyState.Hit);
         }
     }
+
+    public void RotateTowardPlayer()
+    {
+        if (player == null) return;
+
+        Vector3 directionToPlayer = (player.position - transform.position).normalized;
+        directionToPlayer.y = 0; // Ignore vertical rotation
+
+        Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
 
     IEnumerator DieAfterAnimation()
     {
