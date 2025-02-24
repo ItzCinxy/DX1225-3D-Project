@@ -26,6 +26,10 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private GameObject normalDronePrefab;
     [SerializeField] private GameObject rocketDronePrefab;
 
+    [Header("Coins")]
+    private int coinAmount = 0;
+    [SerializeField] TMP_Text coinText;
+
     [Header("UI Settings")]
     [SerializeField] private Slider healthBar;
     [SerializeField] private TMP_Text healthText;
@@ -49,6 +53,11 @@ public class PlayerStats : MonoBehaviour
         {
             staminaBar.maxValue = maxStamina;
             staminaBar.value = currentStamina;
+        }
+
+        if (coinText != null)
+        {
+            coinText.text = "0";
         }
 
         // Update text on start
@@ -263,5 +272,30 @@ public class PlayerStats : MonoBehaviour
         {
             Instantiate(rocketDronePrefab, transform.position, Quaternion.identity);
         }
+    }
+
+    public void IncreaseCoins(int amountToIncrease)
+    {
+        coinAmount += amountToIncrease;
+        UpdateCoinText(coinAmount);
+    }
+
+    public void UseCoins(int amountToUse)
+    {
+        coinAmount -= amountToUse;
+        UpdateCoinText(coinAmount);
+    }
+
+    private void UpdateCoinText(int coinAmount)
+    {
+        if (coinText != null)
+        {
+            coinText.text = coinAmount.ToString();
+        }
+    }
+
+    public int GetCoins()
+    {
+        return coinAmount;
     }
 }
