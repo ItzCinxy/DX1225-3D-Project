@@ -319,10 +319,10 @@ MonoBehaviour:
   weaponPool:
   - {fileID: 3916501062029622350, guid: c5dfad2375a0ea140bdfb5ba261ec6c6, type: 3}
   - {fileID: 2643555289510151061, guid: 8bfd4086ca86324488ec1b7cb63a92f1, type: 3}
-  - {fileID: 4137721612486666428, guid: bd43cf8928203974686db5a800b8652a, type: 3}
+  - {fileID: 6055461160669010065, guid: bd43cf8928203974686db5a800b8652a, type: 3}
   weaponSpawnPoint: {fileID: 3209650411527600761}
   boxCooldown: 3
-  weaponLifetime: 3
+  weaponLifetime: 1
   interactText: {fileID: 5160634804698247779}
   openBoxSound: {fileID: 0}
   receiveWeaponSound: {fileID: 0}

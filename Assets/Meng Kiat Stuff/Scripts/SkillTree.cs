@@ -29,6 +29,12 @@ public class SkillTree : MonoBehaviour
         return false;
     }
 
+    public void IncreaseSkillPoint()
+    {
+        skillPoints++;
+        UpdateSkillPointText();
+    }
+
     private void UpdateSkillPointText()
     {
         skillPointsText.text = "Skill Points: " + skillPoints;

@@ -32,6 +32,10 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private Slider staminaBar;
     [SerializeField] private TMP_Text staminaText;
 
+    [Header("Coin Setting")]
+    [SerializeField] private int coinAmount;
+    [SerializeField] private TMP_Text coinAmountText;
+
     private Coroutine healthBarLerpCoroutine;
     private Coroutine staminaBarLerpCoroutine;
 
@@ -49,6 +53,11 @@ public class PlayerStats : MonoBehaviour
         {
             staminaBar.maxValue = maxStamina;
             staminaBar.value = currentStamina;
+        }
+
+        if (coinAmountText != null)
+        {
+            coinAmountText.text = coinAmount.ToString();
         }
 
         // Update text on start
@@ -263,5 +272,27 @@ public class PlayerStats : MonoBehaviour
         {
             Instantiate(rocketDronePrefab, transform.position, Quaternion.identity);
         }
+    }
+
+    public void IncreaseCoin(int amountToIncrease)
+    {
+        coinAmount += amountToIncrease;
+        UpdateCoinAmount();
+    }
+
+    public void UseCoins(int amountToUse)
+    {
+        coinAmount -= amountToUse;
+        UpdateCoinAmount();
+    }
+
+    private void UpdateCoinAmount()
+    {
+        coinAmountText.text = coinAmount.ToString();
+    }
+
+    public int GetCoinAmount()
+    {
+        return coinAmount;
     }
 }
