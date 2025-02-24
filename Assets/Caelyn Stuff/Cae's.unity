@@ -1290,6 +1290,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8504259784528394106, guid: e172d113a3539af44bd9f6d9d93113a2,
         type: 3}
+      propertyPath: weaponLifetime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8504259784528394106, guid: e172d113a3539af44bd9f6d9d93113a2,
+        type: 3}
       propertyPath: playerTransform
       value: 
       objectReference: {fileID: 1514026221}
