@@ -71,9 +71,13 @@ public class SkillNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (gameObject.name.Contains("StaminaRegen")) skillTree.UpgradeStaminaRegen();
         if (gameObject.name.Contains("FireResistance")) skillTree.UpgradeFireResistance();
 
-        // ?? Unlocking Active Abilities
+        // Activate Abilities
         if (gameObject.name.Contains("UnlockPush")) skillTree.UnlockPush();
         if (gameObject.name.Contains("UnlockFrenzy")) skillTree.UnlockFrenzy();
+
+        // Spawn Drones
+        if (gameObject.name.Contains("NormalDrone")) skillTree.SpawnNormalDrone();
+        if (gameObject.name.Contains("RocketDrone")) skillTree.SpawnRocketDrone();
     }
 
 
@@ -119,6 +123,8 @@ public class SkillNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (gameObject.name.Contains("FireResistance")) return "Fire Resistance Up";
         if (gameObject.name.Contains("UnlockPush")) return "Unlock Push Ability";
         if (gameObject.name.Contains("UnlockFrenzy")) return "Unlock Frenzy Ability";
+        if (gameObject.name.Contains("NormalDrone")) return "Spawn Normal Drone";
+        if (gameObject.name.Contains("RocketDrone")) return "Spawn Rocket Drone";
         return "Unknown Skill";
     }
 }

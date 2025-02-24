@@ -4,7 +4,7 @@ using UnityEngine;
 public class DroneAITYPE1 : MonoBehaviour
 {
     [Header("Drone Settings")]
-    public Transform player; // Player reference
+    private Transform player; // Player reference
     public float followRange = 3f; // Max distance from player
     public float attackRange = 6f; // Attack range
     public float speed = 5f; // Movement speed
@@ -27,6 +27,19 @@ public class DroneAITYPE1 : MonoBehaviour
 
     void Start()
     {
+        if (player == null)
+        {
+            GameObject playerObj = GameObject.FindWithTag("Player");
+            if (playerObj != null)
+            {
+                player = playerObj.transform;
+            }
+            else
+            {
+                Debug.LogError("No GameObject with tag 'Player' found in the scene!");
+            }
+        }
+
         SetRandomWanderTarget();
 
         // If the drone has a Rigidbody, disable gravity and physics influence
