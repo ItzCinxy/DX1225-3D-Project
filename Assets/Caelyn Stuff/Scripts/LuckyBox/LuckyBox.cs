@@ -11,33 +11,26 @@ public class LuckyBox : MonoBehaviour
     [SerializeField] private float weaponLifetime = 10f; // Time before weapon disappears
 
     [Header("References")]
-    [SerializeField] private TMP_Text interactText; // UI text to display "Press E to use"
+    [SerializeField] private TMP_Text interactText;
     [SerializeField] private AudioClip openBoxSound;
     [SerializeField] private AudioClip receiveWeaponSound;
+    [SerializeField] private WeaponHolder playerWeaponHolder;
 
     private bool isBoxActive = false;
     private WeaponBase floatingWeapon = null;
-    [SerializeField] private float interactionRange = 3f; // Adjust the distance for showing text
-    [SerializeField] private Transform playerTransform; // Assign the player's transform in the Inspector
+    [SerializeField] private float interactionRange = 3f;
+    [SerializeField] private Transform playerTransform;
 
     [Header("Box Models")]
-    [SerializeField] private GameObject openBoxModel;  // ✅ Assign the open model in the Inspector
-    [SerializeField] private GameObject closedBoxModel; // ✅ Assign the closed model in the Inspector
+    [SerializeField] private GameObject openBoxModel;
+    [SerializeField] private GameObject closedBoxModel;
 
     private void Update()
     {
         if (playerTransform == null || interactText == null) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-
-        if (distanceToPlayer <= interactionRange)
-        {
-            interactText.gameObject.SetActive(true);
-        }
-        else
-        {
-            interactText.gameObject.SetActive(false);
-        }
+        interactText.gameObject.SetActive(distanceToPlayer <= interactionRange && !isBoxActive);
     }
 
     private void SetBoxState(bool isOpen)
@@ -52,12 +45,16 @@ public class LuckyBox : MonoBehaviour
         {
             StartCoroutine(OpenBox());
         }
+        else if (floatingWeapon != null)
+        {
+            TryPickupWeapon();
+        }
     }
 
     private IEnumerator OpenBox()
     {
         isBoxActive = true;
-        SetBoxState(true); // ✅ Show open box
+        SetBoxState(true);
 
         if (interactText != null)
             interactText.text = "Rolling...";
@@ -67,76 +64,114 @@ public class LuckyBox : MonoBehaviour
         if (openBoxSound != null)
             AudioSource.PlayClipAtPoint(openBoxSound, transform.position);
 
-        yield return new WaitForSeconds(2f); // Simulate rolling effect
+        yield return new WaitForSeconds(2f);
 
-        // ✅ Make sure weaponPool is not empty
         if (weaponPool == null || weaponPool.Length == 0)
         {
             Debug.LogError("Weapon Pool is empty! Add weapon prefabs in the Inspector.");
-            SetBoxState(false); // ✅ Close box if no weapon is found
-            isBoxActive = false; // ✅ Allow interaction again
+            ResetBox();
             yield break;
         }
 
-        // ✅ Select a random weapon prefab
         int randomIndex = Random.Range(0, weaponPool.Length);
         WeaponBase weaponPrefab = weaponPool[randomIndex];
 
         if (weaponPrefab == null)
         {
             Debug.LogError("Weapon prefab is missing in weaponPool!");
-            SetBoxState(false); // ✅ Close box if something goes wrong
-            isBoxActive = false; // ✅ Allow interaction again
+            ResetBox();
             yield break;
         }
 
-        // ✅ Instantiate a new weapon properly
         floatingWeapon = Instantiate(weaponPrefab, weaponSpawnPoint.position, Quaternion.identity);
 
-        // ✅ Ensure it has all components
         if (!floatingWeapon.TryGetComponent(out Collider weaponCollider))
-        {
-            floatingWeapon.gameObject.AddComponent<BoxCollider>(); // Add collider if missing
-        }
+            floatingWeapon.gameObject.AddComponent<BoxCollider>();
 
         if (!floatingWeapon.TryGetComponent(out Rigidbody weaponRb))
-        {
-            weaponRb = floatingWeapon.gameObject.AddComponent<Rigidbody>(); // Add Rigidbody if missing
-        }
+            weaponRb = floatingWeapon.gameObject.AddComponent<Rigidbody>();
 
-        weaponRb.isKinematic = true; // Disable physics
-        floatingWeapon.gameObject.layer = LayerMask.NameToLayer("Pickup"); // ✅ Set pickup layer
+        weaponRb.isKinematic = true;
+        floatingWeapon.gameObject.layer = LayerMask.NameToLayer("Pickup");
 
-        // ✅ Add floating effect if not already attached
         if (floatingWeapon.GetComponent<FloatingWeapon>() == null)
-        {
             floatingWeapon.gameObject.AddComponent<FloatingWeapon>();
-        }
 
-        interactText.text = "Press 'E' to swap";
+        if (interactText != null)
+            interactText.text = "Press 'E' to pick up";
+
         Debug.Log("Weapon spawned: " + floatingWeapon.name);
 
-        yield return new WaitForSeconds(weaponLifetime); // Wait before removing the weapon
+        yield return new WaitForSeconds(weaponLifetime);
 
         if (floatingWeapon != null)
         {
-            Debug.Log("Weapon expired: " + floatingWeapon.name);
-            Destroy(floatingWeapon.gameObject);
+            if (floatingWeapon.transform.parent == null) // Only destroy if not picked up
+            {
+                Destroy(floatingWeapon.gameObject);
+            }
             floatingWeapon = null;
         }
 
-        yield return new WaitForSeconds(boxCooldown); // ✅ Wait before allowing interaction again
-
-        interactText.text = "Press 'E' to use";
-        SetBoxState(false);
-        isBoxActive = false; // ✅ Now the player can interact again
+        ResetBox();
     }
+
+    private void TryPickupWeapon()
+    {
+        if (floatingWeapon == null || playerWeaponHolder == null) return;
+
+        WeaponBase weaponToEquip = floatingWeapon.GetComponent<Weapon>() as WeaponBase ??
+                               floatingWeapon.GetComponent<ProjectileWeapon>() as WeaponBase;
+
+        if (weaponToEquip == null)
+        {
+            Debug.LogError("Picked up object is not a valid weapon!");
+            return;
+        }
+
+        if (playerWeaponHolder.CanPickupWeapon())
+        {
+            //  Find and disable the FloatingWeapon script
+            FloatingWeapon floatingEffect = floatingWeapon.GetComponent<FloatingWeapon>();
+            if (floatingEffect != null)
+            {
+                Debug.Log("Exists");
+                Destroy(floatingEffect);
+            }
+
+            floatingWeapon.transform.SetParent(null);
+            floatingWeapon.gameObject.SetActive(false); 
+
+            playerWeaponHolder.EquipWeapon(floatingWeapon);
+
+            floatingWeapon = null; 
+
+            if (receiveWeaponSound != null)
+                AudioSource.PlayClipAtPoint(receiveWeaponSound, transform.position);
+
+            ResetBox();
+        }
+        else
+        {
+            Debug.Log("Inventory full! Drop a weapon first.");
+        }
+    }
+
 
     public void WeaponPickedUp(WeaponBase pickedWeapon)
     {
-        if (floatingWeapon == pickedWeapon) // Only clear it if it's the same weapon
+        if (floatingWeapon == pickedWeapon)
         {
-            floatingWeapon = null; // Clear the reference so the box no longer tracks it
+            floatingWeapon = null;
+            ResetBox();
         }
+    }
+
+    private void ResetBox()
+    {
+        isBoxActive = false;
+        SetBoxState(false);
+        if (interactText != null)
+            interactText.text = "Press 'E' to use";
     }
 }
