@@ -4237,6 +4237,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RealMan (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1166940016607623534, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3287674359219554678, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: activePanels.Array.data[0]
@@ -11895,7 +11900,7 @@ PrefabInstance:
     - target: {fileID: 7708013090833069323, guid: 8dd250c2dea12b54ab4a2f6f2c4248ff,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8843262995588316003, guid: 8dd250c2dea12b54ab4a2f6f2c4248ff,
         type: 3}
