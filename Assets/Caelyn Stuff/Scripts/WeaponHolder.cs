@@ -23,7 +23,6 @@ public class WeaponHolder : MonoBehaviour
             equippedWeapon.Shoot();
             ProcessHitscanEffects();
 
-            AlertNearbyZombies(transform.position, 2.5f);
         }
 
         if (_playerInput.actions["Shoot"].WasPressedThisFrame() && equippedWeapon is ProjectileWeapon)
@@ -50,6 +49,8 @@ public class WeaponHolder : MonoBehaviour
                 currentTarget = hit.transform; // Assign hit zombie as drone's target
                 hit.collider.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
             }
+
+            AlertNearbyZombies(transform.position, 2.5f);
         }
     }
 
