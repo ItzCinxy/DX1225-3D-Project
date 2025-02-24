@@ -18,31 +18,32 @@ public class WeaponHolder : MonoBehaviour
 
     private void Update()
     {
-        if (_playerInput.actions["Shoot"].IsPressed()) Shoot();
+        if (_playerInput.actions["Shoot"].IsPressed() && equippedWeapon is Weapon)
+        {
+            equippedWeapon.Shoot();
+            ProcessHitscanEffects();
+        }
+
+        if (_playerInput.actions["Shoot"].WasPressedThisFrame() && equippedWeapon is ProjectileWeapon)
+        {
+            equippedWeapon.Shoot();
+        }
+
         if (_playerInput.actions["Reload"].IsPressed()) Reload();
         if (_playerInput.actions["Interact"].WasPressedThisFrame()) Interact();
         if (_playerInput.actions["Drop"].WasPressedThisFrame()) DropWeapon();
     }
 
-    private void Shoot()
+    private void ProcessHitscanEffects()
     {
-        if (equippedWeapon == null) return;
-
-        equippedWeapon.Shoot();
-
-        //SoundManager.Instance.PlayWeaponShootSound();
-
-        // Check if the weapon is a hitscan weapon
-        if (equippedWeapon is Weapon)
+        // ✅ Hitscan effects (Drone Targeting & Damage)
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 100f))
         {
-            RaycastHit hit; // for ck
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 100f))
+            if (hit.collider.CompareTag("Zombie"))
             {
-                if (hit.collider.CompareTag("Zombie"))
-                {
-                    currentTarget = hit.transform; // Assign hit zombie as drone's target
-                    hit.collider.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
-                }
+                currentTarget = hit.transform; // Assign hit zombie as drone's target
+                hit.collider.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
             }
         }
     }
@@ -115,6 +116,7 @@ public class WeaponHolder : MonoBehaviour
         equippedWeapon.transform.SetParent(null);
         ammoDisplay.text = "-- / --";
         equippedWeapon = null;
+        animator.SetBool("IsHoldingGun", false);
     }
 
     private void OnDrawGizmos()
