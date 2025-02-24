@@ -59,11 +59,11 @@ public class WeaponRaycast : MonoBehaviour
                 bmbAI.TakeDamage(weaponDmg);
             }
 
-            //ScreamerZombieAIController scrmAI = hit.collider.GetComponent<ScreamerZombieAIController>();
-            //if (scrmAI != null)
-            //{
-            //    scrmAI.TakeDamage(weaponDmg);
-            //}
+            ScreamerZombieAIController scrmAI = hit.collider.GetComponent<ScreamerZombieAIController>();
+            if (scrmAI != null)
+            {
+                scrmAI.TakeDamage(weaponDmg);
+            }
 
             ChargerAIController chrgAI = hit.collider.GetComponent<ChargerAIController>();
             if (chrgAI != null)

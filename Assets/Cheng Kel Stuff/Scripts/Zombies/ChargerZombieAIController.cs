@@ -81,9 +81,8 @@ public class ChargerAIController : MonoBehaviour
             case EnemyState.Walk: HandleWalkState(); break;
             case EnemyState.Run: HandleRunState(); break;
             case EnemyState.Attack: HandleAttackState(); break;
-            case EnemyState.Hit: HandleHitState(); break;
+            case EnemyState.Hit: break;
         }
-
 
         if (!isDying || !isConvulsing)
         {
@@ -323,16 +322,6 @@ public class ChargerAIController : MonoBehaviour
         }
     }
 
-    void HandleHitState()
-    {
-        velocity = Vector3.zero; // Stop movement
-        animator.SetBool("Hit", true); // Trigger hit animation
-
-        // Transition back to Run or Idle after a short time
-        StartCoroutine(RecoverFromHit());
-    }
-
-
     IEnumerator PerformAttack()
     {
         if (!canAttack || isDying) yield break;
@@ -373,16 +362,8 @@ public class ChargerAIController : MonoBehaviour
 
     IEnumerator RecoverFromHit()
     {
-        yield return new WaitForSeconds(0.5f); // Adjust if needed
-
-        if (CanSeePlayer())
-        {
-            ChangeState(EnemyState.Run); // Resume chasing player
-        }
-        else
-        {
-            ChangeState(EnemyState.Idle); // Return to idle if player is out of sight
-        }
+        yield return new WaitForSeconds(0.5f);
+        ChangeState(EnemyState.Run);
     }
 
     IEnumerator ConvulseBeforeDespawn()
