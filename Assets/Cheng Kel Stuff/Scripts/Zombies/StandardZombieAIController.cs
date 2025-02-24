@@ -189,7 +189,12 @@ public class StandardZombieAIController : MonoBehaviour
         Vector3 directionToPlayer = (player.position - transform.position).normalized;
         float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
 
-        if (angleToPlayer < visionAngle / 2)
+        // Allow detection at a slight downward angle
+        float heightDifference = transform.position.y - player.position.y;
+        float downwardAngle = Vector3.Angle(Vector3.down, directionToPlayer);
+
+        // If player is within the forward vision cone AND within downward visibility
+        if (angleToPlayer < visionAngle / 2 && downwardAngle < 45f) // 45-degree downward check
         {
             if (Physics.Raycast(transform.position + Vector3.up * 1.5f, directionToPlayer, out RaycastHit hit, chaseRange))
             {
@@ -199,6 +204,7 @@ public class StandardZombieAIController : MonoBehaviour
                 }
             }
         }
+
         return false;
     }
 
@@ -436,10 +442,8 @@ public class StandardZombieAIController : MonoBehaviour
     {
         if (player == null) return;
 
-        // Set the Gizmo color
         Gizmos.color = new Color(1, 0, 0, 0.3f);
 
-        // Draw vision cone
         Vector3 forward = transform.forward * chaseRange;
         Vector3 leftBoundary = Quaternion.Euler(0, -visionAngle / 2, 0) * forward;
         Vector3 rightBoundary = Quaternion.Euler(0, visionAngle / 2, 0) * forward;
@@ -448,8 +452,10 @@ public class StandardZombieAIController : MonoBehaviour
         Gizmos.DrawLine(transform.position, transform.position + rightBoundary);
         Gizmos.DrawWireSphere(transform.position + forward, 0.3f);
 
-        // Draw filled vision cone
-        Gizmos.DrawMesh(CreateVisionMesh(), transform.position, transform.rotation);
+        // **New: Draw downward detection range**
+        Gizmos.color = new Color(0, 0, 1, 0.3f); // Blue for downward detection
+        Vector3 downBoundary = Quaternion.Euler(45f, 0, 0) * forward; // 45-degree downward
+        Gizmos.DrawLine(transform.position, transform.position + downBoundary);
     }
 
     // Helper function to create a vision cone shape
