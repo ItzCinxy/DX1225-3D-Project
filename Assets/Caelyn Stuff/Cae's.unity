@@ -816,17 +816,17 @@ PrefabInstance:
     - target: {fileID: 2690540265235318783, guid: 1188a74ac345e70499c4a52c498df245,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.8777885
+      value: 3.92
       objectReference: {fileID: 0}
     - target: {fileID: 2690540265235318783, guid: 1188a74ac345e70499c4a52c498df245,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 2690540265235318783, guid: 1188a74ac345e70499c4a52c498df245,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.1367936
+      value: 2.08
       objectReference: {fileID: 0}
     - target: {fileID: 2690540265235318783, guid: 1188a74ac345e70499c4a52c498df245,
         type: 3}
@@ -868,32 +868,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: HealthPack
       objectReference: {fileID: 0}
-    - target: {fileID: 6477114811567125893, guid: 1188a74ac345e70499c4a52c498df245,
+    - target: {fileID: 9054142115088541643, guid: 1188a74ac345e70499c4a52c498df245,
         type: 3}
-      propertyPath: m_Layer
-      value: 0
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.size
+      value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 8696550420235683081, guid: 1188a74ac345e70499c4a52c498df245,
+    - target: {fileID: 9054142115088541643, guid: 1188a74ac345e70499c4a52c498df245,
         type: 3}
-      propertyPath: m_Layer
-      value: 0
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Name
+      value: Brightness
       objectReference: {fileID: 0}
-    - target: {fileID: 8814450903900254950, guid: 1188a74ac345e70499c4a52c498df245,
+    - target: {fileID: 9054142115088541643, guid: 1188a74ac345e70499c4a52c498df245,
         type: 3}
-      propertyPath: m_Materials.Array.size
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Value
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9054142115088541643, guid: 1188a74ac345e70499c4a52c498df245,
+        type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Overridden
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8814450903900254950, guid: 1188a74ac345e70499c4a52c498df245,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: d2bf3a63e64aa3e46a99fb84ba0d705b, type: 2}
-    - target: {fileID: 8814450903900254950, guid: 1188a74ac345e70499c4a52c498df245,
-        type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: -8776601976136620645, guid: 5d6bb30ecb4858c45a195c9d710e038a,
-        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1048,50 +1042,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 470643784193566554, guid: 306453e79aaf5574daa3db745708c34f,
-        type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 470643784193566554, guid: 306453e79aaf5574daa3db745708c34f,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 45be5b7b842b78041beb8b80d6ab4412, type: 2}
-    - target: {fileID: 470643784193566554, guid: 306453e79aaf5574daa3db745708c34f,
-        type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: f87cd43ae930e0346b4ef4e845228d47, type: 2}
     - target: {fileID: 794305810215856843, guid: 306453e79aaf5574daa3db745708c34f,
         type: 3}
       propertyPath: m_Name
       value: AmmoPack
       objectReference: {fileID: 0}
-    - target: {fileID: 794305810215856843, guid: 306453e79aaf5574daa3db745708c34f,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2128210819814901391, guid: 306453e79aaf5574daa3db745708c34f,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3352666520567182353, guid: 306453e79aaf5574daa3db745708c34f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.0315683
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3352666520567182353, guid: 306453e79aaf5574daa3db745708c34f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00000011920929
+      value: 0.58
       objectReference: {fileID: 0}
     - target: {fileID: 3352666520567182353, guid: 306453e79aaf5574daa3db745708c34f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.3195057
+      value: 1.92
       objectReference: {fileID: 0}
     - target: {fileID: 3352666520567182353, guid: 306453e79aaf5574daa3db745708c34f,
         type: 3}
@@ -1127,6 +1096,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6326788415608273987, guid: 306453e79aaf5574daa3db745708c34f,
+        type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6326788415608273987, guid: 306453e79aaf5574daa3db745708c34f,
+        type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Name
+      value: Brightness
+      objectReference: {fileID: 0}
+    - target: {fileID: 6326788415608273987, guid: 306453e79aaf5574daa3db745708c34f,
+        type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Value
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6326788415608273987, guid: 306453e79aaf5574daa3db745708c34f,
+        type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Overridden
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
