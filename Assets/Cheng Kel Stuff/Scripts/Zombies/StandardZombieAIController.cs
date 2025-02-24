@@ -91,7 +91,7 @@ public class StandardZombieAIController : MonoBehaviour
             case EnemyState.Walk: HandleWalkState(); break;
             case EnemyState.Run: HandleRunState(); break;
             case EnemyState.Attack: HandleAttackState(); break;
-            case EnemyState.Hit: break;
+            case EnemyState.Hit: HandleHitState(); break;
         }
 
         if (!isDying || !isConvulsing)
@@ -365,6 +365,16 @@ public class StandardZombieAIController : MonoBehaviour
         targetPosition = transform.position;
     }
 
+    void HandleHitState()
+    {
+        velocity = Vector3.zero; // Stop movement
+        animator.SetBool("Hit", true); // Trigger hit animation
+
+        // Transition back to Run or Idle after a short time
+        StartCoroutine(RecoverFromHit());
+    }
+
+
     public void AttackHitEvent()
     {
         if (player == null || isDying) return;
@@ -417,8 +427,16 @@ public class StandardZombieAIController : MonoBehaviour
 
     IEnumerator RecoverFromHit()
     {
-        yield return new WaitForSeconds(0.5f);
-        ChangeState(EnemyState.Run);
+        yield return new WaitForSeconds(0.5f); // Adjust if needed
+
+        if (CanSeePlayer())
+        {
+            ChangeState(EnemyState.Run); // Resume chasing player
+        }
+        else
+        {
+            ChangeState(EnemyState.Idle); // Return to idle if player is out of sight
+        }
     }
 
     IEnumerator ConvulseBeforeDespawn()
