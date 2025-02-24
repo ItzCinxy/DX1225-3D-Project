@@ -44,7 +44,7 @@ public class Projectile : MonoBehaviour
             }
         }
 
-        Destroy(gameObject); // Destroy grenade after explosion
+        Destroy(gameObject); 
     }
 
     private void OnCollisionEnter(Collision collision)
