@@ -14,7 +14,7 @@ public class HealthPack : MonoBehaviour
             PlayerStats playerStats = other.GetComponent<PlayerStats>();
 
             if (playerStats != null)
-            {
+            { 
                 playerStats.Heal(incHealthAmt); // Heal the player
                 Destroy(gameObject); // Remove the health pack
             }

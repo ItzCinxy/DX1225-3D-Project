@@ -9,6 +9,8 @@ public class LuckyBox : MonoBehaviour
     [SerializeField] private Transform weaponSpawnPoint; // Where the weapon appears
     [SerializeField] private float boxCooldown = 3f; // Cooldown time before using the box again
     [SerializeField] private float weaponLifetime = 10f; // Time before weapon disappears
+    [SerializeField] private int costToOpen = 5;
+    private PlayerStats playerStats;
 
     [Header("References")]
     [SerializeField] private TMP_Text interactText; // UI text to display "Press E to use"
@@ -23,6 +25,11 @@ public class LuckyBox : MonoBehaviour
     [Header("Box Models")]
     [SerializeField] private GameObject openBoxModel;  // ✅ Assign the open model in the Inspector
     [SerializeField] private GameObject closedBoxModel; // ✅ Assign the closed model in the Inspector
+
+    private void Start()
+    {
+        playerStats = FindObjectOfType<PlayerStats>();
+    }
 
     private void Update()
     {
@@ -50,9 +57,29 @@ public class LuckyBox : MonoBehaviour
     {
         if (!isBoxActive && floatingWeapon == null)
         {
-            StartCoroutine(OpenBox());
+            if (playerStats.GetCoinAmount() >= costToOpen)
+            {
+                StartCoroutine(OpenBox());
+                playerStats.UseCoins(costToOpen);
+            }
+            else
+            {
+                StartCoroutine(FailToOpenBox());
+            }
         }
     }
+
+    private IEnumerator FailToOpenBox()
+    {
+        if (interactText != null)
+        {
+            interactText.text = "Not Enough Money"; // Show message
+            yield return new WaitForSeconds(1.5f); // Wait before resetting
+            interactText.text = "Press 'E' to use"; // Reset to default
+        }
+    }
+
+
 
     private IEnumerator OpenBox()
     {

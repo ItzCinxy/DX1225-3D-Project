@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float explosionDelay = 3f;
     [SerializeField] private float explosionRadius = 5f;
     [SerializeField] private float explosionForce = 700f;
+    [SerializeField] private int explosionDamage = 50;
     [SerializeField] private GameObject explosionEffect;
 
     private Rigidbody rb;
@@ -41,6 +42,27 @@ public class Projectile : MonoBehaviour
             if (rb != null)
             {
                 rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
+            }
+
+            if (nearby.TryGetComponent(out StandardZombieAIController stdAI))
+            {
+                stdAI.TakeDamage(explosionDamage);
+            }
+            else if (nearby.TryGetComponent(out TankZombieAIController tankAI))
+            {
+                tankAI.TakeDamage(explosionDamage);
+            }
+            else if (nearby.TryGetComponent(out BomberZombieAIController bmbAI))
+            {
+                bmbAI.TakeDamage(explosionDamage);
+            }
+            //else if (nearby.TryGetComponent(out ScreamerZombieAIController scrmAI))
+            //{
+            //    scrmAI.TakeDamage(explosionDamage);
+            //}
+            else if (nearby.TryGetComponent(out ChargerAIController chrgAI))
+            {
+                chrgAI.TakeDamage(explosionDamage);
             }
         }
 
