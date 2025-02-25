@@ -44,26 +44,20 @@ public class Projectile : MonoBehaviour
                 rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
             }
 
+            float distance = Vector3.Distance(transform.position, nearby.transform.position);
+            float damageMultiplier = Mathf.Clamp01(1 - (distance / explosionRadius)); // Closer = More Damage
+            int finalDamage = Mathf.RoundToInt(explosionDamage * damageMultiplier);
+
             if (nearby.TryGetComponent(out StandardZombieAIController stdAI))
-            {
-                stdAI.TakeDamage(explosionDamage);
-            }
+                stdAI.TakeDamage(finalDamage);
             else if (nearby.TryGetComponent(out TankZombieAIController tankAI))
-            {
-                tankAI.TakeDamage(explosionDamage);
-            }
+                tankAI.TakeDamage(finalDamage);
             else if (nearby.TryGetComponent(out BomberZombieAIController bmbAI))
-            {
-                bmbAI.TakeDamage(explosionDamage);
-            }
+                bmbAI.TakeDamage(finalDamage);
             //else if (nearby.TryGetComponent(out ScreamerZombieAIController scrmAI))
-            //{
-            //    scrmAI.TakeDamage(explosionDamage);
-            //}
+            //    scrmAI.TakeDamage(finalDamage);
             else if (nearby.TryGetComponent(out ChargerAIController chrgAI))
-            {
-                chrgAI.TakeDamage(explosionDamage);
-            }
+                chrgAI.TakeDamage(finalDamage);
         }
 
         Destroy(gameObject); // Destroy grenade after explosion
