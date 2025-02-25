@@ -1,10 +1,13 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class MainDoor : MonoBehaviour
+public class EndGame : MonoBehaviour
 {
     private bool isUnlocked = false;
-
-
+    private void Update()
+    {
+        Debug.Log(isUnlocked);
+    }
     public void UnlockDoor()
     {
         isUnlocked = true;
@@ -14,12 +17,12 @@ public class MainDoor : MonoBehaviour
     {
         if (isUnlocked && other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E))
         {
-            OpenDoor();
+            Exit();
         }
     }
 
-    private void OpenDoor()
+    private void Exit()
     {
-        SceneChanger.Instance.ChangeMap();
+        SceneManager.LoadScene("Main Menu");
     }
 }

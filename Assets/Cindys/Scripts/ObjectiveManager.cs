@@ -6,8 +6,9 @@ public class ObjectiveManager : MonoBehaviour
 {
     public static ObjectiveManager Instance;
 
-    [Header("Main Door")]
-    public GameObject mainDoor; // Assign the door in the Inspector
+    [Header("Main Doors")]
+    public GameObject Map1MainDoor;
+    public GameObject Map2MainDoor;
 
     [Header("Objective Displays")]
     [SerializeField] private TMP_Text questDisplay;
@@ -22,7 +23,7 @@ public class ObjectiveManager : MonoBehaviour
     [SerializeField] private Objective map1ZombieObjective;
 
     [Header("Map 2 Objectives")]
-    [SerializeField] private Objective map2BossObjective;
+    //[SerializeField] private Objective map2BossObjective;
     [SerializeField] private Objective map2UnlockingArea;
     [SerializeField] private Objective map2ZombieObjective;
 
@@ -38,24 +39,31 @@ public class ObjectiveManager : MonoBehaviour
 
     void Start()
     {
-        SetMapObjectives(1); // Initialize with map 1 objectives
+        SetMapObjectives(1);
 
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
 
+        if (Map2MainDoor == null)
+        {
+            Map2MainDoor = GameObject.Find("train tunnel end .001"); // Replace with the correct name or path
+            Debug.Log("Map2MainDoor assigned: " + (Map2MainDoor != null));
+        }
     }
 
     public void SetMapObjectives(int mapIndex)
     {
+        objectivesCompleted = false;
+
         switch (mapIndex)
         {
             case 1:
                 currentObjectives = new List<Objective> { map1KeyObjective, map1ZombieObjective };
                 break;
             case 2:
-                currentObjectives = new List<Objective> { map2BossObjective, map2ZombieObjective, map2UnlockingArea };
+                currentObjectives = new List<Objective> { map2ZombieObjective, map2UnlockingArea };
                 break;
             default:
                 currentObjectives = new List<Objective>();
@@ -76,12 +84,10 @@ public class ObjectiveManager : MonoBehaviour
 
                 if (objective.type == ObjectiveType.Binary)
                 {
-                    // For true/false objectives like collecting a key
                     questDisplay.text += $" {objective.objectiveName}: {(objective.isCompleted ? "Done" : "Not Done")} {status}\n";
                 }
                 else if (objective.type == ObjectiveType.Progress)
                 {
-                    // For count-based objectives like killing zombies
                     questDisplay.text += $" {objective.objectiveName}: {objective.currentProgress} / {objective.totalRequired} {status}\n";
                 }
             }
@@ -114,12 +120,47 @@ public class ObjectiveManager : MonoBehaviour
         {
             if (objective.type == ObjectiveType.Progress && objective.objectiveName.ToLower().Contains("zombie") && !objective.isCompleted)
             {
+                Debug.Log($"Updating objective: {objective.objectiveName}");
+
                 objective.currentProgress++; // Increase count for this specific objective
 
                 if (objective.currentProgress >= objective.totalRequired)
                 {
                     objective.isCompleted = true;
+                    Debug.Log($"Objective completed: {objective.objectiveName}");
                 }
+            }
+        }
+
+        UpdateObjectiveDisplay();
+        CheckObjectives();
+    }
+
+    public void BossKilled()
+    {
+        if (objectivesCompleted) return;
+
+        foreach (var objective in currentObjectives)
+        {
+            if (objective.type == ObjectiveType.Binary && objective.objectiveName.ToLower().Contains("boss") && !objective.isCompleted)
+            {
+                objective.isCompleted = true;
+            }
+        }
+
+        UpdateObjectiveDisplay();
+        CheckObjectives();
+    }
+
+    public void UnlockArea()
+    {
+        if (objectivesCompleted) return;
+
+        foreach (var objective in currentObjectives)
+        {
+            if (objective.type == ObjectiveType.Binary && objective.objectiveName.ToLower().Contains("area") && !objective.isCompleted)
+            {
+                objective.isCompleted = true;
             }
         }
 
@@ -150,9 +191,15 @@ public class ObjectiveManager : MonoBehaviour
     // Unlock the door when objectives are completed
     private void OpenDoor()
     {
-        if (mainDoor != null)
+        if (Map1MainDoor != null)
         {
-            mainDoor.GetComponent<MainDoor>().UnlockDoor();
+            Debug.Log("DOOORS");
+            Map1MainDoor.GetComponent<MainDoor>().UnlockDoor();
+        }
+        else if (Map2MainDoor != null)
+        {
+            Debug.Log("DOOORS1");
+            Map2MainDoor.GetComponent<EndGame>().UnlockDoor();
         }
     }
 
@@ -160,18 +207,17 @@ public class ObjectiveManager : MonoBehaviour
 
 public enum ObjectiveType
 {
-    Binary,  // Simple true/false objectives (e.g., collect key, unlock area)
-    Progress // Count-based objectives (e.g., kill X zombies)
+    Binary,
+    Progress
 }
 
 [System.Serializable]
 public class Objective
 {
     public string objectiveName;
-    public ObjectiveType type; // Determines if it's a count-based or binary objective
+    public ObjectiveType type; 
     public bool isCompleted;
 
-    // Only used for Progress-based objectives
     public int totalRequired;
     public int currentProgress;
 }

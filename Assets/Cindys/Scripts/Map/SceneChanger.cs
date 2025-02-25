@@ -42,6 +42,7 @@ public class SceneChanger : MonoBehaviour
         player.position = spawnPositions[currentMapIndex];
 
         SoundManager.Instance.PlayBGM(currentMapIndex);
+        ObjectiveManager.Instance.SetMapObjectives(currentMapIndex + 1);
     }
 
     private void ActivateMap(int index)
