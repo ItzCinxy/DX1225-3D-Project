@@ -11,8 +11,11 @@ public class SceneChanger : MonoBehaviour
 
     private int currentMapIndex = 0;
 
-    private void Awake()
+
+    private void Start()
     {
+        ActivateMap(currentMapIndex);
+
         player.position = spawnPositions[currentMapIndex];
         SoundManager.Instance.PlayBGM(0);
 
@@ -24,11 +27,6 @@ public class SceneChanger : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    private void Start()
-    {
-        ActivateMap(currentMapIndex);
     }
 
     public void ChangeMap()
@@ -44,6 +42,7 @@ public class SceneChanger : MonoBehaviour
         player.position = spawnPositions[currentMapIndex];
 
         SoundManager.Instance.PlayBGM(currentMapIndex);
+        ObjectiveManager.Instance.SetMapObjectives(currentMapIndex + 1);
     }
 
     private void ActivateMap(int index)

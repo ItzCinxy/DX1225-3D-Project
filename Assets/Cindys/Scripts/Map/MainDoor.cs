@@ -1,14 +1,13 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MainDoor : MonoBehaviour
 {
     private bool isUnlocked = false;
 
+
     public void UnlockDoor()
     {
         isUnlocked = true;
-        Debug.Log("Door Unlocked! Press 'E' to Open.");
     }
 
     private void OnTriggerStay(Collider other)
