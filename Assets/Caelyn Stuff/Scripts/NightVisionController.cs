@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using TMPro;
 
 [RequireComponent(typeof(Volume))]
 public class NightVisionController : MonoBehaviour
@@ -9,6 +10,7 @@ public class NightVisionController : MonoBehaviour
     [SerializeField] private Color boostedLightColour;
     [SerializeField] private Volume volume;
     [SerializeField] private PlayerInput input;
+    [SerializeField] private TMP_Text offOnText;
 
     private bool canNightVision = false;
 
@@ -17,6 +19,11 @@ public class NightVisionController : MonoBehaviour
     private void Start()
     {
         RenderSettings.ambientLight = defaultLightColour;
+
+        if (offOnText != null)
+        {
+            offOnText.text = "";
+        }
     }
 
     private void Update()
@@ -37,11 +44,13 @@ public class NightVisionController : MonoBehaviour
         {
             RenderSettings.ambientLight = boostedLightColour;
             volume.weight = 1;
+            offOnText.text = "ON";
         }
         else
         {
             RenderSettings.ambientLight = defaultLightColour;
             volume.weight = 0;
+            offOnText.text = "OFF";
         }
     }
 
