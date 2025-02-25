@@ -322,7 +322,7 @@ MonoBehaviour:
   - {fileID: 6055461160669010065, guid: bd43cf8928203974686db5a800b8652a, type: 3}
   weaponSpawnPoint: {fileID: 3209650411527600761}
   boxCooldown: 3
-  weaponLifetime: 1
+  weaponLifetime: 3
   costToOpen: 5
   interactText: {fileID: 5160634804698247779}
   openBoxSound: {fileID: 0}
