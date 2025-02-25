@@ -11,7 +11,7 @@ public class ObjectiveManager : MonoBehaviour
 
     private bool hasKey = false;
     private int zombiesKilled = 0;
-    public int zombiesToKill = 5;
+    public int zombiesToKill = 15;
     private bool objectivesCompleted = false;
 
     private void Awake()
@@ -27,16 +27,22 @@ public class ObjectiveManager : MonoBehaviour
 
     public void PickUpKey()
     {
-        hasKey = true;
-        questKeyDisplay.text = $"Key collected: {hasKey}";
-        CheckObjectives();
+        if (!objectivesCompleted)
+        {
+            hasKey = true;
+            questKeyDisplay.text = $"Key collected: {hasKey}";
+            CheckObjectives();
+        }
     }
 
     public void ZombieKilled()
     {
-        zombiesKilled++;
-        questZombieDisplay.text = $"Zombies killed: {zombiesKilled} / {zombiesToKill}";
-        CheckObjectives();
+        if (!objectivesCompleted && !(zombiesKilled >= zombiesToKill))
+        {
+            zombiesKilled++;
+            questZombieDisplay.text = $"Zombies killed: {zombiesKilled} / {zombiesToKill}";
+            CheckObjectives();
+        }
     }
 
     private void CheckObjectives()

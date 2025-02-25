@@ -14,6 +14,7 @@ public class SceneChanger : MonoBehaviour
     private void Awake()
     {
         player.position = spawnPositions[currentMapIndex];
+        SoundManager.Instance.PlayBGM(0);
 
         if (Instance == null)
         {
@@ -41,6 +42,8 @@ public class SceneChanger : MonoBehaviour
         maps[currentMapIndex].SetActive(true);
 
         player.position = spawnPositions[currentMapIndex];
+
+        SoundManager.Instance.PlayBGM(currentMapIndex);
     }
 
     private void ActivateMap(int index)

@@ -17,6 +17,7 @@ public class Menu : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePanel();
+            SoundManager.Instance.TogglePause();
         }
     }
 
