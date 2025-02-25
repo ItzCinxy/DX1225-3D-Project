@@ -323,6 +323,7 @@ MonoBehaviour:
   weaponSpawnPoint: {fileID: 3209650411527600761}
   boxCooldown: 3
   weaponLifetime: 1
+  costToOpen: 5
   interactText: {fileID: 5160634804698247779}
   openBoxSound: {fileID: 0}
   receiveWeaponSound: {fileID: 0}
