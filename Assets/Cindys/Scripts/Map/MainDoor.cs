@@ -21,6 +21,6 @@ public class MainDoor : MonoBehaviour
 
     private void OpenDoor()
     {
-        SceneManager.LoadScene("Map2.1");
+        SceneChanger.Instance.ChangeMap();
     }
 }
