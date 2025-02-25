@@ -7,23 +7,21 @@ public class NightVisionController : MonoBehaviour
 {
     [SerializeField] private Color defaultLightColour;
     [SerializeField] private Color boostedLightColour;
+    [SerializeField] private Volume volume;
     [SerializeField] private PlayerInput input;
 
-    private bool isNightVisionEnabled;
+    private bool canNightVision = false;
 
-    private Volume volume;
+    private bool isNightVisionEnabled;
 
     private void Start()
     {
         RenderSettings.ambientLight = defaultLightColour;
-
-        volume = gameObject.GetComponent<Volume>();
-        volume.weight = 0;
     }
 
     private void Update()
     {
-        if (input.actions["ToggleNightVision"].WasPressedThisFrame())
+        if (input.actions["ToggleNightVision"].WasPressedThisFrame() && canNightVision)
         {
             ToggleNightVision();
         }
@@ -31,6 +29,8 @@ public class NightVisionController : MonoBehaviour
 
     private void ToggleNightVision()
     {
+        if (!canNightVision) return;
+
         isNightVisionEnabled = !isNightVisionEnabled;
 
         if (isNightVisionEnabled)
@@ -43,5 +43,10 @@ public class NightVisionController : MonoBehaviour
             RenderSettings.ambientLight = defaultLightColour;
             volume.weight = 0;
         }
+    }
+
+    public void UnlockNightVision()
+    {
+        canNightVision = true;
     }
 }

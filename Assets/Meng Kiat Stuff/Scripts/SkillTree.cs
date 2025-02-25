@@ -9,6 +9,7 @@ public class SkillTree : MonoBehaviour
     [SerializeField] private TMP_Text skillPointsText;
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private Abilities playerAbilities;
+    [SerializeField] private NightVisionController nightVision;
 
     private bool pushUnlocked = false;
     private bool frenzyUnlocked = false;
@@ -65,6 +66,11 @@ public class SkillTree : MonoBehaviour
             frenzyUnlocked = true;
             playerAbilities.EnableFrenzy(); // ?? Enable Frenzy in Abilities script
         }
+    }
+
+    public void UnlockNightVision()
+    {
+        nightVision.UnlockNightVision();
     }
 
     public int GetSkillPoints() => skillPoints;

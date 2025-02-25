@@ -78,6 +78,8 @@ public class SkillNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         // Spawn Drones
         if (gameObject.name.Contains("NormalDrone")) skillTree.SpawnNormalDrone();
         if (gameObject.name.Contains("RocketDrone")) skillTree.SpawnRocketDrone();
+
+        if (gameObject.name.Contains("NightVision")) skillTree.UnlockNightVision();
     }
 
 
@@ -125,6 +127,7 @@ public class SkillNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (gameObject.name.Contains("UnlockFrenzy")) return "Unlock Frenzy Ability";
         if (gameObject.name.Contains("NormalDrone")) return "Spawn Normal Drone";
         if (gameObject.name.Contains("RocketDrone")) return "Spawn Rocket Drone";
+        if (gameObject.name.Contains("NightVision")) return "Unlock Night Vision";
         return "Unknown Skill";
     }
 }

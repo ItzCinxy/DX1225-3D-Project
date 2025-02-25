@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7423190812038852530}
   - component: {fileID: 7209949207297057546}
   - component: {fileID: 6992400020635673641}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Pin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,9 +98,9 @@ GameObject:
   - component: {fileID: 8200013817488441368}
   - component: {fileID: 1835057536517002405}
   - component: {fileID: 1800784227223360622}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Grenade
-  m_TagString: Untagged
+  m_TagString: Grenade
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -184,7 +184,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 37888
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -234,6 +234,7 @@ MonoBehaviour:
   explosionDelay: 3
   explosionRadius: 5
   explosionForce: 700
+  explosionDamage: 50
   explosionEffect: {fileID: 1337198075554910, guid: 25c7aa9ad705fe143a4d71c1c8deb7d4,
     type: 3}
 --- !u!1 &7990866970846394697
@@ -247,7 +248,7 @@ GameObject:
   - component: {fileID: 207822870103008405}
   - component: {fileID: 6379885489398721381}
   - component: {fileID: 9195171163110365598}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: 01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
