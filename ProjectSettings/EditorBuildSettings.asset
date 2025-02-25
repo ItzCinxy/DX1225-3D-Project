@@ -14,6 +14,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Cindys/Scenes/Map.unity
     guid: 866bb3da54a934547b872994b6f21ae9
+  - enabled: 1
+    path: Assets/Caelyn Stuff/Scene/Win.unity
+    guid: 03f4f210868c39e41a6ad58434a44b5b
+  - enabled: 1
+    path: Assets/Caelyn Stuff/Scene/Lose.unity
+    guid: 44d3749a9dccd2344b6586192d118af8
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 82fd936692af4ae45b2134c1f4115264,
       type: 3}

@@ -199,6 +199,7 @@ public class PlayerStats : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         //Debug.Log("Player died!");
         Destroy(gameObject);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Lose");
     }
 
     private IEnumerator ExhaustWithDelay()
