@@ -45,12 +45,6 @@ public class ObjectiveManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-
-        if (Map2MainDoor == null)
-        {
-            Map2MainDoor = GameObject.Find("train tunnel end .001"); // Replace with the correct name or path
-            Debug.Log("Map2MainDoor assigned: " + (Map2MainDoor != null));
-        }
     }
 
     public void SetMapObjectives(int mapIndex)
@@ -191,15 +185,20 @@ public class ObjectiveManager : MonoBehaviour
     // Unlock the door when objectives are completed
     private void OpenDoor()
     {
+
+        if (Map2MainDoor == null)
+        {
+            Map2MainDoor = GameObject.Find("train tunnel end .001");
+            Debug.Log("Map2MainDoor assigned: " + (Map2MainDoor != null));
+        }
+        else
+        {
+            Map2MainDoor.GetComponent<EndGame>().UnlockDoor();
+        }
+
         if (Map1MainDoor != null)
         {
-            Debug.Log("DOOORS");
             Map1MainDoor.GetComponent<MainDoor>().UnlockDoor();
-        }
-        else if (Map2MainDoor != null)
-        {
-            Debug.Log("DOOORS1");
-            Map2MainDoor.GetComponent<EndGame>().UnlockDoor();
         }
     }
 
