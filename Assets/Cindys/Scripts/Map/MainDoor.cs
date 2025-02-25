@@ -1,9 +1,13 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MainDoor : MonoBehaviour
 {
     private bool isUnlocked = false;
+
+    private void Update()
+    {
+        Debug.Log(isUnlocked);
+    }
 
     public void UnlockDoor()
     {

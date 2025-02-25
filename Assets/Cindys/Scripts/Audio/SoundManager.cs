@@ -21,6 +21,23 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
+        //if (Instance != null && Instance != this)
+        //{
+        //    Destroy(gameObject);
+        //    return;
+        //}
+
+        //Instance = this;
+        //DontDestroyOnLoad(gameObject);
+
+        //if (bgmChannel != null)
+        //{
+        //    bgmChannel.loop = true; // Ensure BGM loops
+        //}
+    }
+
+    private void Start()
+    {
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -28,7 +45,6 @@ public class SoundManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
         if (bgmChannel != null)
         {
@@ -63,6 +79,8 @@ public class SoundManager : MonoBehaviour
     public void PlayBGM(int index)
     {
         if (bgmClips.Count == 0 || index >= bgmClips.Count) return;
+
+        Debug.Log("playing sound");
 
         bgmChannel.clip = bgmClips[index];
         bgmChannel.Play();
