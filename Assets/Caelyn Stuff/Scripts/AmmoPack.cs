@@ -17,14 +17,13 @@ public class AmmoPack : MonoBehaviour
             // Ensure WeaponHolder exists and has an equipped weapon
             if (weaponHolder != null && weaponHolder.GetIsWeaponEquipped())
             {
-                // Get the equipped weapon
-                Weapon equippedWeapon = weaponHolder.GetEquippedWeapon() as Weapon;
+                // Get the equipped weapon (Generalized for all weapons)
+                WeaponBase equippedWeapon = weaponHolder.GetEquippedWeapon();
 
                 if (equippedWeapon != null)
                 {
                     equippedWeapon.IncreaseTotalAmmo(increaseAmmoAmt);
-
-                    Destroy(gameObject);
+                    Destroy(gameObject); // Destroy ammo pack after pickup
                 }
             }
         }
