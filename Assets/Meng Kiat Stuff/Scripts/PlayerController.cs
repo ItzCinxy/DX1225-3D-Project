@@ -46,8 +46,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 targetShoulderOffset;
 
-
-
     private float knockbackTimer = 0f;
     private float knockbackDuration = 2f;
 
