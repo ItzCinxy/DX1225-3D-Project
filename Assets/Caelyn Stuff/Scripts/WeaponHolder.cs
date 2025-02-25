@@ -9,6 +9,12 @@ public class WeaponHolder : MonoBehaviour
     public List<WeaponBase> equippedWeapons = new List<WeaponBase>(); // Supports up to 2 weapons
     private int currentWeaponIndex = 0;
 
+    [Header("Grenade")]
+    [SerializeField] private GameObject grenadePrefab;
+    [SerializeField] private float throwForce = 10f;
+    public int numOfNades = 0;
+
+    [Header("Player Stuff")]
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private float pickupRange = 3f;
     [SerializeField] private LayerMask pickupLayer;
@@ -58,6 +64,9 @@ public class WeaponHolder : MonoBehaviour
 
         if (_playerInput.actions["Drop"].WasPressedThisFrame())
             DropWeapon();
+
+        if (_playerInput.actions["ThrowGrenade"].WasPressedThisFrame())
+            ThrowNade();
     }
 
     private void ProcessHitscanEffects()
@@ -313,4 +322,35 @@ public class WeaponHolder : MonoBehaviour
         }
     }
 
+    public void IncreaseNadeAmount()
+    {
+        numOfNades++;
+    }
+
+    private void ThrowNade()
+    {
+        if (numOfNades <= 0) return;
+
+        // Deduct one grenade from your stash
+        numOfNades--;
+
+        // Spawn the grenade at the weaponHolder's position
+        Vector3 spawnPosition = weaponHolder.position;
+        GameObject grenadeInstance = Instantiate(grenadePrefab, spawnPosition, Quaternion.identity);
+
+        // Get the grenade's Rigidbody
+        Rigidbody rb = grenadeInstance.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            // Use the camera's forward direction for throwing, with a slight upward boost
+            Transform camTransform = Camera.main.transform;
+            Vector3 throwDirection = (camTransform.forward + camTransform.up * 0.5f).normalized;
+
+            rb.AddForce(throwDirection * throwForce, ForceMode.VelocityChange);
+        }
+        else
+        {
+            Debug.LogError("Grenade prefab is missing a Rigidbody component. Fix it, please.");
+        }
+    }
 }
