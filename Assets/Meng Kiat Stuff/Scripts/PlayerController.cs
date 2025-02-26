@@ -29,6 +29,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera _thirdPersonCamera;
     [SerializeField] private CinemachineVirtualCamera _firstPersonCamera;
 
+    [Header("Camera Bob")]
+    [SerializeField] private Transform firstPersonCameraTransform;
+    [SerializeField] private float bobSpeed = 6f;
+    [SerializeField] private float bobAmount = 0.05f;
+
+    private float defaultCameraY;
+    private float bobTimer;
+
     [Header("Active Panels")]
     [SerializeField] private List<GameObject> activePanels;
 
@@ -56,6 +64,10 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         _skillTreeCanvas?.gameObject.SetActive(false);
 
+        if (firstPersonCameraTransform != null)
+        {
+            defaultCameraY = firstPersonCameraTransform.localPosition.y;
+        }
     }
 
     private void Update()
@@ -83,6 +95,11 @@ public class PlayerController : MonoBehaviour
         HandleJump();
         RotateWithCamera();
         HandleAbilities();
+
+        if (isFirstPerson)
+        {
+            HandleCameraBob();
+        }
 
         velocity.y += gravity * 2 * Time.deltaTime;
         _characterController.Move(velocity * Time.deltaTime);
@@ -145,10 +162,71 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateCameraView()
     {
-        _firstPersonCamera.Priority = isFirstPerson ? 20 : 10;
-        _thirdPersonCamera.Priority = isFirstPerson ? 10 : 20;
-        _skin.gameObject.SetActive(!isFirstPerson);
+        if (isFirstPerson)
+        {
+            _firstPersonCamera.Priority = 20;
+            _thirdPersonCamera.Priority = 10;
+            _skin.gameObject.SetActive(false);
+        }
+        else
+        {
+            _firstPersonCamera.Priority = 10;
+            _thirdPersonCamera.Priority = 20;
+            _skin.gameObject.SetActive(true);
+        }
     }
+
+    private void HandleCameraBob()
+    {
+        // Only bob in first-person and when grounded
+        if (!isFirstPerson || !isGrounded || firstPersonCameraTransform == null)
+        {
+            bobTimer = 0f;
+            firstPersonCameraTransform.localPosition = new Vector3(
+                firstPersonCameraTransform.localPosition.x,
+                Mathf.Lerp(firstPersonCameraTransform.localPosition.y, defaultCameraY, Time.deltaTime * 10f),
+                firstPersonCameraTransform.localPosition.z
+            );
+            return;
+        }
+
+        // Get movement input magnitude
+        float moveInput = inputDirection.magnitude;
+
+        // Stop bobbing if no movement
+        if (moveInput < 0.1f)
+        {
+            bobTimer = 0f;
+            firstPersonCameraTransform.localPosition = new Vector3(
+                firstPersonCameraTransform.localPosition.x,
+                Mathf.Lerp(firstPersonCameraTransform.localPosition.y, defaultCameraY, Time.deltaTime * 10f),
+                firstPersonCameraTransform.localPosition.z
+            );
+            return;
+        }
+
+        // Determine current movement speed based on sprint/crouch
+        float currentSpeed = moveSpeed;
+        if (isSprinting) currentSpeed *= sprintSpeedMultiplier;
+        if (isCrouching) currentSpeed *= crouchSpeedMultiplier;
+
+        // Scale bobbing intensity with speed
+        float speedFactor = currentSpeed / moveSpeed;
+        float bobFrequency = bobSpeed * speedFactor; // Faster bobbing when sprinting
+        float bobAmplitude = bobAmount * speedFactor; // Higher bob when moving faster
+
+        // Bobbing effect using sine wave
+        bobTimer += Time.deltaTime * bobFrequency;
+        float verticalOffset = Mathf.Sin(bobTimer) * bobAmplitude;
+
+        // Apply to camera position
+        firstPersonCameraTransform.localPosition = new Vector3(
+            firstPersonCameraTransform.localPosition.x,
+            defaultCameraY + verticalOffset,
+            firstPersonCameraTransform.localPosition.z
+        );
+    }
+
 
     private void HandleGroundCheck()
     {
