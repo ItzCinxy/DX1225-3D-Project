@@ -2983,6 +2983,11 @@ MonoBehaviour:
     type: 3}
   ZombieSounds: {fileID: 8300000, guid: af64fd26a3be268418c9b533bc6a9f35, type: 3}
   AudioSource: {fileID: 7143791235541815936}
+  isDying: 0
+  _separationWeight: 0
+  _cohesionWeight: 0
+  _alignmentWeight: 0
+  _neighbourRadius: 0
 --- !u!82 &7143791235541815936
 AudioSource:
   m_ObjectHideFlags: 0
