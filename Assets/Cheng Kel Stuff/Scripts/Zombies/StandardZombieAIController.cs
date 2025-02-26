@@ -19,7 +19,7 @@ public class StandardZombieAIController : MonoBehaviour
     [SerializeField] private float runSpeed = 4f;
 
     [SerializeField] private float visionAngle = 60f;
-    [SerializeField] private float rotationSpeed = 5f;
+    [SerializeField] private float rotationSpeed = 15f;
 
     [SerializeField] private LayerMask obstacleLayer;
 
