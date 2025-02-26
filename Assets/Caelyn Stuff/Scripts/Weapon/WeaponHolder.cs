@@ -32,6 +32,7 @@ public class WeaponHolder : MonoBehaviour
     private void Start()
     {
         lastFirstPersonState = _playerController.GetIsFirstPerson();
+        UpdateWeaponListUI();
     }
 
     private void Update()
@@ -135,31 +136,25 @@ public class WeaponHolder : MonoBehaviour
         newWeapon.transform.localPosition = Vector3.zero;
         newWeapon.transform.localRotation = Quaternion.identity;
 
-        Rigidbody rb = newWeapon.GetComponent<Rigidbody>();
-        if (rb)
+        if (newWeapon.TryGetComponent(out Rigidbody rb))
             rb.isKinematic = true;
         else
             newWeapon.gameObject.AddComponent<Rigidbody>();
 
-        BoxCollider bc = newWeapon.GetComponent<BoxCollider>();
-        if (bc)
+        if (newWeapon.TryGetComponent(out BoxCollider bc))
             bc.enabled = false;
         else
             newWeapon.gameObject.AddComponent<BoxCollider>();
 
-        if (equippedWeapons.Count < 2)
-        {
-            equippedWeapons.Add(newWeapon);
-            newWeapon.gameObject.SetActive(equippedWeapons.Count == 1);
-            currentWeaponIndex = equippedWeapons.Count - 1;
-        }
-        else
+        if (equippedWeapons.Count >= 2)
         {
             DropWeapon();
-            equippedWeapons.Add(newWeapon);
-            currentWeaponIndex = equippedWeapons.Count - 1;
-            newWeapon.gameObject.SetActive(true);
         }
+
+        equippedWeapons.Add(newWeapon);
+        currentWeaponIndex = equippedWeapons.Count - 1;
+
+        ActivateCurrentWeapon();
 
         animator.SetBool("IsHoldingGun", true);
         if (ammoDisplay != null)
@@ -176,12 +171,10 @@ public class WeaponHolder : MonoBehaviour
 
         WeaponBase currentWeapon = equippedWeapons[currentWeaponIndex];
 
-        Rigidbody rb = currentWeapon.GetComponent<Rigidbody>();
-        if (rb)
+        if (currentWeapon.TryGetComponent(out Rigidbody rb))
             rb.isKinematic = false;
 
-        BoxCollider bc = currentWeapon.GetComponent<BoxCollider>();
-        if (bc)
+        if (currentWeapon.TryGetComponent(out BoxCollider bc))
             bc.enabled = true;
 
         currentWeapon.transform.SetParent(null);
@@ -193,8 +186,8 @@ public class WeaponHolder : MonoBehaviour
         // Activate the remaining weapon, if any
         if (equippedWeapons.Count > 0)
         {
-            currentWeaponIndex = 0;
-            equippedWeapons[currentWeaponIndex].gameObject.SetActive(true);
+            currentWeaponIndex = Mathf.Clamp(currentWeaponIndex, 0, equippedWeapons.Count - 1);
+            ActivateCurrentWeapon();
         }
         else
         {
@@ -206,20 +199,30 @@ public class WeaponHolder : MonoBehaviour
 
     private void SwapWeaponNext()
     {
+        if (equippedWeapons.Count <= 1) return;
+
         equippedWeapons[currentWeaponIndex].gameObject.SetActive(false);
         currentWeaponIndex = (currentWeaponIndex + 1) % equippedWeapons.Count;
-        equippedWeapons[currentWeaponIndex].gameObject.SetActive(true);
-        UpdateUI();
-        UpdateWeaponListUI();
+        ActivateCurrentWeapon();
     }
 
     private void SwapWeaponPrevious()
     {
+        if (equippedWeapons.Count <= 1) return;
+
         equippedWeapons[currentWeaponIndex].gameObject.SetActive(false);
-        currentWeaponIndex--;
-        if (currentWeaponIndex < 0)
-            currentWeaponIndex = equippedWeapons.Count - 1;
-        equippedWeapons[currentWeaponIndex].gameObject.SetActive(true);
+        currentWeaponIndex = (currentWeaponIndex - 1 + equippedWeapons.Count) % equippedWeapons.Count;
+        ActivateCurrentWeapon();
+    }
+
+    private void ActivateCurrentWeapon()
+    {
+        // ✅ Ensure only the active weapon is enabled
+        for (int i = 0; i < equippedWeapons.Count; i++)
+        {
+            equippedWeapons[i].gameObject.SetActive(i == currentWeaponIndex);
+        }
+
         UpdateUI();
         UpdateWeaponListUI();
     }
@@ -243,12 +246,21 @@ public class WeaponHolder : MonoBehaviour
         if (weaponListText == null)
             return;
 
-        string text = "Weapons:\n";
-        for (int i = 0; i < equippedWeapons.Count; i++)
-        {
-            string weaponName = equippedWeapons[i].gameObject.name.Replace("(Clone)", "").Trim();
-            text += (i == currentWeaponIndex ? "> " : "  ") + weaponName + "\n";
-        }
+        // Default UI when no weapons are equipped
+        string weapon1 = "--";
+        string weapon2 = "--";
+
+        // Replace with actual weapon names if available
+        if (equippedWeapons.Count > 0)
+            weapon1 = equippedWeapons[0].gameObject.name.Replace("(Clone)", "").Trim();
+        if (equippedWeapons.Count > 1)
+            weapon2 = equippedWeapons[1].gameObject.name.Replace("(Clone)", "").Trim();
+
+        // Format the list with ">" for the active weapon
+        string text = (currentWeaponIndex == 0 ? "> " : "  ") + weapon1 + "\n";
+        text += (currentWeaponIndex == 1 ? "> " : "  ") + weapon2;
+
+        // Apply text to UI
         weaponListText.text = text;
     }
 
