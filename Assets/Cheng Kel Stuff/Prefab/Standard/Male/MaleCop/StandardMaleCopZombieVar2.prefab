@@ -938,6 +938,11 @@ MonoBehaviour:
     type: 3}
   healthPrefab: {fileID: 6477114811567125893, guid: 1188a74ac345e70499c4a52c498df245,
     type: 3}
+  isDying: 0
+  _separationWeight: 0
+  _cohesionWeight: 0
+  _alignmentWeight: 0
+  _neighbourRadius: 0
 --- !u!54 &3032123111615145176
 Rigidbody:
   m_ObjectHideFlags: 0

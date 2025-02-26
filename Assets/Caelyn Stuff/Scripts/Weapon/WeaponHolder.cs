@@ -5,7 +5,10 @@ using UnityEngine.InputSystem;
 
 public class WeaponHolder : MonoBehaviour
 {
-    [SerializeField] private Transform weaponHolder;
+    [SerializeField] private PlayerController _playerController;
+    private bool lastFirstPersonState;
+    [SerializeField] private Transform firstPersonWeaponHolder;
+    [SerializeField] private Transform thirdPersonWeaponHolder;
     public List<WeaponBase> equippedWeapons = new List<WeaponBase>(); // Supports up to 2 weapons
     private int currentWeaponIndex = 0;
 
@@ -26,8 +29,20 @@ public class WeaponHolder : MonoBehaviour
 
     public static Transform currentTarget; // Shared target for drone
 
+    private void Start()
+    {
+        lastFirstPersonState = _playerController.GetIsFirstPerson();
+        UpdateWeaponListUI();
+    }
+
     private void Update()
     {
+        bool currentFirstPersonState = _playerController.GetIsFirstPerson();
+        if (currentFirstPersonState != lastFirstPersonState)
+        {
+            UpdateWeaponHolderView();
+            lastFirstPersonState = currentFirstPersonState;
+        }
         // Check for mouse scroll wheel input (using Input.GetAxis, not InputControl scroll)
         float scrollDelta = Input.GetAxis("Mouse ScrollWheel");
         if (Mathf.Abs(scrollDelta) > 0.01f && equippedWeapons.Count > 1)
@@ -105,64 +120,49 @@ public class WeaponHolder : MonoBehaviour
 
     public void EquipWeapon(WeaponBase newWeapon)
     {
-        // Prevent duplicate pickups
         if (equippedWeapons.Contains(newWeapon))
             return;
 
-        // Remove floating effect if present
         if (newWeapon.TryGetComponent(out FloatingWeapon floatingEffect))
             Destroy(floatingEffect);
 
         if (FindObjectOfType<LuckyBox>() is LuckyBox luckyBox)
             luckyBox.WeaponPickedUp(newWeapon);
 
-        newWeapon.transform.SetParent(weaponHolder);
+        bool isFirstPerson = _playerController.GetIsFirstPerson();
+        Transform activeHolder = isFirstPerson ? firstPersonWeaponHolder : thirdPersonWeaponHolder;
+
+        newWeapon.transform.SetParent(activeHolder);
         newWeapon.transform.localPosition = Vector3.zero;
         newWeapon.transform.localRotation = Quaternion.identity;
 
-        Rigidbody rb = newWeapon.GetComponent<Rigidbody>();
-        if (rb)
+        if (newWeapon.TryGetComponent(out Rigidbody rb))
             rb.isKinematic = true;
         else
             newWeapon.gameObject.AddComponent<Rigidbody>();
 
-        BoxCollider bc = newWeapon.GetComponent<BoxCollider>();
-        if (bc)
+        if (newWeapon.TryGetComponent(out BoxCollider bc))
             bc.enabled = false;
         else
             newWeapon.gameObject.AddComponent<BoxCollider>();
 
-        // If you have less than 2 weapons, add the new one
-        if (equippedWeapons.Count < 2)
+        if (equippedWeapons.Count >= 2)
         {
-            equippedWeapons.Add(newWeapon);
-            // If it's the first weapon, activate it; otherwise, keep it inactive.
-            if (equippedWeapons.Count == 1)
-            {
-                currentWeaponIndex = 0;
-                newWeapon.gameObject.SetActive(true);
-            }
-            else
-            {
-                newWeapon.gameObject.SetActive(false);
-            }
-        }
-        else
-        {
-            // Already holding 2 weapons: drop the current one and replace it
             DropWeapon();
-            equippedWeapons.Add(newWeapon);
-            currentWeaponIndex = equippedWeapons.Count - 1;
-            newWeapon.gameObject.SetActive(true);
         }
+
+        equippedWeapons.Add(newWeapon);
+        currentWeaponIndex = equippedWeapons.Count - 1;
+
+        ActivateCurrentWeapon();
 
         animator.SetBool("IsHoldingGun", true);
-
         if (ammoDisplay != null)
             newWeapon.SetAmmoDisplay(ammoDisplay);
 
         UpdateWeaponListUI();
     }
+
 
     public void DropWeapon()
     {
@@ -171,12 +171,10 @@ public class WeaponHolder : MonoBehaviour
 
         WeaponBase currentWeapon = equippedWeapons[currentWeaponIndex];
 
-        Rigidbody rb = currentWeapon.GetComponent<Rigidbody>();
-        if (rb)
+        if (currentWeapon.TryGetComponent(out Rigidbody rb))
             rb.isKinematic = false;
 
-        BoxCollider bc = currentWeapon.GetComponent<BoxCollider>();
-        if (bc)
+        if (currentWeapon.TryGetComponent(out BoxCollider bc))
             bc.enabled = true;
 
         currentWeapon.transform.SetParent(null);
@@ -188,8 +186,8 @@ public class WeaponHolder : MonoBehaviour
         // Activate the remaining weapon, if any
         if (equippedWeapons.Count > 0)
         {
-            currentWeaponIndex = 0;
-            equippedWeapons[currentWeaponIndex].gameObject.SetActive(true);
+            currentWeaponIndex = Mathf.Clamp(currentWeaponIndex, 0, equippedWeapons.Count - 1);
+            ActivateCurrentWeapon();
         }
         else
         {
@@ -201,20 +199,30 @@ public class WeaponHolder : MonoBehaviour
 
     private void SwapWeaponNext()
     {
+        if (equippedWeapons.Count <= 1) return;
+
         equippedWeapons[currentWeaponIndex].gameObject.SetActive(false);
         currentWeaponIndex = (currentWeaponIndex + 1) % equippedWeapons.Count;
-        equippedWeapons[currentWeaponIndex].gameObject.SetActive(true);
-        UpdateUI();
-        UpdateWeaponListUI();
+        ActivateCurrentWeapon();
     }
 
     private void SwapWeaponPrevious()
     {
+        if (equippedWeapons.Count <= 1) return;
+
         equippedWeapons[currentWeaponIndex].gameObject.SetActive(false);
-        currentWeaponIndex--;
-        if (currentWeaponIndex < 0)
-            currentWeaponIndex = equippedWeapons.Count - 1;
-        equippedWeapons[currentWeaponIndex].gameObject.SetActive(true);
+        currentWeaponIndex = (currentWeaponIndex - 1 + equippedWeapons.Count) % equippedWeapons.Count;
+        ActivateCurrentWeapon();
+    }
+
+    private void ActivateCurrentWeapon()
+    {
+        // ✅ Ensure only the active weapon is enabled
+        for (int i = 0; i < equippedWeapons.Count; i++)
+        {
+            equippedWeapons[i].gameObject.SetActive(i == currentWeaponIndex);
+        }
+
         UpdateUI();
         UpdateWeaponListUI();
     }
@@ -233,18 +241,26 @@ public class WeaponHolder : MonoBehaviour
         }
     }
 
-    // This method updates the UI text to show your current weapons.
     private void UpdateWeaponListUI()
     {
         if (weaponListText == null)
             return;
 
-        string text = "Weapons:\n";
-        for (int i = 0; i < equippedWeapons.Count; i++)
-        {
-            // Mark the active weapon with a ">" symbol.
-            text += (i == currentWeaponIndex ? "> " : "  ") + equippedWeapons[i].gameObject.name + "\n";
-        }
+        // Default UI when no weapons are equipped
+        string weapon1 = "--";
+        string weapon2 = "--";
+
+        // Replace with actual weapon names if available
+        if (equippedWeapons.Count > 0)
+            weapon1 = equippedWeapons[0].gameObject.name.Replace("(Clone)", "").Trim();
+        if (equippedWeapons.Count > 1)
+            weapon2 = equippedWeapons[1].gameObject.name.Replace("(Clone)", "").Trim();
+
+        // Format the list with ">" for the active weapon
+        string text = (currentWeaponIndex == 0 ? "> " : "  ") + weapon1 + "\n";
+        text += (currentWeaponIndex == 1 ? "> " : "  ") + weapon2;
+
+        // Apply text to UI
         weaponListText.text = text;
     }
 
@@ -322,6 +338,20 @@ public class WeaponHolder : MonoBehaviour
         }
     }
 
+    public void UpdateWeaponHolderView()
+    {
+        bool isFirstPerson = _playerController.GetIsFirstPerson();
+        Transform targetHolder = isFirstPerson ? firstPersonWeaponHolder : thirdPersonWeaponHolder;
+
+        foreach (WeaponBase weapon in equippedWeapons)
+        {
+            weapon.transform.SetParent(targetHolder);
+            weapon.transform.localPosition = Vector3.zero;
+            weapon.transform.localRotation = Quaternion.identity;
+        }
+    }
+
+
     public void IncreaseNadeAmount()
     {
         numOfNades++;
@@ -335,7 +365,7 @@ public class WeaponHolder : MonoBehaviour
         numOfNades--;
 
         // Spawn the grenade at the weaponHolder's position
-        Vector3 spawnPosition = weaponHolder.position;
+        Vector3 spawnPosition = thirdPersonWeaponHolder.position;
         GameObject grenadeInstance = Instantiate(grenadePrefab, spawnPosition, Quaternion.identity);
 
         // Get the grenade's Rigidbody
