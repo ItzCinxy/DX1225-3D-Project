@@ -13,10 +13,6 @@ public class MapChanger : MonoBehaviour
     private int currentMapIndex = 0;
     private bool waitingForCutsceneToEnd = false;
 
-    [Header("Map2")]
-    [SerializeField] private GameObject colliders;
-    [SerializeField] private GameObject Canva;
-
     private void Start()
     {
         ActivateMap(currentMapIndex);
@@ -34,6 +30,7 @@ public class MapChanger : MonoBehaviour
             return;
         }
 
+        // Subscribe to cutscene end event
         if (CutsceneManager.Instance != null)
         {
             CutsceneManager.Instance.director.stopped += OnCutsceneEnd;
@@ -44,23 +41,23 @@ public class MapChanger : MonoBehaviour
     {
         if (maps.Count == 0 || player == null || spawnPositions.Count == 0) return;
 
-        maps[currentMapIndex].SetActive(false);
-
-        currentMapIndex = (currentMapIndex + 1) % maps.Count;
-
-        maps[currentMapIndex].SetActive(true);
-
+        // If a cutscene is playing, wait for it to end before teleporting
         if (CutsceneManager.Instance != null && CutsceneManager.Instance.IsCutscenePlaying)
         {
             waitingForCutsceneToEnd = true;
             return;
         }
 
-        TeleportPlayer();
+        TeleportPlayerAndChangeMap();
     }
 
-    private void TeleportPlayer()
+    private void TeleportPlayerAndChangeMap()
     {
+        maps[currentMapIndex].SetActive(false);
+
+        currentMapIndex = (currentMapIndex + 1) % maps.Count;
+
+        maps[currentMapIndex].SetActive(true);
 
         player.position = spawnPositions[currentMapIndex];
 
@@ -73,9 +70,7 @@ public class MapChanger : MonoBehaviour
         if (waitingForCutsceneToEnd)
         {
             waitingForCutsceneToEnd = false;
-            TeleportPlayer();
-            colliders.SetActive(true);
-            Canva.SetActive(false);
+            TeleportPlayerAndChangeMap();
         }
     }
 
