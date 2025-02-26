@@ -129,6 +129,15 @@ public class WeaponHolder : MonoBehaviour
         if (FindObjectOfType<LuckyBox>() is LuckyBox luckyBox)
             luckyBox.WeaponPickedUp(newWeapon);
 
+        // Change weapon layer to "WeaponLayer" so it only renders in the Weapon Camera
+        newWeapon.gameObject.layer = LayerMask.NameToLayer("Weapon");
+
+        // Apply the layer change to all child objects (for attachments, sights, etc.)
+        foreach (Transform child in newWeapon.transform)
+        {
+            child.gameObject.layer = LayerMask.NameToLayer("Weapon");
+        }
+
         bool isFirstPerson = _playerController.GetIsFirstPerson();
         Transform activeHolder = isFirstPerson ? firstPersonWeaponHolder : thirdPersonWeaponHolder;
 
@@ -176,6 +185,15 @@ public class WeaponHolder : MonoBehaviour
 
         if (currentWeapon.TryGetComponent(out BoxCollider bc))
             bc.enabled = true;
+
+        // Reset the weapon layer so it can be seen in the world again
+        currentWeapon.gameObject.layer = LayerMask.NameToLayer("Pickup");
+
+        // Apply layer change to all child objects (attachments, sights, etc.)
+        foreach (Transform child in currentWeapon.transform)
+        {
+            child.gameObject.layer = LayerMask.NameToLayer("Pickup");
+        }
 
         currentWeapon.transform.SetParent(null);
         ammoDisplay.text = "-- / --";
