@@ -27,7 +27,7 @@ public class FireDamage : MonoBehaviour
         while (player != null)
         {
             player.TakeDamage(damage);
-            Debug.Log("Player is taking fire damage: " + damage);
+            //Debug.Log("Player is taking fire damage: " + damage);
             yield return new WaitForSeconds(tickRate);
         }
     }

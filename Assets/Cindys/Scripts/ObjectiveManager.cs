@@ -47,9 +47,12 @@ public class ObjectiveManager : MonoBehaviour
             Destroy(gameObject);
     }
 
+    private int currentMapIndex = 1;
+
     public void SetMapObjectives(int mapIndex)
     {
         objectivesCompleted = false;
+        currentMapIndex = mapIndex;
 
         switch (mapIndex)
         {
@@ -65,6 +68,11 @@ public class ObjectiveManager : MonoBehaviour
         }
 
         UpdateObjectiveDisplay();
+    }
+
+    private int GetCurrentMapIndex()
+    {
+        return currentMapIndex;
     }
 
     private void UpdateObjectiveDisplay()
@@ -177,30 +185,48 @@ public class ObjectiveManager : MonoBehaviour
         if (allCompleted && !objectivesCompleted)
         {
             objectivesCompleted = true;
-            questDisplay.text = "Objectives completed!\nDoor is opened.";
-            OpenDoor();
+
+            if (currentMapIndex == 1)
+            {
+                questDisplay.text = "Objectives completed!\nDoor is opened.";
+            }
+            else if (currentMapIndex == 2)
+            {
+                questDisplay.text = "Objectives completed!\nRun to the train station.";
+            }
+
+            OpenDoor(currentMapIndex); // Pass the current map index to the OpenDoor method
         }
     }
 
-    // Unlock the door when objectives are completed
-    private void OpenDoor()
+    private void OpenDoor(int mapIndex)
     {
+        if (!objectivesCompleted) return; // Ensure objectives are actually completed before unlocking
 
-        if (Map2MainDoor == null)
+        switch (mapIndex)
         {
-            Map2MainDoor = GameObject.Find("train tunnel end .001");
-            Debug.Log("Map2MainDoor assigned: " + (Map2MainDoor != null));
-        }
-        else
-        {
-            Map2MainDoor.GetComponent<EndGame>().UnlockDoor();
-        }
+            case 1:
+                if (Map1MainDoor != null)
+                {
+                    Debug.Log("Unlocking Map 1 Main Door");
+                    Map1MainDoor.GetComponent<MainDoor>().UnlockDoor();
+                }
+                break;
 
-        if (Map1MainDoor != null)
-        {
-            Map1MainDoor.GetComponent<MainDoor>().UnlockDoor();
+            case 2:
+                if (Map2MainDoor != null)
+                {
+                    Debug.Log("Unlocking Map 2 Main Door");
+                    Map2MainDoor.GetComponent<EndGame>().UnlockDoor();
+                }
+                break;
+
+            default:
+                Debug.LogWarning("Invalid map index for OpenDoor()");
+                break;
         }
     }
+
 
 }
 

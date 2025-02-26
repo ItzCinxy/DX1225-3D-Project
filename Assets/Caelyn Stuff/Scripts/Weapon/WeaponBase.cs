@@ -16,8 +16,10 @@ public abstract class WeaponBase : MonoBehaviour
 
     [Header("Weapon Audio")]
     public AudioClip[] shootingSounds;
+    public AudioClip ReloadingSounds;
     private int soundIndex = 0;
     [SerializeField] AudioSource weaponAudioSource;
+
 
     [Header("UI Elements")]
     protected TMP_Text ammoDisplay;
@@ -44,6 +46,7 @@ public abstract class WeaponBase : MonoBehaviour
 
     protected virtual IEnumerator ReloadRoutine()
     {
+        PlayReloadSound();
         isReloading = true;
         if (ammoDisplay != null) ammoDisplay.text = "Reloading...";
         yield return new WaitForSeconds(reloadTime);
@@ -96,8 +99,16 @@ public abstract class WeaponBase : MonoBehaviour
     {
         if (shootingSounds.Length > 0 && weaponAudioSource != null)
         {
-            weaponAudioSource.PlayOneShot(shootingSounds[soundIndex]);  // Play sound from weapon AudioSource
+            weaponAudioSource.PlayOneShot(shootingSounds[soundIndex]);
             soundIndex = (soundIndex + 1) % shootingSounds.Length;
+        }
+    }
+
+    public void PlayReloadSound()
+    {
+        if (weaponAudioSource != null)
+        {
+            weaponAudioSource.PlayOneShot(ReloadingSounds);
         }
     }
 }

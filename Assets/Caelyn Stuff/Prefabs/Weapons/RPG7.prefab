@@ -221,7 +221,8 @@ MonoBehaviour:
   fireRate: 1
   reloadTime: 3
   shootingSounds:
-  - {fileID: 8300000, guid: c73c49a0ddc47014a94a580fbbd25023, type: 3}
+  - {fileID: 8300000, guid: bcb525241cfeeb7468b562500dd80285, type: 3}
+  ReloadingSounds: {fileID: 8300000, guid: 69f25dca99f8bf04ab35b93669feef7f, type: 3}
   weaponAudioSource: {fileID: 7005038891786330680}
   projectilePrefab: {fileID: 3143612010013662528, guid: ec362e3c3edb68d48bf0f957b3e6dbce,
     type: 3}
