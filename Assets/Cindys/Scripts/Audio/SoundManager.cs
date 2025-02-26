@@ -80,7 +80,6 @@ public class SoundManager : MonoBehaviour
     {
         if (bgmClips.Count == 0 || index >= bgmClips.Count) return;
 
-        Debug.Log("playing sound");
 
         bgmChannel.clip = bgmClips[index];
         bgmChannel.Play();

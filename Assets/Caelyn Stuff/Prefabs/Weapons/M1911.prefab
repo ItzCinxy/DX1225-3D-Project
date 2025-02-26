@@ -55,13 +55,8 @@ MonoBehaviour:
   fireRate: 0.2
   reloadTime: 1
   shootingSounds:
-  - {fileID: 8300000, guid: 4f7ce35d80ee38a4f91801b46215a0e3, type: 3}
-  - {fileID: 8300000, guid: 6661b2a770e17d74fb469f895d29f014, type: 3}
-  - {fileID: 8300000, guid: 5d8458f517cd4834eacd594f77bf4b03, type: 3}
-  - {fileID: 8300000, guid: ed9ebf71e48884f43b500deecebf9426, type: 3}
-  - {fileID: 8300000, guid: 2d26fca82fd6bb4499b1a1a8dd6aed35, type: 3}
-  - {fileID: 8300000, guid: 79544935c080c164582df18b73e78f85, type: 3}
-  - {fileID: 8300000, guid: fd852929c413ee84abb5139aaee8d91a, type: 3}
+  - {fileID: 8300000, guid: 9f05e04cf6c57f246be7930dccb7e302, type: 3}
+  ReloadingSounds: {fileID: 8300000, guid: 4835d74a92d4da84a9653dd4e19bccb9, type: 3}
   weaponAudioSource: {fileID: 8256883601706717376}
 --- !u!114 &7580760144774843520
 MonoBehaviour:
