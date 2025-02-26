@@ -11,6 +11,8 @@ public class CutsceneManager : MonoBehaviour
 
     [SerializeField] private GameObject PlayerUIpanel;
 
+    public bool IsCutscenePlaying { get; private set; } = false; // Public read-only access
+
     private void Awake()
     {
         if (Instance == null)
@@ -31,10 +33,10 @@ public class CutsceneManager : MonoBehaviour
             director.stopped += OnCutsceneEnd;
         }
 
-        PlayCutscene(0);
+        PlayCutscene("StartGame");
     }
 
-    public void PlayCutscene(int index)
+    public void PlayCutscene(string timelineName)
     {
         if (director == null || timelines == null || timelines.Length == 0)
         {
@@ -42,10 +44,22 @@ public class CutsceneManager : MonoBehaviour
             return;
         }
 
-        if (index >= 0 && index < timelines.Length)
+        // Find the timeline by name
+        PlayableAsset selectedTimeline = null;
+        foreach (var timeline in timelines)
+        {
+            if (timeline.name == timelineName)
+            {
+                selectedTimeline = timeline;
+                break;
+            }
+        }
+
+        if (selectedTimeline != null)
         {
             StopCutscene();
-            director.playableAsset = timelines[index];
+            director.playableAsset = selectedTimeline;
+            IsCutscenePlaying = true; // Set flag to true
 
             if (PlayerUIpanel != null) PlayerUIpanel.SetActive(false);
 
@@ -53,7 +67,7 @@ public class CutsceneManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"CutsceneManager: Invalid timeline index {index}.");
+            Debug.LogWarning($"CutsceneManager: No timeline found with name '{timelineName}'.");
         }
     }
 
@@ -62,11 +76,14 @@ public class CutsceneManager : MonoBehaviour
         if (director != null && director.state == PlayState.Playing)
         {
             director.Stop();
+            IsCutscenePlaying = false; // Reset flag when manually stopping
         }
     }
 
     private void OnCutsceneEnd(PlayableDirector pd)
     {
+        IsCutscenePlaying = false; // Reset flag when the cutscene ends
+
         if (PlayerUIpanel != null) PlayerUIpanel.SetActive(true);
     }
 

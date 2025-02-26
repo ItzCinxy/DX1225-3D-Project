@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class MapChanger : MonoBehaviour
 {
@@ -10,7 +11,11 @@ public class MapChanger : MonoBehaviour
     [SerializeField] private List<Vector3> spawnPositions; // List of player spawn positions
 
     private int currentMapIndex = 0;
+    private bool waitingForCutsceneToEnd = false;
 
+    [Header("Map2")]
+    [SerializeField] private GameObject colliders;
+    [SerializeField] private GameObject Canva;
 
     private void Start()
     {
@@ -26,6 +31,12 @@ public class MapChanger : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
+        }
+
+        if (CutsceneManager.Instance != null)
+        {
+            CutsceneManager.Instance.director.stopped += OnCutsceneEnd;
         }
     }
 
@@ -39,10 +50,33 @@ public class MapChanger : MonoBehaviour
 
         maps[currentMapIndex].SetActive(true);
 
+        if (CutsceneManager.Instance != null && CutsceneManager.Instance.IsCutscenePlaying)
+        {
+            waitingForCutsceneToEnd = true;
+            return;
+        }
+
+        TeleportPlayer();
+    }
+
+    private void TeleportPlayer()
+    {
+
         player.position = spawnPositions[currentMapIndex];
 
         SoundManager.Instance.PlayBGM(currentMapIndex);
         ObjectiveManager.Instance.SetMapObjectives(currentMapIndex + 1);
+    }
+
+    private void OnCutsceneEnd(PlayableDirector pd)
+    {
+        if (waitingForCutsceneToEnd)
+        {
+            waitingForCutsceneToEnd = false;
+            TeleportPlayer();
+            colliders.SetActive(true);
+            Canva.SetActive(false);
+        }
     }
 
     private void ActivateMap(int index)
@@ -55,6 +89,15 @@ public class MapChanger : MonoBehaviour
         if (maps.Count > 0)
         {
             maps[index].SetActive(true);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // Unsubscribe from the cutscene event
+        if (CutsceneManager.Instance != null)
+        {
+            CutsceneManager.Instance.director.stopped -= OnCutsceneEnd;
         }
     }
 }

@@ -4,7 +4,6 @@ public class MainDoor : MonoBehaviour
 {
     private bool isUnlocked = false;
 
-
     public void UnlockDoor()
     {
         isUnlocked = true;
@@ -14,6 +13,7 @@ public class MainDoor : MonoBehaviour
     {
         if (isUnlocked && other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E))
         {
+            CutsceneManager.Instance.PlayCutscene("AfterMap1");
             OpenDoor();
         }
     }
