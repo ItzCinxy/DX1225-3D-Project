@@ -53255,7 +53255,7 @@ PrefabInstance:
     - target: {fileID: 1149565387616923703, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: m_Name
-      value: RealMan (1)
+      value: RealMan
       objectReference: {fileID: 0}
     - target: {fileID: 3287674359219554678, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}

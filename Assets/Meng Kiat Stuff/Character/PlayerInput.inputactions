@@ -24,33 +24,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Shoot",
-                    "type": "Button",
-                    "id": "c9b33848-afa0-4f3a-a80e-16b2d2eef932",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Reload",
-                    "type": "Button",
-                    "id": "5acb724e-7eba-4064-8bb2-ae1ae2017106",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Interact",
-                    "type": "Button",
-                    "id": "cbca0530-621b-4f27-8475-60a2617ee66c",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Sprint",
                     "type": "Button",
                     "id": "e7a2014f-88e7-4227-8b37-327877a6fc84",
@@ -69,6 +42,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "cbca0530-621b-4f27-8475-60a2617ee66c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Drop",
                     "type": "Button",
                     "id": "a790c45e-c6b3-4b1b-960e-9011d45423fb",
@@ -78,9 +60,36 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ToggleSkillTree",
+                    "name": "Throw",
                     "type": "Button",
-                    "id": "3df03fb1-be3a-4b59-a601-9bdd4e4dad07",
+                    "id": "ab9fa74a-cc44-4b23-84be-3ff54239d8a5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Shoot",
+                    "type": "Button",
+                    "id": "c9b33848-afa0-4f3a-a80e-16b2d2eef932",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "5acb724e-7eba-4064-8bb2-ae1ae2017106",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ThrowGrenade",
+                    "type": "Button",
+                    "id": "0df69051-a712-4cfd-884c-e7bb20801695",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -105,9 +114,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Throw",
+                    "name": "ToggleSkillTree",
                     "type": "Button",
-                    "id": "ab9fa74a-cc44-4b23-84be-3ff54239d8a5",
+                    "id": "3df03fb1-be3a-4b59-a601-9bdd4e4dad07",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -126,15 +135,6 @@
                     "name": "Ability2",
                     "type": "Button",
                     "id": "2602ae92-1740-4cc0-a5b7-89b490639fb8",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "ThrowGrenade",
-                    "type": "Button",
-                    "id": "0df69051-a712-4cfd-884c-e7bb20801695",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
