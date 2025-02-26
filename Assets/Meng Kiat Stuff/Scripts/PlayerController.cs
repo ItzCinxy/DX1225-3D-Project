@@ -180,6 +180,12 @@ public class PlayerController : MonoBehaviour
             followComponent.ShoulderOffset = Vector3.Lerp(followComponent.ShoulderOffset, targetShoulderOffset, Time.deltaTime * 5f);
         }
 
+        Cinemachine3rdPersonFollow followComponent2 = _firstPersonCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+        if (followComponent2 != null)
+        {
+            followComponent2.ShoulderOffset = Vector3.Lerp(followComponent2.ShoulderOffset, targetShoulderOffset, Time.deltaTime * 5f);
+        }
+
         _animator.SetBool("IsCrouching", isCrouching);
     }
 
