@@ -13,7 +13,6 @@ public class MainDoor : MonoBehaviour
     {
         if (isUnlocked && other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E))
         {
-            CutsceneManager.Instance.PlayCutscene("AfterMap1");
             OpenDoor();
         }
     }
