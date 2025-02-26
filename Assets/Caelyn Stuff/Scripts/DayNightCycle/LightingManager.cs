@@ -11,6 +11,7 @@ public class LightingManager : MonoBehaviour
     [SerializeField] private LightingPreset preset;
     // Variables
     [SerializeField, Range(0, 24)] private float time;
+    [SerializeField] private float timeMultiplier = 0.1f; // Adjust this to control speed
 
     private void Update()
     {
@@ -19,7 +20,7 @@ public class LightingManager : MonoBehaviour
 
         if (Application.isPlaying)
         {
-            time += Time.deltaTime;
+            time += Time.deltaTime * timeMultiplier;
             time %= 24; // Clamp between 0-24
             UpdateLighting(time / 24f);
         }
