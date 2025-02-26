@@ -38,7 +38,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: c5623863044f015409732cc2c6ec0b64, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicMap:
@@ -67,14 +67,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BottomLine: 0.637
+    - _BottomLine: 0.792
     - _Metallic: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Smoothness: 1
-    - _TopLine: 0.776
+    - _Smoothness: 0.693
+    - _TopLine: 0.596
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BottomColor: {r: 1, g: 0, b: 0, a: 1}
-    - _TopColor: {r: 1, g: 0.07557702, b: 0, a: 1}
+    - _BaseColor: {r: 0.4339623, g: 0.4339623, b: 0.4339623, a: 1}
+    - _BottomColor: {r: 0, g: 0.27494478, b: 1, a: 1}
+    - _TopColor: {r: 0.40901873, g: 1, b: 0.35534585, a: 1}
   m_BuildTextureStacks: []
