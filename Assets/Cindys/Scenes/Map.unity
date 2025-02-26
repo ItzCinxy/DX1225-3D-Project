@@ -53809,6 +53809,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 55025328860115417, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: coinAmount
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 342206559525137037, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -65254,6 +65259,74 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1594855330}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1597905193
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5710878915395878391, guid: e172d113a3539af44bd9f6d9d93113a2,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.9790554
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710878915395878391, guid: e172d113a3539af44bd9f6d9d93113a2,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.919
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710878915395878391, guid: e172d113a3539af44bd9f6d9d93113a2,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8.195709
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710878915395878391, guid: e172d113a3539af44bd9f6d9d93113a2,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710878915395878391, guid: e172d113a3539af44bd9f6d9d93113a2,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710878915395878391, guid: e172d113a3539af44bd9f6d9d93113a2,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710878915395878391, guid: e172d113a3539af44bd9f6d9d93113a2,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710878915395878391, guid: e172d113a3539af44bd9f6d9d93113a2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710878915395878391, guid: e172d113a3539af44bd9f6d9d93113a2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710878915395878391, guid: e172d113a3539af44bd9f6d9d93113a2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013106250788918190, guid: e172d113a3539af44bd9f6d9d93113a2,
+        type: 3}
+      propertyPath: m_Name
+      value: Lucky Box
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e172d113a3539af44bd9f6d9d93113a2, type: 3}
 --- !u!1001 &1598351817
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -109925,3 +109998,4 @@ SceneRoots:
   - {fileID: 1658087278}
   - {fileID: 543039223}
   - {fileID: 70584656}
+  - {fileID: 1597905193}

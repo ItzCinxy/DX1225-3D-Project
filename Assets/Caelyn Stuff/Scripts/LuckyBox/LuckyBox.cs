@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using TMPro;
+using UnityEngine.ProBuilder;
 
 public class LuckyBox : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class LuckyBox : MonoBehaviour
     private bool isBoxActive = false;
     private WeaponBase floatingWeapon = null;
     [SerializeField] private float interactionRange = 3f; // Adjust the distance for showing text
-    [SerializeField] private Transform playerTransform; // Assign the player's transform in the Inspector
+    private Transform playerTransform; // Assign the player's transform in the Inspector
 
     [Header("Box Models")]
     [SerializeField] private GameObject openBoxModel;  // ✅ Assign the open model in the Inspector
@@ -29,6 +30,16 @@ public class LuckyBox : MonoBehaviour
     private void Start()
     {
         playerStats = FindObjectOfType<PlayerStats>();
+
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            playerTransform = player.transform;
+        }
+        else
+        {
+            Debug.LogError("No GameObject with tag 'Player' found! Set the player's tag to 'Player'.");
+        }
     }
 
     private void Update()
@@ -40,6 +51,12 @@ public class LuckyBox : MonoBehaviour
         if (distanceToPlayer <= interactionRange)
         {
             interactText.gameObject.SetActive(true);
+            // Make the text face the camera
+            if (Camera.main != null)
+            {
+                interactText.transform.LookAt(Camera.main.transform);
+                interactText.transform.Rotate(0, 180, 0); // Flip it to face the player properly
+            }
         }
         else
         {
@@ -75,7 +92,7 @@ public class LuckyBox : MonoBehaviour
         {
             interactText.text = "Not Enough Money"; // Show message
             yield return new WaitForSeconds(1.5f); // Wait before resetting
-            interactText.text = "Press 'E' to use"; // Reset to default
+            interactText.text = "Press 'E' with 5 credits to use"; // Reset to default
         }
     }
 
@@ -140,7 +157,7 @@ public class LuckyBox : MonoBehaviour
             floatingWeapon.gameObject.AddComponent<FloatingWeapon>();
         }
 
-        interactText.text = "Press 'E' to swap";
+        interactText.text = "Press 'E' to equip";
         Debug.Log("Weapon spawned: " + floatingWeapon.name);
 
         yield return new WaitForSeconds(weaponLifetime); // Wait before removing the weapon
@@ -154,7 +171,7 @@ public class LuckyBox : MonoBehaviour
 
         yield return new WaitForSeconds(boxCooldown); // ✅ Wait before allowing interaction again
 
-        interactText.text = "Press 'E' to use";
+        interactText.text = "Press 'E' with 5 credits to use";
         SetBoxState(false);
         isBoxActive = false; // ✅ Now the player can interact again
     }
