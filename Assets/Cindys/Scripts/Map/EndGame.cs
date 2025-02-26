@@ -23,7 +23,7 @@ public class EndGame : MonoBehaviour
 
     private void PlayCutscene()
     {
-        CutsceneManager.Instance.PlayCutscene(1);
+        CutsceneManager.Instance.PlayCutscene("EndingWinScene");
 
         //if (cutsceneDirector != null)
         //{

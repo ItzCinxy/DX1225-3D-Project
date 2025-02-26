@@ -8,6 +8,7 @@ public class SoundManager : MonoBehaviour
     [Header("Audio Sources")]
     public AudioSource bgmChannel;
     public AudioSource sfxChannel;
+    public AudioSource loopSfxChannel; // Separate channel for looping sounds like walking/running
 
     [Header("BGM Clips")]
     public List<AudioClip> bgmClips = new List<AudioClip>(); // Assign in Inspector
@@ -16,27 +17,12 @@ public class SoundManager : MonoBehaviour
     public AudioClip playerHurt;
     public AudioClip playerDie;
     public AudioClip playerJump;
+    public AudioClip playerWalk;
+    public AudioClip playerRun;
 
     private bool isPaused = false;
 
     private void Awake()
-    {
-        //if (Instance != null && Instance != this)
-        //{
-        //    Destroy(gameObject);
-        //    return;
-        //}
-
-        //Instance = this;
-        //DontDestroyOnLoad(gameObject);
-
-        //if (bgmChannel != null)
-        //{
-        //    bgmChannel.loop = true; // Ensure BGM loops
-        //}
-    }
-
-    private void Start()
     {
         if (Instance != null && Instance != this)
         {
@@ -45,7 +31,10 @@ public class SoundManager : MonoBehaviour
         }
 
         Instance = this;
+    }
 
+    private void Start()
+    {
         if (bgmChannel != null)
         {
             bgmChannel.loop = true; // Ensure BGM loops
@@ -55,16 +44,7 @@ public class SoundManager : MonoBehaviour
     public void TogglePause()
     {
         isPaused = !isPaused;
-
-        if (isPaused)
-        {
-            AudioListener.pause = true; // Pause all sounds
-        }
-        else
-        {
-
-            AudioListener.pause = false; // Resume sounds
-        }
+        AudioListener.pause = isPaused;
     }
 
     public void PlaySFX(AudioClip clip)
@@ -75,11 +55,35 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    // Play a specific BGM (e.g., for a map)
+    public void PlayLoopingSFX(AudioClip clip)
+    {
+        if (clip == null || loopSfxChannel == null) return;
+
+        // Only play if the sound is not already playing
+        if (!loopSfxChannel.isPlaying || loopSfxChannel.clip != clip)
+        {
+            loopSfxChannel.clip = clip;
+            loopSfxChannel.loop = true;
+            loopSfxChannel.Play();
+        }
+    }
+
+    public void StopLoopingSFX()
+    {
+        if (loopSfxChannel != null)
+        {
+            loopSfxChannel.Stop();
+        }
+    }
+
+    public bool IsPlaying(AudioClip clip)
+    {
+        return loopSfxChannel != null && loopSfxChannel.isPlaying && loopSfxChannel.clip == clip;
+    }
+
     public void PlayBGM(int index)
     {
         if (bgmClips.Count == 0 || index >= bgmClips.Count) return;
-
 
         bgmChannel.clip = bgmClips[index];
         bgmChannel.Play();

@@ -283,6 +283,7 @@ public class PlayerController : MonoBehaviour
         }
 
         float currentSpeed = moveSpeed;
+        AudioClip movementSound = null;
 
         if (isCrouching)
         {
@@ -290,8 +291,23 @@ public class PlayerController : MonoBehaviour
         }
         else if (isSprinting)
         {
+            movementSound = SoundManager.Instance.playerRun;
             currentSpeed *= sprintSpeedMultiplier;
             _playerStats.UseStamina(0.1f);
+        }
+        else if (isMoving && isGrounded)
+        {
+            movementSound = SoundManager.Instance.playerWalk;
+        }
+
+        // Play only if the movement sound changes
+        if (movementSound != null)
+        {
+            SoundManager.Instance.PlayLoopingSFX(movementSound);
+        }
+        else
+        {
+            SoundManager.Instance.StopLoopingSFX();
         }
 
         ResetMovementAnimations();
@@ -303,6 +319,7 @@ public class PlayerController : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
     }
+
 
     private Vector3 CalculateMoveDirection()
     {
