@@ -117,7 +117,7 @@ public class TankZombieAIController : MonoBehaviour
 
         ResetAllAnimationBools(); // Ensure only one bool is active at a time
 
-        Debug.Log($"Zombie changed state to: {currentState}");
+        //Debug.Log($"Zombie changed state to: {currentState}");
 
         switch (currentState)
         {
@@ -213,7 +213,7 @@ public class TankZombieAIController : MonoBehaviour
         if (isDying || isConvulsing) return;
 
         currentHealth -= damage;
-        Debug.Log($"{gameObject.name} took {damage} damage! HP: {currentHealth}");
+        //Debug.Log($"{gameObject.name} took {damage} damage! HP: {currentHealth}");
 
         if (healthBar != null)
         {
@@ -387,7 +387,7 @@ public class TankZombieAIController : MonoBehaviour
         // Ensure the player is still in attack range before applying damage
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
         {
-            Debug.Log("Zombie attack landed!");
+            //Debug.Log("Zombie attack landed!");
             playerstats?.TakeDamage((float)attackDamage); // Apply damage
             _player.ApplyKnockback(transform.position, 10, 10);
         }

@@ -33,7 +33,7 @@ public class WeaponRaycast : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, shootRange, targetLayer))
         {
-            Debug.Log($"Hit: {hit.collider.gameObject.name}");
+           // Debug.Log($"Hit: {hit.collider.gameObject.name}");
 
             Target target = hit.collider.GetComponent<Target>();
             if (target != null)

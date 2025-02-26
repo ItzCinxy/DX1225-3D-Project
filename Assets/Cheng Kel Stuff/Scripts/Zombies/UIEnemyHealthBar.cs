@@ -24,7 +24,7 @@ public class UIEnemyHealthBar : MonoBehaviour
 
     public void SetHealth(int health)
     {
-        Debug.Log($"Updating Enemy HP Bar: {health} / {slider.maxValue}");
+
 
         if (healthBarLerpCoroutine != null)
         {

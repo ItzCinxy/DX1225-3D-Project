@@ -113,7 +113,7 @@ public class ChargerAIController : MonoBehaviour
 
         ResetAllAnimationBools(); // Ensure only one bool is active at a time
 
-        Debug.Log($"Zombie changed state to: {currentState}");
+        //Debug.Log($"Zombie changed state to: {currentState}");
 
         switch (currentState)
         {
@@ -209,7 +209,7 @@ public class ChargerAIController : MonoBehaviour
         if (isDying || isConvulsing) return;
 
         currentHealth -= damage;
-        Debug.Log($"{gameObject.name} took {damage} damage! HP: {currentHealth}");
+        //Debug.Log($"{gameObject.name} took {damage} damage! HP: {currentHealth}");
 
         if (healthBar != null)
         {
