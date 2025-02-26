@@ -20,6 +20,6 @@ public class MainDoor : MonoBehaviour
 
     private void OpenDoor()
     {
-        SceneChanger.Instance.ChangeMap();
+        MapChanger.Instance.ChangeMap();
     }
 }
