@@ -38,7 +38,7 @@ public abstract class WeaponBase : MonoBehaviour
 
     public virtual void Reload()
     {
-        if (isReloading || totalAmmo <= 0) return;
+        if (isReloading || totalAmmo <= 0 || currentAmmoInMag >= maxMagazineSize) return;
         StartCoroutine(ReloadRoutine());
     }
 
