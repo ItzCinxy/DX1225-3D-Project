@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneChanger : MonoBehaviour
+public class MapChanger : MonoBehaviour
 {
-    public static SceneChanger Instance { get; private set; }
+    public static MapChanger Instance { get; private set; }
 
     [SerializeField] private List<GameObject> maps; // List of maps
     [SerializeField] private Transform player;
