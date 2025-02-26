@@ -2791,10 +2791,13 @@ MonoBehaviour:
     type: 3}
   healthPrefab: {fileID: 6477114811567125893, guid: 1188a74ac345e70499c4a52c498df245,
     type: 3}
-  _separationWeight: 0.5
-  _cohesionWeight: 0.5
-  _alignmentWeight: 0.5
-  _neighbourRadius: 5
+  ZombieSounds: {fileID: 0}
+  AudioSource: {fileID: 0}
+  isDying: 0
+  _separationWeight: 0
+  _cohesionWeight: 0
+  _alignmentWeight: 0
+  _neighbourRadius: 0
 --- !u!1 &7065884196299369448
 GameObject:
   m_ObjectHideFlags: 0
