@@ -321,14 +321,15 @@ MonoBehaviour:
   - {fileID: 2643555289510151061, guid: 8bfd4086ca86324488ec1b7cb63a92f1, type: 3}
   - {fileID: 6055461160669010065, guid: bd43cf8928203974686db5a800b8652a, type: 3}
   weaponSpawnPoint: {fileID: 3209650411527600761}
-  boxCooldown: 3
+  boxCooldown: 1
   weaponLifetime: 3
   costToOpen: 5
   interactText: {fileID: 5160634804698247779}
-  openBoxSound: {fileID: 0}
-  receiveWeaponSound: {fileID: 0}
+  openBoxSound: {fileID: 8300000, guid: 94172b4f13acd6847b149bbe5c005ec7, type: 3}
+  rollingSFX: {fileID: 8300000, guid: cb92661572fd42545981df5bdb037eed, type: 3}
+  closeBoxSound: {fileID: 8300000, guid: 5b5b1a580e6b273408f92fce2b6773cf, type: 3}
+  receiveWeaponSound: {fileID: 8300000, guid: 8cf91b3a3bdd7604b97a7f8e866f839e, type: 3}
   interactionRange: 3
-  playerTransform: {fileID: 0}
   openBoxModel: {fileID: 7065447736825527576}
   closedBoxModel: {fileID: 1881221193113671935}
 --- !u!65 &2991020581181022813

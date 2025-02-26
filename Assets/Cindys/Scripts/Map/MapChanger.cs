@@ -11,7 +11,6 @@ public class MapChanger : MonoBehaviour
     [SerializeField] private List<Vector3> spawnPositions; // List of player spawn positions
 
     private int currentMapIndex = 0;
-    private bool waitingForCutsceneToEnd = false;
 
     private void Start()
     {
@@ -30,29 +29,12 @@ public class MapChanger : MonoBehaviour
             return;
         }
 
-        // Subscribe to cutscene end event
-        if (CutsceneManager.Instance != null)
-        {
-            CutsceneManager.Instance.director.stopped += OnCutsceneEnd;
-        }
     }
 
     public void ChangeMap()
     {
         if (maps.Count == 0 || player == null || spawnPositions.Count == 0) return;
 
-        // If a cutscene is playing, wait for it to end before teleporting
-        if (CutsceneManager.Instance != null && CutsceneManager.Instance.IsCutscenePlaying)
-        {
-            waitingForCutsceneToEnd = true;
-            return;
-        }
-
-        TeleportPlayerAndChangeMap();
-    }
-
-    private void TeleportPlayerAndChangeMap()
-    {
         maps[currentMapIndex].SetActive(false);
 
         currentMapIndex = (currentMapIndex + 1) % maps.Count;
@@ -65,15 +47,6 @@ public class MapChanger : MonoBehaviour
         ObjectiveManager.Instance.SetMapObjectives(currentMapIndex + 1);
     }
 
-    private void OnCutsceneEnd(PlayableDirector pd)
-    {
-        if (waitingForCutsceneToEnd)
-        {
-            waitingForCutsceneToEnd = false;
-            TeleportPlayerAndChangeMap();
-        }
-    }
-
     private void ActivateMap(int index)
     {
         foreach (GameObject map in maps)
@@ -84,15 +57,6 @@ public class MapChanger : MonoBehaviour
         if (maps.Count > 0)
         {
             maps[index].SetActive(true);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        // Unsubscribe from the cutscene event
-        if (CutsceneManager.Instance != null)
-        {
-            CutsceneManager.Instance.director.stopped -= OnCutsceneEnd;
         }
     }
 }
