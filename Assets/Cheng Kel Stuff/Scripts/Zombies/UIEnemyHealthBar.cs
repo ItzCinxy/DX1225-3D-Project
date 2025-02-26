@@ -24,7 +24,7 @@ public class UIEnemyHealthBar : MonoBehaviour
 
     public void SetHealth(int health)
     {
-
+        //Debug.Log($"Updating Enemy HP Bar: {health} / {slider.maxValue}");
 
         if (healthBarLerpCoroutine != null)
         {
@@ -110,7 +110,7 @@ public class UIEnemyHealthBar : MonoBehaviour
         // Fallback if no active camera found
         if (activeCamera == null)
         {
-            Debug.LogWarning("No active camera found for UIEnemyHealthBar!");
+            //Debug.LogWarning("No active camera found for UIEnemyHealthBar!");
         }
     }
 }
