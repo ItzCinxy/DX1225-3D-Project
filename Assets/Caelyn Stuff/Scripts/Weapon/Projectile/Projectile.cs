@@ -56,6 +56,8 @@ public class Projectile : MonoBehaviour
                 bmbAI.TakeDamage(finalDamage);
             //else if (nearby.TryGetComponent(out ScreamerZombieAIController scrmAI))
             //    scrmAI.TakeDamage(finalDamage);
+            else if (nearby.TryGetComponent(out SpitterZombieAIController spitAI))
+                spitAI.TakeDamage(finalDamage);
             else if (nearby.TryGetComponent(out ChargerAIController chrgAI))
                 chrgAI.TakeDamage(finalDamage);
         }
