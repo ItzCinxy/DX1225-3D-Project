@@ -308,9 +308,4 @@ public class PlayerController : MonoBehaviour
 
         Debug.Log("Player knocked back!");
     }
-
-    public bool GetIsFirstPerson()
-    {
-        return isFirstPerson;
-    }
 }
