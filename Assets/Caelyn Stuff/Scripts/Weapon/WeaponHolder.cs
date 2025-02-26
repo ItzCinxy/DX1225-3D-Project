@@ -366,6 +366,22 @@ public class WeaponHolder : MonoBehaviour
             weapon.transform.SetParent(targetHolder);
             weapon.transform.localPosition = Vector3.zero;
             weapon.transform.localRotation = Quaternion.identity;
+
+            // Change the weapon tag based on the camera mode
+            if (isFirstPerson)
+            {
+                weapon.gameObject.layer = LayerMask.NameToLayer("Weapon"); // Equipped weapon in FPS mode
+            }
+            else
+            {
+                weapon.gameObject.layer = LayerMask.NameToLayer("Pickup"); // Droppable weapon in TPS mode
+            }
+
+            // Apply tag change to all child objects (attachments, scopes, etc.)
+            foreach (Transform child in weapon.transform)
+            {
+                child.gameObject.tag = weapon.gameObject.tag;
+            }
         }
     }
 
