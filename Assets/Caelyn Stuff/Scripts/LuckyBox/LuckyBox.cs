@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using TMPro;
+using UnityEngine.ProBuilder;
 
 public class LuckyBox : MonoBehaviour
 {
@@ -15,10 +16,7 @@ public class LuckyBox : MonoBehaviour
     [Header("References")]
     [SerializeField] private TMP_Text interactText; // UI text to display "Press E to use"
     [SerializeField] private AudioClip openBoxSound;
-    [SerializeField] private AudioClip rollingSFX;
-    [SerializeField] private AudioClip closeBoxSound;
     [SerializeField] private AudioClip receiveWeaponSound;
-    private AudioSource audioSource;
 
     private bool isBoxActive = false;
     private WeaponBase floatingWeapon = null;
@@ -42,9 +40,6 @@ public class LuckyBox : MonoBehaviour
         {
             Debug.LogError("No GameObject with tag 'Player' found! Set the player's tag to 'Player'.");
         }
-
-        audioSource = gameObject.AddComponent<AudioSource>();
-        audioSource.playOnAwake = false;
     }
 
     private void Update()
@@ -97,7 +92,7 @@ public class LuckyBox : MonoBehaviour
         {
             interactText.text = "Not Enough Money"; // Show message
             yield return new WaitForSeconds(1.5f); // Wait before resetting
-            interactText.text = "Press 'E' with 5 Credits to open"; // Reset to default
+            interactText.text = "Press 'E' with 5 credits to use"; // Reset to default
         }
     }
 
@@ -116,19 +111,13 @@ public class LuckyBox : MonoBehaviour
         if (openBoxSound != null)
             AudioSource.PlayClipAtPoint(openBoxSound, transform.position);
 
-        yield return new WaitForSeconds(0.5f); // Short delay before rolling starts
-
-        if (rollingSFX != null)
-            audioSource.PlayOneShot(rollingSFX);
-
-        yield return new WaitForSeconds(2f); // Rolling effect
+        yield return new WaitForSeconds(2f); // Simulate rolling effect
 
         // ✅ Make sure weaponPool is not empty
         if (weaponPool == null || weaponPool.Length == 0)
         {
             Debug.LogError("Weapon Pool is empty! Add weapon prefabs in the Inspector.");
             SetBoxState(false); // ✅ Close box if no weapon is found
-            PlayClosingSound();
             isBoxActive = false; // ✅ Allow interaction again
             yield break;
         }
@@ -141,7 +130,6 @@ public class LuckyBox : MonoBehaviour
         {
             Debug.LogError("Weapon prefab is missing in weaponPool!");
             SetBoxState(false); // ✅ Close box if something goes wrong
-            PlayClosingSound();
             isBoxActive = false; // ✅ Allow interaction again
             yield break;
         }
@@ -169,10 +157,7 @@ public class LuckyBox : MonoBehaviour
             floatingWeapon.gameObject.AddComponent<FloatingWeapon>();
         }
 
-        if (receiveWeaponSound != null)
-            audioSource.PlayOneShot(receiveWeaponSound);
-
-        interactText.text = "Press 'E' to pick up";
+        interactText.text = "Press 'E' to equip";
         Debug.Log("Weapon spawned: " + floatingWeapon.name);
 
         yield return new WaitForSeconds(weaponLifetime); // Wait before removing the weapon
@@ -186,9 +171,8 @@ public class LuckyBox : MonoBehaviour
 
         yield return new WaitForSeconds(boxCooldown); // ✅ Wait before allowing interaction again
 
-        interactText.text = "Press 'E' with 5 Credits to open";
+        interactText.text = "Press 'E' with 5 credits to use";
         SetBoxState(false);
-        PlayClosingSound();
         isBoxActive = false; // ✅ Now the player can interact again
     }
 
@@ -198,11 +182,5 @@ public class LuckyBox : MonoBehaviour
         {
             floatingWeapon = null; // Clear the reference so the box no longer tracks it
         }
-    }
-
-    private void PlayClosingSound()
-    {
-        if (closeBoxSound != null)
-            audioSource.PlayOneShot(closeBoxSound);
     }
 }
