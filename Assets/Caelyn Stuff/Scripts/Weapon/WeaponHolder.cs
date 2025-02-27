@@ -316,7 +316,7 @@ public class WeaponHolder : MonoBehaviour
             BomberZombieAIController bomberZombie = hitCollider.GetComponent<BomberZombieAIController>();
             //ScreamerZombieAIController screamerZombie = hitCollider.GetComponent<ScreamerZombieAIController>();
             //ToxicroakZombieAIController toxicroakZombie = hitCollider.GetComponent<ToxicroakZombieAIController>();
-            //SpitterZombieAIController spitterZombie = hitCollider.GetComponent<SpitterZombieAIController>();
+            SpitterZombieAIController spitterZombie = hitCollider.GetComponent<SpitterZombieAIController>();
 
             if (standardZombie != null && !standardZombie.isDying)
             {
@@ -348,11 +348,11 @@ public class WeaponHolder : MonoBehaviour
             //    toxicroakZombie.RotateTowardPlayer();
             //    toxicroakZombie.ChangeState(ToxicroakZombieAIController.EnemyState.Run);
             //}
-            //else if (spitterZombie != null && !spitterZombie.isDying)
-            //{
-            //    spitterZombie.RotateTowardPlayer();
-            //    spitterZombie.ChangeState(SpitterZombieAIController.EnemyState.Run);
-            //}
+            else if (spitterZombie != null && !spitterZombie.isDying)
+            {
+                spitterZombie.RotateTowardPlayer();
+                spitterZombie.ChangeState(SpitterZombieAIController.EnemyState.Run);
+            }
         }
     }
 
