@@ -47,6 +47,7 @@ public class BomberZombieAIController : MonoBehaviour
     [SerializeField] private GameObject ammoPrefab;
     [SerializeField] private GameObject healthPrefab;
     [SerializeField] private GameObject explosionEffectPrefab;
+    [SerializeField] private GameObject GrenadePickUpPrefab;
 
     [Header("Zombie Audio")]
     public AudioClip ZombieSounds;
@@ -295,7 +296,7 @@ public class BomberZombieAIController : MonoBehaviour
     {
         ObjectiveManager.Instance.ZombieKilled();
         // Randomly decide whether to drop health or ammo (50% chance for each)
-        int dropChance = Random.Range(0, 5);
+        int dropChance = Random.Range(0, 6);
         if (dropChance == 0 && ammoPrefab != null)
         {
             Instantiate(ammoPrefab, transform.position, Quaternion.identity);
@@ -303,6 +304,10 @@ public class BomberZombieAIController : MonoBehaviour
         else if (dropChance == 1 && healthPrefab != null)
         {
             Instantiate(healthPrefab, transform.position, Quaternion.identity);
+        }
+        else if (dropChance == 2 && GrenadePickUpPrefab != null)
+        {
+            Instantiate(GrenadePickUpPrefab, transform.position, Quaternion.identity);
         }
 
         // Spawn fire exactly at death spot

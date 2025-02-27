@@ -36,6 +36,7 @@ public class TankZombieAIController : MonoBehaviour
     [Header("Loot Drops")]
     [SerializeField] private GameObject ammoPrefab;
     [SerializeField] private GameObject healthPrefab;
+    [SerializeField] private GameObject GrenadePickUpPrefab;
 
     private Transform player;
     private CharacterController playerController;
@@ -284,7 +285,7 @@ public class TankZombieAIController : MonoBehaviour
     {
         ObjectiveManager.Instance.ZombieKilled();
         // Randomly decide whether to drop health or ammo (50% chance for each)
-        int dropChance = Random.Range(0, 5); // Generates either 0 or 1
+        int dropChance = Random.Range(0, 6); // Generates either 0 or 1
 
         if (dropChance == 0 && ammoPrefab != null)
         {
@@ -293,6 +294,10 @@ public class TankZombieAIController : MonoBehaviour
         else if (dropChance == 1 && healthPrefab != null)
         {
             Instantiate(healthPrefab, transform.position, Quaternion.identity);
+        }
+        else if (dropChance == 2 && GrenadePickUpPrefab != null)
+        {
+            Instantiate(GrenadePickUpPrefab, transform.position, Quaternion.identity);
         }
 
         if (healthBar != null)
