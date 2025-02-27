@@ -65,13 +65,6 @@ public class BomberZombieAIController : MonoBehaviour
 
     int canStartAttack = 1;
 
-    [Header("Flocking")]
-    private List<BomberZombieAIController> zombies;
-    [SerializeField][Range(0, 1)] private float _separationWeight = 0.5f;
-    [SerializeField][Range(0, 1)] private float _cohesionWeight = 0.5f;
-    [SerializeField][Range(0, 1)] private float _alignmentWeight = 0.5f;
-    [SerializeField] private float _neighbourRadius = 5f;
-
     private CapsuleCollider capsuleCollider;
     private Rigidbody _rb;
     void Start()
@@ -95,8 +88,6 @@ public class BomberZombieAIController : MonoBehaviour
             healthBar.SetMaxHealth(maxHealth);
         }
 
-        zombies = new List<BomberZombieAIController>(FindObjectsOfType<BomberZombieAIController>());
-
         capsuleCollider = GetComponent<CapsuleCollider>();
         _rb = GetComponent<Rigidbody>();
 
@@ -106,8 +97,6 @@ public class BomberZombieAIController : MonoBehaviour
     void Update()
     {
         if (isDying || isConvulsing) return;
-
-        zombies.RemoveAll(z => z == null);
 
         switch (currentState)
         {
@@ -320,8 +309,6 @@ public class BomberZombieAIController : MonoBehaviour
 
         playerstats.IncreaseCoin(100);
 
-        zombies.Remove(this);
-
         Destroy(gameObject);
     }
 
@@ -359,8 +346,6 @@ public class BomberZombieAIController : MonoBehaviour
 
     void HandleWalkState()
     {
-        Vector3 flockingForce = ComputeFlocking(); // Weaker flocking influence
-        velocity += flockingForce;
         Seek(targetPosition, walkSpeed);
         if (Vector3.Distance(transform.position, targetPosition) < 1f)
             ChangeState(EnemyState.Idle);
@@ -372,8 +357,6 @@ public class BomberZombieAIController : MonoBehaviour
     {
         if (player == null) return;
 
-        Vector3 flockingForce = ComputeFlocking(); // Weaker flocking influence
-        velocity += flockingForce;
         Seek(player.position, runSpeed);
 
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
@@ -390,39 +373,6 @@ public class BomberZombieAIController : MonoBehaviour
             return;
 
         ChangeState(EnemyState.Run);
-    }
-
-    Vector3 ComputeFlocking()
-    {
-        Vector3 separation = Vector3.zero;
-        Vector3 cohesion = Vector3.zero;
-        Vector3 alignment = Vector3.zero;
-        int neighborCount = 0;
-
-        foreach (BomberZombieAIController zombie in zombies)
-        {
-            if (zombie != this)
-            {
-                float distance = Vector3.Distance(transform.position, zombie.transform.position);
-                if (distance < _neighbourRadius)
-                {
-                    separation += (transform.position - zombie.transform.position).normalized / distance;
-                    cohesion += zombie.transform.position;
-                    alignment += zombie.velocity;
-                    neighborCount++;
-                }
-            }
-        }
-
-        if (neighborCount > 0)
-        {
-            cohesion /= neighborCount;
-            alignment /= neighborCount;
-            cohesion = (cohesion - transform.position).normalized;
-            alignment = alignment.normalized;
-        }
-
-        return (separation * _separationWeight) + (cohesion * _cohesionWeight) + (alignment * _alignmentWeight);
     }
 
 
