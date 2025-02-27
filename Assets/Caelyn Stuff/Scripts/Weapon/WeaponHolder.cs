@@ -15,6 +15,7 @@ public class WeaponHolder : MonoBehaviour
     [Header("Grenade")]
     [SerializeField] private GameObject grenadePrefab;
     [SerializeField] private float throwForce = 10f;
+    [SerializeField] private TMP_Text numOfNadesText;
     public int numOfNades = 0;
 
     [Header("Player Stuff")]
@@ -31,6 +32,7 @@ public class WeaponHolder : MonoBehaviour
     {
         lastFirstPersonState = _playerController.GetIsFirstPerson();
         UpdateWeaponListUI();
+        UpdateNumOfNadesText();
     }
 
     private void Update()
@@ -312,10 +314,10 @@ public class WeaponHolder : MonoBehaviour
         }
     }
 
-
     public void IncreaseNadeAmount()
     {
         numOfNades++;
+        UpdateNumOfNadesText();
     }
 
     private void ThrowNade()
@@ -324,7 +326,7 @@ public class WeaponHolder : MonoBehaviour
 
         // Deduct one grenade from your stash
         numOfNades--;
-
+        UpdateNumOfNadesText();
         // Spawn the grenade at the weaponHolder's position
         Vector3 spawnPosition = thirdPersonWeaponHolder.position;
         GameObject grenadeInstance = Instantiate(grenadePrefab, spawnPosition, Quaternion.identity);
@@ -342,6 +344,14 @@ public class WeaponHolder : MonoBehaviour
         else
         {
             Debug.LogError("Grenade prefab is missing a Rigidbody component. Fix it, please.");
+        }
+    }
+    
+    private void UpdateNumOfNadesText()
+    {
+        if (numOfNadesText != null)
+        {
+            numOfNadesText.text = "Nades: " + numOfNades;
         }
     }
 }
