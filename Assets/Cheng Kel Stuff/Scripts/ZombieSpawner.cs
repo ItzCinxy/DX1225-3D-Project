@@ -18,6 +18,8 @@ public class ZombieSpawner : MonoBehaviour
 
     private List<Vector3> usedSpawnPositions = new List<Vector3>();
 
+    [SerializeField] private GameObject fog;
+
     private void Awake()
     {
         StartCoroutine(WaitForMapChangeAndSpawn());
@@ -41,6 +43,10 @@ public class ZombieSpawner : MonoBehaviour
         {
             SpawnAllZombies();
         }
+
+        fog.SetActive(true);
+        ParticleSystem fogParticle = fog.GetComponent<ParticleSystem>();
+        fogParticle.Play();
     }
 
     void SpawnAllZombies()
