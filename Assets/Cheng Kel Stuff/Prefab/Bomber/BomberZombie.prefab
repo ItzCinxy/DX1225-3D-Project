@@ -2955,7 +2955,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roamRadius: 6
   chaseRange: 36
-  attackRange: 2.5
+  attackRange: 4
   idleTime: 2
   walkTime: 4
   walkSpeed: 3
@@ -2968,7 +2968,7 @@ MonoBehaviour:
   maxHealth: 200
   currentHealth: 0
   attackDamage: 0
-  explosionRadius: 2.5
+  explosionRadius: 15
   explosionDamage: 30
   firePrefab: {fileID: 9014088529870822324, guid: f45dcc5787dc0ba4d9fd56f880dad9c3,
     type: 3}

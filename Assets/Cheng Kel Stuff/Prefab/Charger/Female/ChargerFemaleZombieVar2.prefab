@@ -1123,13 +1123,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e98ffccd51b0ec4d8840a9c9ff44120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roamRadius: 5
+  roamRadius: 7
   chaseRange: 36
   attackRange: 2
-  idleTime: 3
-  walkTime: 5
-  walkSpeed: 3
-  runSpeed: 8
+  idleTime: 2
+  walkTime: 3
+  walkSpeed: 4
+  runSpeed: 10
   visionAngle: 120
   rotationSpeed: 3
   obstacleLayer:
