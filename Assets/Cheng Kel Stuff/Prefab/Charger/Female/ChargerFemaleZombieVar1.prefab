@@ -1793,6 +1793,8 @@ MonoBehaviour:
     type: 3}
   healthPrefab: {fileID: 6477114811567125893, guid: 1188a74ac345e70499c4a52c498df245,
     type: 3}
+  GrenadePickUpPrefab: {fileID: 8949150381175492050, guid: 09b20e8556f4a604fb1e00c48be3ef6c,
+    type: 3}
   isDying: 0
   _separationWeight: 0
   _cohesionWeight: 0

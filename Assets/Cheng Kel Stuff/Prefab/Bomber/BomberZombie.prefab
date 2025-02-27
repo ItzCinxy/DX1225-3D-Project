@@ -2981,6 +2981,8 @@ MonoBehaviour:
     type: 3}
   explosionEffectPrefab: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
     type: 3}
+  GrenadePickUpPrefab: {fileID: 8949150381175492050, guid: 09b20e8556f4a604fb1e00c48be3ef6c,
+    type: 3}
   ZombieSounds: {fileID: 8300000, guid: af64fd26a3be268418c9b533bc6a9f35, type: 3}
   AudioSource: {fileID: 7143791235541815936}
   isDying: 0
