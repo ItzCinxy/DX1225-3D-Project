@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
 public class HomingMissile : MonoBehaviour
@@ -54,11 +54,21 @@ public class HomingMissile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        // ✅ If it hits a zombie, explode
         if (other.CompareTag("Zombie"))
         {
             Explode();
+            return;
+        }
+
+        // ✅ If it hits an obstacle, destroy it (prevent passing through)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Environment") || other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            Debug.Log("Missile hit an obstacle and exploded.");
+            Explode(); // Destroy the missile upon hitting an obstacle
         }
     }
+
     void Explode()
     {
         if (explosionEffectPrefab != null)

@@ -43,6 +43,13 @@ public class MapChanger : MonoBehaviour
 
         player.position = spawnPositions[currentMapIndex];
 
+        //Move the drone to the player’s new position
+        GameObject drone = GameObject.FindGameObjectWithTag("Drone");
+        if (drone != null)
+        {
+            drone.transform.position = player.position + new Vector3(0, 2, 0); // Adjust height if needed
+        }
+
         SoundManager.Instance.PlayBGM(currentMapIndex);
         ObjectiveManager.Instance.SetMapObjectives(currentMapIndex + 1);
     }
