@@ -10,9 +10,11 @@ public class Menu : MonoBehaviour
     [SerializeField] private GameObject controlPanel;
     [SerializeField] private GameObject SettingsPanel;
 
+    private bool isPaused = false; // Track the pause state
+
     void Update()
     {
-        if (controlPanel.activeSelf || SettingsPanel.activeSelf) return;    
+        if (controlPanel.activeSelf || SettingsPanel.activeSelf) return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -27,23 +29,17 @@ public class Menu : MonoBehaviour
         HandleGamePause(menu.activeSelf);
     }
 
-    //public void ResetAll()
-    //{
-    //    ResetAllNoLoad();
-    //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    //}
-
-    //public void ResetAllNoLoad()
-    //{
-    //    PlayerPrefs.DeleteAll();
-    //    HandleGamePause(false);
-    //}
-
-    void HandleGamePause(bool isPaused)
+    void HandleGamePause(bool pause)
     {
+        isPaused = pause;
         Time.timeScale = isPaused ? 0f : 1f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+    }
+
+    public bool GetIsPaused()
+    {
+        return isPaused;
     }
 
     public void ReturnBackToMenu()
@@ -70,9 +66,7 @@ public class Menu : MonoBehaviour
     public void ExitBtn()
     {
         PlayerPrefs.DeleteAll();
-
         HandleGamePause(false);
-
         SceneManager.LoadScene("Main Menu");
     }
 }

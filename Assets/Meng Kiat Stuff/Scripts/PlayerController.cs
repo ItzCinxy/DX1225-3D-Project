@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float bobSpeed = 6f;
     [SerializeField] private float bobAmount = 0.05f;
 
+    [SerializeField] private Menu menu;
+
     private float defaultCameraY;
     private float bobTimer;
 
@@ -76,7 +78,7 @@ public class PlayerController : MonoBehaviour
         HandleCameraToggle();
         HandleGamePause();
 
-        if (isSkillTreeOpen)
+        if (isSkillTreeOpen || menu.GetIsPaused())
         {
             Time.timeScale = 0;
             return;
