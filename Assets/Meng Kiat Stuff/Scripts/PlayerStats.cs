@@ -11,7 +11,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float currentHealth;
 
     [Header("Stamina Settings")]
-    private float baseStaminaRegen = 0.01f;
+    private float baseStaminaRegen = 1f;
     private float maxStamina = 100f;
     [SerializeField] private float currentStamina;
 

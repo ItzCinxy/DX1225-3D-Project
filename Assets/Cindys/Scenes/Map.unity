@@ -44273,6 +44273,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3287674359219554678, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
+      propertyPath: menu
+      value: 
+      objectReference: {fileID: 1658087277}
+    - target: {fileID: 3287674359219554678, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
       propertyPath: activePanels.Array.data[0]
       value: 
       objectReference: {fileID: 2004568887}
@@ -53514,7 +53519,7 @@ MonoBehaviour:
     objectiveName: Zombie Slayer
     type: 1
     isCompleted: 0
-    totalRequired: 1
+    totalRequired: 5
     currentProgress: 0
   map1KeyLocation: {fileID: 1135591754}
   map1DoorLocation: {fileID: 614647132}
