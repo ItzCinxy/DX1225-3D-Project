@@ -29024,9 +29024,9 @@ MonoBehaviour:
   - {fileID: 7997650950129744345, guid: c5b115129734b2447b2f4a965d3268d8, type: 3}
   - {fileID: 2828529877596690705, guid: c3fff07140ad38d4f9b79001ace87a61, type: 3}
   - {fileID: 6152807240969163700, guid: 9485bb5c7c5c15442b2ec37a09efebb5, type: 3}
-  totalZombies: 600
-  spawnRadius: 50
-  minSpawnDistance: 2
+  totalZombies: 800
+  spawnRadius: 100
+  minSpawnDistance: 1.25
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 0
