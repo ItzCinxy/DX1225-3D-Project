@@ -5,21 +5,32 @@ using UnityEngine;
 public class ZombieSpawner : MonoBehaviour
 {
     [Header("Zombie Spawning Settings")]
-    public List<GameObject> zombiePrefabs; // List of zombie prefabs (drag in the Inspector)
+    public List<GameObject> zombiePrefabs; // List of zombie prefabs
     public int totalZombies = 350; // Total number of zombies to spawn
-    public float spawnRadius = 50f; // Radius around the spawner to spawn zombies
-    public float minSpawnDistance = 2f; // Minimum distance between zombies to prevent overlapping
-    public LayerMask obstacleLayer; // Prevents spawning inside obstacles
+    public float spawnRadius = 50f; // Radius around the spawner
+    public float minSpawnDistance = 2f; // Prevents overlapping
+    public LayerMask obstacleLayer; // Prevent spawning in walls
 
     [Header("Spawning Optimization")]
-    public bool spawnInWaves = false; // If true, zombies spawn over time instead of instantly
-    public int zombiesPerWave = 50; // Number of zombies per wave
-    public float waveInterval = 5f; // Time between waves
+    public bool spawnInWaves = false;
+    public int zombiesPerWave = 50;
+    public float waveInterval = 5f;
 
-    private List<Vector3> usedSpawnPositions = new List<Vector3>(); // Stores used positions to prevent overlap
+    private List<Vector3> usedSpawnPositions = new List<Vector3>();
 
-    void Awake()
+    private void Awake()
     {
+        StartCoroutine(WaitForMapChangeAndSpawn());
+    }
+
+    IEnumerator WaitForMapChangeAndSpawn()
+    {
+        //Wait until `MapChanger` finishes changing maps
+        while (MapChanger.Instance == null)
+        {
+            yield return null; // Wait a frame
+        }
+
         if (spawnInWaves)
         {
             StartCoroutine(SpawnInWaves());
@@ -64,7 +75,7 @@ public class ZombieSpawner : MonoBehaviour
 
     Vector3 GetValidSpawnPosition()
     {
-        for (int i = 0; i < 10; i++) // Try 10 times to find a valid position
+        for (int i = 0; i < 10; i++)
         {
             Vector3 randomPosition = transform.position + new Vector3(
                 Random.Range(-spawnRadius, spawnRadius),
@@ -72,10 +83,8 @@ public class ZombieSpawner : MonoBehaviour
                 Random.Range(-spawnRadius, spawnRadius)
             );
 
-            // Check if position is inside obstacles
             if (!Physics.CheckSphere(randomPosition, minSpawnDistance, obstacleLayer))
             {
-                // Ensure no other zombies are too close
                 bool tooClose = false;
                 foreach (Vector3 pos in usedSpawnPositions)
                 {
@@ -93,13 +102,12 @@ public class ZombieSpawner : MonoBehaviour
                 }
             }
         }
-        return Vector3.zero; // No valid position found
+        return Vector3.zero;
     }
 
     void SpawnZombie(Vector3 position)
     {
-        if (zombiePrefabs.Count == 0) return; // No prefabs assigned
-
+        if (zombiePrefabs.Count == 0) return;
         GameObject zombiePrefab = zombiePrefabs[Random.Range(0, zombiePrefabs.Count)];
         Instantiate(zombiePrefab, position, Quaternion.identity);
     }
