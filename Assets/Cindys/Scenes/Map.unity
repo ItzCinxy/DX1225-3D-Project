@@ -52517,7 +52517,6 @@ MonoBehaviour:
   timelines:
   - {fileID: 11400000, guid: 03ef140edf444b940829813ac9ec1830, type: 2}
   - {fileID: 11400000, guid: 3dd8be218d5fa7540867f86e1e23e6d9, type: 2}
-  Zombie: {fileID: 1594091755}
   PlayerUIpanel: {fileID: 762529534}
 --- !u!1001 &1659749201
 PrefabInstance:
@@ -85895,6 +85894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8e702300f5b10748bb399b5e71448e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Zombie: {fileID: 1594091755}
 --- !u!64 &9206024015209024939
 MeshCollider:
   m_ObjectHideFlags: 0

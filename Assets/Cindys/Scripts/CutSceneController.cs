@@ -9,8 +9,6 @@ public class CutsceneManager : MonoBehaviour
     public PlayableDirector director; // Reference to a single PlayableDirector
     public PlayableAsset[] timelines; // Assign different Timelines in the Inspector
 
-    public GameObject Zombie;
-
     [SerializeField] private GameObject PlayerUIpanel;
 
     public bool IsCutscenePlaying { get; private set; } = false; // Public read-only access
@@ -62,7 +60,6 @@ public class CutsceneManager : MonoBehaviour
             StopCutscene();
             director.playableAsset = selectedTimeline;
             IsCutscenePlaying = true; // Set flag to true
-            Zombie.SetActive(false);
 
             if (PlayerUIpanel != null) PlayerUIpanel.SetActive(false);
 

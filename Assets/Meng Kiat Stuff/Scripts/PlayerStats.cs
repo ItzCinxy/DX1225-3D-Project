@@ -247,7 +247,7 @@ public class PlayerStats : MonoBehaviour
 
     public void IncreaseHealthRegen(float amountToIncrease)
     {
-        healthRegenSpeed += amountToIncrease + 1f;
+        healthRegenSpeed += amountToIncrease + 0.4f;
     }
 
     public void IncreaseStaminaRegen(float amountToIncrease)

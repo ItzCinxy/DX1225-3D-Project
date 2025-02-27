@@ -6,6 +6,7 @@ public class EndGame : MonoBehaviour
 {
     private bool isUnlocked = false;
     private bool CutScenePlaying = false;
+    public GameObject Zombie;
 
     public void UnlockDoor()
     {
@@ -24,6 +25,7 @@ public class EndGame : MonoBehaviour
     private void PlayCutscene()
     {
         CutsceneManager.Instance.PlayCutscene("EndingWinScene");
+        Zombie.SetActive(false);
 
         //if (cutsceneDirector != null)
         //{
