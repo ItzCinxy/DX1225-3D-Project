@@ -2635,8 +2635,8 @@ MonoBehaviour:
   walkTime: 5
   walkSpeed: 1.5
   runSpeed: 4
-  visionAngle: 60
-  rotationSpeed: 5
+  visionAngle: 180
+  rotationSpeed: 3
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
