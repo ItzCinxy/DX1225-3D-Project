@@ -118,13 +118,6 @@ public class DroneAITYPE1 : MonoBehaviour
             }
         }
 
-        // Prioritize player's shooting target from WeaponHolder
-        if (WeaponHolder.currentTarget != null)
-        {
-            currentTarget = WeaponHolder.currentTarget;
-            return;
-        }
-
         // Find the closest valid zombie
         float closestDistance = float.MaxValue;
         GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie");

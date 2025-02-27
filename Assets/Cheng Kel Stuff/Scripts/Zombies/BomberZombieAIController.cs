@@ -80,8 +80,9 @@ public class BomberZombieAIController : MonoBehaviour
         if (player != null)
         {
             playerController = player.GetComponent<CharacterController>();
-            playerstats = player.GetComponent<PlayerStats>();
         }
+
+        playerstats = FindObjectOfType<PlayerStats>();
 
         currentHealth = maxHealth;
 
@@ -231,7 +232,7 @@ public class BomberZombieAIController : MonoBehaviour
             healthBar.SetHealth(currentHealth);
         }
 
-        RotateTowardPlayer();
+        StartCoroutine(RotateTowardPlayer());
 
         if (currentHealth <= 0)
         {
@@ -243,15 +244,31 @@ public class BomberZombieAIController : MonoBehaviour
         }
     }
 
-    public void RotateTowardPlayer()
+    public void WeaponRotateTowardsPlayer()
     {
-        if (player == null) return;
+        StartCoroutine(RotateTowardPlayer());
+    }
+
+    IEnumerator RotateTowardPlayer()
+    {
+        if (player == null) yield break; // Stop if no player exists
 
         Vector3 directionToPlayer = (player.position - transform.position).normalized;
         directionToPlayer.y = 0; // Ignore vertical rotation
 
         Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
+        float elapsedTime = 0f;
+        float duration = 0.5f; // Adjust this to control rotation speed
+
+        while (elapsedTime < duration)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, (elapsedTime / duration));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.rotation = targetRotation; // Ensure final rotation is exact
     }
 
 

@@ -27,8 +27,6 @@ public class WeaponHolder : MonoBehaviour
     [SerializeField] private TMP_Text weaponListText;  // New text field for weapon list
     [SerializeField] private Animator animator;
 
-    public static Transform currentTarget; // Shared target for drone
-
     private void Start()
     {
         lastFirstPersonState = _playerController.GetIsFirstPerson();
@@ -60,14 +58,11 @@ public class WeaponHolder : MonoBehaviour
             if (_playerInput.actions["Shoot"].IsPressed() && currentWeapon is Weapon)
             {
                 currentWeapon.Shoot();
-                ProcessHitscanEffects();
             }
 
             if (_playerInput.actions["Shoot"].WasPressedThisFrame() && currentWeapon is ProjectileWeapon)
             {
                 currentWeapon.Shoot();
-                ProcessHitscanEffects();
-                AlertNearbyZombies(transform.position, 6.5f);
             }
 
             if (_playerInput.actions["Reload"].IsPressed())
@@ -80,24 +75,8 @@ public class WeaponHolder : MonoBehaviour
         if (_playerInput.actions["Drop"].WasPressedThisFrame())
             DropWeapon();
 
-        if (_playerInput.actions["ThrowGrenade"].WasPressedThisFrame())
+        if (_playerInput.actions["ThrowGrenade"].IsPressed())
             ThrowNade();
-    }
-
-    private void ProcessHitscanEffects()
-    {
-        // ✅ Hitscan effects (Drone Targeting & Damage)
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 100f))
-        {
-            if (hit.collider.CompareTag("Zombie"))
-            {
-                currentTarget = hit.transform; // Assign hit zombie as drone's target
-                hit.collider.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
-            }
-
-            AlertNearbyZombies(transform.position, 2.5f);
-        }
     }
 
     private void Interact()
@@ -302,58 +281,6 @@ public class WeaponHolder : MonoBehaviour
         if (equippedWeapons.Count > 0)
             return equippedWeapons[currentWeaponIndex];
         return null;
-    }
-
-    void AlertNearbyZombies(Vector3 position, float alertRange)
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(position, alertRange);
-        foreach (Collider hitCollider in hitColliders)
-        {
-            // Check each type of zombie and alert them
-            StandardZombieAIController standardZombie = hitCollider.GetComponent<StandardZombieAIController>();
-            TankZombieAIController tankZombie = hitCollider.GetComponent<TankZombieAIController>();
-            ChargerAIController chargerZombie = hitCollider.GetComponent<ChargerAIController>();
-            BomberZombieAIController bomberZombie = hitCollider.GetComponent<BomberZombieAIController>();
-            //ScreamerZombieAIController screamerZombie = hitCollider.GetComponent<ScreamerZombieAIController>();
-            //ToxicroakZombieAIController toxicroakZombie = hitCollider.GetComponent<ToxicroakZombieAIController>();
-            SpitterZombieAIController spitterZombie = hitCollider.GetComponent<SpitterZombieAIController>();
-
-            if (standardZombie != null && !standardZombie.isDying)
-            {
-                standardZombie.RotateTowardPlayer();
-                standardZombie.ChangeState(StandardZombieAIController.EnemyState.Run);
-            }
-            else if (tankZombie != null && !tankZombie.isDying)
-            {
-                tankZombie.RotateTowardPlayer();
-                tankZombie.ChangeState(TankZombieAIController.EnemyState.Run);
-            }
-            else if (chargerZombie != null && !chargerZombie.isDying)
-            {
-                chargerZombie.RotateTowardPlayer();
-                chargerZombie.ChangeState(ChargerAIController.EnemyState.Run);
-            }
-            else if (bomberZombie != null && !bomberZombie.isDying)
-            {
-                bomberZombie.RotateTowardPlayer();
-                bomberZombie.ChangeState(BomberZombieAIController.EnemyState.Run);
-            }
-            //else if (screamerZombie != null && !screamerZombie.isDying)
-            //{
-            //    screamerZombie.RotateTowardPlayer();
-            //    screamerZombie.ChangeState(ScreamerZombieAIController.EnemyState.Run);
-            //}
-            //else if (toxicroakZombie != null && !toxicroakZombie.isDying)
-            //{
-            //    toxicroakZombie.RotateTowardPlayer();
-            //    toxicroakZombie.ChangeState(ToxicroakZombieAIController.EnemyState.Run);
-            //}
-            else if (spitterZombie != null && !spitterZombie.isDying)
-            {
-                spitterZombie.RotateTowardPlayer();
-                spitterZombie.ChangeState(SpitterZombieAIController.EnemyState.Run);
-            }
-        }
     }
 
     public void UpdateWeaponHolderView()
