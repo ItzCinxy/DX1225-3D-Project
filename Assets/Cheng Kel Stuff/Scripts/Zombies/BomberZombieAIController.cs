@@ -295,7 +295,7 @@ public class BomberZombieAIController : MonoBehaviour
     {
         ObjectiveManager.Instance.ZombieKilled();
         // Randomly decide whether to drop health or ammo (50% chance for each)
-        int dropChance = Random.Range(0, 2);
+        int dropChance = Random.Range(0, 5);
         if (dropChance == 0 && ammoPrefab != null)
         {
             Instantiate(ammoPrefab, transform.position, Quaternion.identity);
