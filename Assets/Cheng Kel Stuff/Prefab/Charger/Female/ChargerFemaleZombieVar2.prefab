@@ -1123,13 +1123,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roamRadius: 5
-  chaseRange: 10
+  chaseRange: 36
   attackRange: 2
   idleTime: 3
   walkTime: 5
   walkSpeed: 3
   runSpeed: 8
-  visionAngle: 180
+  visionAngle: 120
   rotationSpeed: 3
   obstacleLayer:
     serializedVersion: 2
@@ -1145,10 +1145,6 @@ MonoBehaviour:
   GrenadePickUpPrefab: {fileID: 8949150381175492050, guid: 09b20e8556f4a604fb1e00c48be3ef6c,
     type: 3}
   isDying: 0
-  _separationWeight: 0
-  _cohesionWeight: 0
-  _alignmentWeight: 0
-  _neighbourRadius: 0
 --- !u!1 &4012120031274648625
 GameObject:
   m_ObjectHideFlags: 0

@@ -77,7 +77,7 @@ public class WeaponHolder : MonoBehaviour
         if (_playerInput.actions["Drop"].WasPressedThisFrame())
             DropWeapon();
 
-        if (_playerInput.actions["ThrowGrenade"].IsPressed())
+        if (_playerInput.actions["ThrowGrenade"].WasPressedThisFrame())
             ThrowNade();
     }
 

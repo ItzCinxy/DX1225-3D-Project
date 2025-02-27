@@ -5872,7 +5872,7 @@ PrefabInstance:
     - target: {fileID: 198748979371217952, guid: 1a365141225c22e49a7bb976869b22a8,
         type: 3}
       propertyPath: InitialModule.startSize.minScalar
-      value: 20
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 199183317042074402, guid: 1a365141225c22e49a7bb976869b22a8,
         type: 3}
@@ -29080,7 +29080,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.011, y: -0, z: -12.5872}
-  m_LocalScale: {x: 39.922794, y: 0.1, z: 134.85835}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 447342555}
@@ -29179,8 +29179,8 @@ MonoBehaviour:
   - {fileID: 7997650950129744345, guid: c5b115129734b2447b2f4a965d3268d8, type: 3}
   - {fileID: 2828529877596690705, guid: c3fff07140ad38d4f9b79001ace87a61, type: 3}
   - {fileID: 6152807240969163700, guid: 9485bb5c7c5c15442b2ec37a09efebb5, type: 3}
-  totalZombies: 800
-  spawnRadius: 100
+  totalZombies: 600
+  spawnRadius: 55
   minSpawnDistance: 1.25
   obstacleLayer:
     serializedVersion: 2
@@ -36386,17 +36386,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 33c143e4d30850141a593725316deeea,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.19
+      value: 23.203
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 33c143e4d30850141a593725316deeea,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.216
+      value: 0.499
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 33c143e4d30850141a593725316deeea,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -8.9
+      value: -26.888
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 33c143e4d30850141a593725316deeea,
         type: 3}
@@ -36455,13 +36455,53 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8305434315633318833, guid: 33c143e4d30850141a593725316deeea,
         type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305434315633318833, guid: 33c143e4d30850141a593725316deeea,
+        type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.15
+      value: 0.14999963
       objectReference: {fileID: 0}
     - target: {fileID: 8305434315633318833, guid: 33c143e4d30850141a593725316deeea,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0
+      value: -0.000000014901161
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305434315633318833, guid: 33c143e4d30850141a593725316deeea,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.1227878
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305434315633318833, guid: 33c143e4d30850141a593725316deeea,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.1227878
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305434315633318833, guid: 33c143e4d30850141a593725316deeea,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.6963643
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305434315633318833, guid: 33c143e4d30850141a593725316deeea,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.6963643
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305434315633318833, guid: 33c143e4d30850141a593725316deeea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 110
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305434315633318833, guid: 33c143e4d30850141a593725316deeea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305434315633318833, guid: 33c143e4d30850141a593725316deeea,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -41201,7 +41241,7 @@ GameObject:
   - component: {fileID: 1286704578}
   - component: {fileID: 1286704577}
   - component: {fileID: 1286704576}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69318,7 +69358,7 @@ GameObject:
   - component: {fileID: 2059178501}
   - component: {fileID: 2059178500}
   - component: {fileID: 2059178499}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

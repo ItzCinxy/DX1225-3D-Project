@@ -2954,13 +2954,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roamRadius: 6
-  chaseRange: 12
+  chaseRange: 36
   attackRange: 2.5
   idleTime: 2
   walkTime: 4
   walkSpeed: 3
   runSpeed: 8
-  visionAngle: 180
+  visionAngle: 120
   rotationSpeed: 3
   obstacleLayer:
     serializedVersion: 2
@@ -2986,10 +2986,6 @@ MonoBehaviour:
   ZombieSounds: {fileID: 8300000, guid: af64fd26a3be268418c9b533bc6a9f35, type: 3}
   AudioSource: {fileID: 7143791235541815936}
   isDying: 0
-  _separationWeight: 0
-  _cohesionWeight: 0
-  _alignmentWeight: 0
-  _neighbourRadius: 0
 --- !u!82 &7143791235541815936
 AudioSource:
   m_ObjectHideFlags: 0
