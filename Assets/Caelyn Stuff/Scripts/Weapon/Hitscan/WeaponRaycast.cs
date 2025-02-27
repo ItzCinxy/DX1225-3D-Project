@@ -31,76 +31,75 @@ public class WeaponRaycast : MonoBehaviour
         hasShot = true;
 
         RaycastHit hit;
+        // We cast to specific layers (targetLayer and other layers), but we check if the hit is valid.
         if (Physics.Raycast(ray, out hit, shootRange, targetLayer | LayerMask.GetMask("Default", "Environment", "Door", "Ground")))
         {
-           // Debug.Log($"Hit: {hit.collider.gameObject.name}");
+            // Check if we hit a valid target layer
+            bool hitTargetLayer = ((targetLayer.value & (1 << hit.collider.gameObject.layer)) != 0);
 
-            Target target = hit.collider.GetComponent<Target>();
-            if (target != null)
+            if (hitTargetLayer)
             {
-                target.Hit();
-            }
-
-            StandardZombieAIController stdAI = hit.collider.GetComponentInChildren<StandardZombieAIController>();
-            if (stdAI != null)
-            {
-                stdAI.TakeDamage(weaponDmg);
-            }
-
-            TankZombieAIController tankAI = hit.collider.GetComponent<TankZombieAIController>();
-            if (tankAI != null)
-            {
-                tankAI.TakeDamage(weaponDmg);
-            }
-
-            BomberZombieAIController bmbAI = hit.collider.GetComponent<BomberZombieAIController>();
-            if (bmbAI != null)
-            {
-                bmbAI.TakeDamage(weaponDmg);
-            }
-
-            //ScreamerZombieAIController scrmAI = hit.collider.GetComponent<ScreamerZombieAIController>();
-            //if (scrmAI != null)
-            //{
-            //    scrmAI.TakeDamage(weaponDmg);
-            //}
-
-            SpitterZombieAIController spitAI = hit.collider.GetComponent<SpitterZombieAIController>();
-            if (spitAI != null)
-            {
-                spitAI.TakeDamage(weaponDmg);
-            }
-
-            ChargerAIController chrgAI = hit.collider.GetComponent<ChargerAIController>();
-            if (chrgAI != null)
-            {
-                chrgAI.TakeDamage(weaponDmg);
-            }
-
-            // for particle system
-            //if (hitEffectPrefab != null)
-            //{
-            //    GameObject effectInstance = Instantiate(hitEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
-            //    Destroy(effectInstance, effectInstance.GetComponent<ParticleSystem>().main.duration);
-            //}
-
-            // for vfx graph
-            if (hitEffectPrefab != null)
-            {
-                GameObject vfxInstance = Instantiate(hitEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
-
-                // ✅ Get the Visual Effect component and Play it
-                VisualEffect vfx = vfxInstance.GetComponent<VisualEffect>();
-                if (vfx != null)
+                // Handle hit for different zombie AI types
+                Target target = hit.collider.GetComponent<Target>();
+                if (target != null)
                 {
-                    vfx.Play();
+                    target.Hit();
                 }
 
-                // ✅ Destroy the effect after its lifetime (e.g., 2 seconds)
-                Destroy(vfxInstance, 2f);
+                StandardZombieAIController stdAI = hit.collider.GetComponentInChildren<StandardZombieAIController>();
+                if (stdAI != null)
+                {
+                    stdAI.TakeDamage(weaponDmg);
+                }
+
+                TankZombieAIController tankAI = hit.collider.GetComponent<TankZombieAIController>();
+                if (tankAI != null)
+                {
+                    tankAI.TakeDamage(weaponDmg);
+                }
+
+                BomberZombieAIController bmbAI = hit.collider.GetComponent<BomberZombieAIController>();
+                if (bmbAI != null)
+                {
+                    bmbAI.TakeDamage(weaponDmg);
+                }
+
+                SpitterZombieAIController spitAI = hit.collider.GetComponent<SpitterZombieAIController>();
+                if (spitAI != null)
+                {
+                    spitAI.TakeDamage(weaponDmg);
+                }
+
+                ChargerAIController chrgAI = hit.collider.GetComponent<ChargerAIController>();
+                if (chrgAI != null)
+                {
+                    chrgAI.TakeDamage(weaponDmg);
+                }
+
+                // Instantiate VFX only when hitting a target layer
+                if (hitEffectPrefab != null)
+                {
+                    GameObject vfxInstance = Instantiate(hitEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
+
+                    // ✅ Get the Visual Effect component and Play it
+                    VisualEffect vfx = vfxInstance.GetComponent<VisualEffect>();
+                    if (vfx != null)
+                    {
+                        vfx.Play();
+                    }
+
+                    // ✅ Destroy the effect after its lifetime (e.g., 2 seconds)
+                    Destroy(vfxInstance, 2f);
+                }
+            }
+            // Optionally, if you want to handle the case where you hit the floor or non-target objects.
+            else
+            {
+                Debug.Log("Hit something outside the target layer, no VFX.");
             }
         }
     }
+
 
     private void OnDrawGizmos()
     {
