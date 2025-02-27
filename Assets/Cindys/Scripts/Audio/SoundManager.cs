@@ -20,16 +20,6 @@ public class SoundManager : MonoBehaviour
     public AudioClip playerWalk;
     public AudioClip playerRun;
 
-    [Header("Zombie SFX")]
-    public AudioClip ZombieSound;
-    public AudioClip ZombieSound2;
-    public AudioClip ZombieAttack;
-    public AudioClip ZombieHurt;
-    public AudioClip ZombieDie;
-    public AudioClip ZombieExplodeDie;
-
-    public AudioClip AfterExplodeZombieDie;
-
     private bool isPaused = false;
 
     private void Awake()

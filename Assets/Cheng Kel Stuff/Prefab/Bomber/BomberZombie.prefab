@@ -2983,8 +2983,16 @@ MonoBehaviour:
     type: 3}
   GrenadePickUpPrefab: {fileID: 8949150381175492050, guid: 09b20e8556f4a604fb1e00c48be3ef6c,
     type: 3}
-  ZombieSounds: {fileID: 8300000, guid: af64fd26a3be268418c9b533bc6a9f35, type: 3}
-  AudioSource: {fileID: 7143791235541815936}
+  ZombieIdleSounds:
+  - {fileID: 8300000, guid: 82a5dabd312ce5e42b29ccb526171057, type: 3}
+  - {fileID: 8300000, guid: 470b6370587adf0488c612afc80c0b42, type: 3}
+  ZombieHurt: {fileID: 8300000, guid: e2aa4546c28a285488e58263e1e60872, type: 3}
+  ZombieDie: {fileID: 8300000, guid: bda18c4d98730ad4dac09bc1252caf5f, type: 3}
+  ZombieExplodeSound: {fileID: 8300000, guid: d5c45ae593a3cfa47b2eeb06f0ac4ba5, type: 3}
+  ZombieAttack: {fileID: 8300000, guid: e6c84911554b54440a1b9d34735e560d, type: 3}
+  audioSource: {fileID: 7143791235541815936}
+  minIdleTime: 3
+  maxIdleTime: 6
   isDying: 0
 --- !u!82 &7143791235541815936
 AudioSource:

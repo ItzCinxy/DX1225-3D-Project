@@ -50,8 +50,18 @@ public class BomberZombieAIController : MonoBehaviour
     [SerializeField] private GameObject GrenadePickUpPrefab;
 
     [Header("Zombie Audio")]
-    public AudioClip ZombieSounds;
-    [SerializeField] AudioSource AudioSource;
+    public AudioClip[] ZombieIdleSounds;
+    public AudioClip ZombieHurt;
+    public AudioClip ZombieDie;
+    public AudioClip ZombieExplodeSound;
+    public AudioClip ZombieAttack;
+    [SerializeField] AudioSource audioSource;
+
+    public float minIdleTime = 3f;
+    public float maxIdleTime = 6f;
+
+    private Coroutine idleSoundCoroutine;
+    private bool isPlayingImportantSound = false;
 
     private Transform player;
     private CharacterController playerController;
@@ -69,6 +79,9 @@ public class BomberZombieAIController : MonoBehaviour
     private Rigidbody _rb;
     void Start()
     {
+        idleSoundCoroutine = StartCoroutine(PlayRandomIdleSound());
+
+
         animator = GetComponentInChildren<Animator>();
         healthBar = GetComponentInChildren<UIEnemyHealthBar>();
 
@@ -169,7 +182,7 @@ public class BomberZombieAIController : MonoBehaviour
                 if (capsuleCollider != null) capsuleCollider.enabled = false;
                 if (_rb != null) _rb.isKinematic = true;
                 animator.SetBool("Die", true);
-                PlaySound();
+                PlayDieSound();
                 StartCoroutine(DieAfterAnimation());
                 break;
         }
@@ -284,6 +297,7 @@ public class BomberZombieAIController : MonoBehaviour
     void Die()
     {
         ObjectiveManager.Instance.ZombieKilled();
+        PlayExplodeSound();
         // Randomly decide whether to drop health or ammo (50% chance for each)
         int dropChance = Random.Range(0, 6);
         if (dropChance == 0 && ammoPrefab != null)
@@ -402,6 +416,8 @@ public class BomberZombieAIController : MonoBehaviour
             Debug.Log("Zombie attack landed!");
             playerstats?.TakeDamage((float)attackDamage); // Apply damage
         }
+
+        PlayAttackSound();
 
         //if (explosionEffectPrefab != null)
         //{
@@ -546,25 +562,70 @@ public class BomberZombieAIController : MonoBehaviour
         return mesh;
     }
 
-    public void PlaySound()
+    private IEnumerator PlayRandomIdleSound()
     {
-        // Create a new GameObject just for the sound
-        GameObject audioHolder = new GameObject("DeathSound");
+        while (true)
+        {
+            if (!isPlayingImportantSound && ZombieIdleSounds.Length > 0 && audioSource != null)
+            {
+                AudioClip randomClip = ZombieIdleSounds[Random.Range(0, ZombieIdleSounds.Length)];
+                audioSource.PlayOneShot(randomClip);
+            }
 
-        // Set the position of the new GameObject to the zombie's current position
-        audioHolder.transform.position = transform.position; // Position at the zombie's location
+            float waitTime = Random.Range(minIdleTime, maxIdleTime);
+            yield return new WaitForSeconds(waitTime);
+        }
+    }
 
-        AudioSource newAudioSource = audioHolder.AddComponent<AudioSource>();
+    public void PlayExplodeSound()
+    {
+        if (ZombieHurt != null)
+        {
+            StopIdleSoundTemporarily(ZombieExplodeSound);
+        }
+    }
+    public void PlayDieSound()
+    {
+        if (ZombieHurt != null)
+        {
+            StopIdleSoundTemporarily(ZombieDie);
+        }
+    }
 
-        // Set up the sound clip and other settings (assuming ZombieSounds is assigned correctly)
-        newAudioSource.clip = ZombieSounds;
-        newAudioSource.volume = 1f;  // Adjust as needed
-        newAudioSource.pitch = 1f;   // Adjust as needed
+    public void PlayHurtSound()
+    {
+        if (ZombieHurt != null)
+        {
+            StopIdleSoundTemporarily(ZombieHurt);
+        }
+    }
 
-        // Play the sound
-        newAudioSource.Play();
+    public void PlayAttackSound()
+    {
+        if (ZombieAttack != null)
+        {
+            StopIdleSoundTemporarily(ZombieAttack);
+        }
+    }
 
-        // Destroy the audio holder after the sound finishes playing
-        Destroy(audioHolder, ZombieSounds.length); // Destroy the sound object after the clip length
+    private void StopIdleSoundTemporarily(AudioClip newClip)
+    {
+        if (idleSoundCoroutine != null)
+        {
+            StopCoroutine(idleSoundCoroutine);
+        }
+
+        isPlayingImportantSound = true;
+        audioSource.Stop(); // Stop any current idle sound
+        audioSource.PlayOneShot(newClip);
+
+        StartCoroutine(ResumeIdleSoundsAfter(newClip.length));
+    }
+
+    private IEnumerator ResumeIdleSoundsAfter(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        isPlayingImportantSound = false;
+        idleSoundCoroutine = StartCoroutine(PlayRandomIdleSound());
     }
 }

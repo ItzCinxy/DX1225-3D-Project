@@ -406,6 +406,7 @@ public class PlayerController : MonoBehaviour
 
     public void ApplyKnockback(Vector3 enemyPosition, float knockbackForce, float upwardForce = 1f)
     {
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.playerHurt);
         // Calculate knockback direction away from enemy
         Vector3 knockbackDirection = (transform.position - enemyPosition).normalized;
 

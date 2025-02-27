@@ -58,9 +58,21 @@ public class StandardZombieAIController : MonoBehaviour
     private CapsuleCollider capsuleCollider;
     private Rigidbody _rb;
 
+    [Header("Zombie Audio")]
+    public AudioClip[] ZombieIdleSounds;
+    public AudioClip ZombieHurt;
+    public AudioClip ZombieDie;
+    public AudioClip ZombieAttack;
+    [SerializeField] AudioSource audioSource;
 
+    public float minIdleTime = 3f;
+    public float maxIdleTime = 6f;
+
+    private Coroutine idleSoundCoroutine;
+    private bool isPlayingImportantSound = false;
     void Start()
     {
+        idleSoundCoroutine = StartCoroutine(PlayRandomIdleSound());
         animator = GetComponentInChildren<Animator>();
         healthBar = GetComponentInChildren<UIEnemyHealthBar>();
 
@@ -139,6 +151,7 @@ public class StandardZombieAIController : MonoBehaviour
             case EnemyState.Attack:
                 velocity = Vector3.zero;
                 animator.SetBool("Attack", true);
+                PlayAttackSound();
                 StartCoroutine(PerformAttack());
                 break;
 
@@ -159,6 +172,7 @@ public class StandardZombieAIController : MonoBehaviour
             case EnemyState.Dying:
                 isDying = true;
                 animator.SetBool("Die", true);
+                PlayDieSound();
                 if (capsuleCollider != null) capsuleCollider.enabled = false;
                 if (_rb != null) _rb.isKinematic = true;
                 StartCoroutine(DieAfterAnimation());
@@ -216,6 +230,7 @@ public class StandardZombieAIController : MonoBehaviour
         if (isDying || isConvulsing) return;
 
         currentHealth -= damage;
+        PlayHurtSound();
         //Debug.Log($"{gameObject.name} took {damage} damage! HP: {currentHealth}");
 
         if (healthBar != null)
@@ -494,5 +509,65 @@ public class StandardZombieAIController : MonoBehaviour
         mesh.RecalculateNormals();
 
         return mesh;
+    }
+
+    private IEnumerator PlayRandomIdleSound()
+    {
+        while (true)
+        {
+            if (!isPlayingImportantSound && ZombieIdleSounds.Length > 0 && audioSource != null)
+            {
+                AudioClip randomClip = ZombieIdleSounds[Random.Range(0, ZombieIdleSounds.Length)];
+                audioSource.PlayOneShot(randomClip);
+            }
+
+            float waitTime = Random.Range(minIdleTime, maxIdleTime);
+            yield return new WaitForSeconds(waitTime);
+        }
+    }
+
+    public void PlayDieSound()
+    {
+        if (ZombieHurt != null)
+        {
+            StopIdleSoundTemporarily(ZombieDie);
+        }
+    }
+
+    public void PlayHurtSound()
+    {
+        if (ZombieHurt != null)
+        {
+            StopIdleSoundTemporarily(ZombieHurt);
+        }
+    }
+
+    public void PlayAttackSound()
+    {
+        if (ZombieAttack != null)
+        {
+            StopIdleSoundTemporarily(ZombieAttack);
+        }
+    }
+
+    private void StopIdleSoundTemporarily(AudioClip newClip)
+    {
+        if (idleSoundCoroutine != null)
+        {
+            StopCoroutine(idleSoundCoroutine);
+        }
+
+        isPlayingImportantSound = true;
+        audioSource.Stop(); // Stop any current idle sound
+        audioSource.PlayOneShot(newClip);
+
+        StartCoroutine(ResumeIdleSoundsAfter(newClip.length));
+    }
+
+    private IEnumerator ResumeIdleSoundsAfter(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        isPlayingImportantSound = false;
+        idleSoundCoroutine = StartCoroutine(PlayRandomIdleSound());
     }
 }

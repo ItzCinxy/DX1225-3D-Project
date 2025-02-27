@@ -82,6 +82,7 @@ public class PlayerStats : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.playerHurt);
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
         UpdateHealthBar();
