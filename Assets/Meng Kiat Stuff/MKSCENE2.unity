@@ -236,6 +236,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 55025328860115417, guid: 98a54c0b062ae494493f13bddc03aa78,
+        type: 3}
+      propertyPath: coinAmount
+      value: 193631
+      objectReference: {fileID: 0}
     - target: {fileID: 76525652064397418, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: _playerController
@@ -364,17 +369,17 @@ PrefabInstance:
     - target: {fileID: 7900342818560799519, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.03
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7900342818560799519, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.9000001
+      value: 1.3400002
       objectReference: {fileID: 0}
     - target: {fileID: 7900342818560799519, guid: 98a54c0b062ae494493f13bddc03aa78,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.059999995
+      value: 0.16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
