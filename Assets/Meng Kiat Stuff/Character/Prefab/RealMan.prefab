@@ -11131,10 +11131,10 @@ MonoBehaviour:
   _weaponHolder: {fileID: 76525652064397418}
   _playerStats: {fileID: 55025328860115417}
   _abilities: {fileID: 7730092278187794477}
-  moveSpeed: 2
-  sprintSpeedMultiplier: 2
+  moveSpeed: 1
+  sprintSpeedMultiplier: 1.5
   crouchSpeedMultiplier: 0.5
-  jumpHeight: 3
+  jumpHeight: 2.5
   gravity: -9.81
   groundCheckDistance: 1.7
   groundLayer:
@@ -11243,7 +11243,7 @@ MonoBehaviour:
     type: 3}
   throwForce: 10
   numOfNadesText: {fileID: 3147060045880566844}
-  numOfNades: 99999
+  numOfNades: 1000
   _playerInput: {fileID: 52950440523894269}
   pickupRange: 6
   pickupLayer:
