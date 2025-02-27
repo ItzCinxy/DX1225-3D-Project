@@ -968,10 +968,10 @@ MonoBehaviour:
   ZombieSounds: {fileID: 0}
   AudioSource: {fileID: 0}
   isDying: 0
-  _separationWeight: 0.5
-  _cohesionWeight: 0.5
-  _alignmentWeight: 0.5
-  _neighbourRadius: 5
+  _separationWeight: 0
+  _cohesionWeight: 0
+  _alignmentWeight: 0
+  _neighbourRadius: 0
 --- !u!1 &2163400559978062327
 GameObject:
   m_ObjectHideFlags: 0
