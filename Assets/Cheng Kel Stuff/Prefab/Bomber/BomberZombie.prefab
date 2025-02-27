@@ -2958,8 +2958,8 @@ MonoBehaviour:
   attackRange: 2.5
   idleTime: 2
   walkTime: 4
-  walkSpeed: 1.8
-  runSpeed: 5
+  walkSpeed: 3
+  runSpeed: 8
   visionAngle: 180
   rotationSpeed: 3
   obstacleLayer:
