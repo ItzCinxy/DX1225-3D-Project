@@ -16,6 +16,8 @@ public class ZombieSpawner : MonoBehaviour
     public int zombiesPerWave = 50;
     public float waveInterval = 60f;
 
+    public GameObject zombieParent;
+
     private List<Vector3> usedSpawnPositions = new List<Vector3>();
 
     [SerializeField] private GameObject fog;
@@ -116,7 +118,20 @@ public class ZombieSpawner : MonoBehaviour
     void SpawnZombie(Vector3 position)
     {
         if (zombiePrefabs.Count == 0) return;
+
+        // Get a random zombie prefab
         GameObject zombiePrefab = zombiePrefabs[Random.Range(0, zombiePrefabs.Count)];
-        Instantiate(zombiePrefab, position, Quaternion.identity);
+
+        // Find or create the "Zombie" parent object
+        zombieParent = GameObject.Find("ZombieMap2");
+        if (zombieParent == null)
+        {
+            zombieParent = new GameObject("ZombieMap2"); // Create if it doesn’t exist
+        }
+
+        // Instantiate zombie and set parent
+        GameObject newZombie = Instantiate(zombiePrefab, position, Quaternion.identity);
+        newZombie.transform.parent = zombieParent.transform; // Set parent to "Zombie"
     }
+
 }
