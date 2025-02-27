@@ -50,13 +50,6 @@ public class ChargerAIController : MonoBehaviour
 
     int canStartAttack = 1;
 
-    [Header("Flocking")]
-    private List<ChargerAIController> zombies;
-    [SerializeField][Range(0, 1)] private float _separationWeight = 0.5f;
-    [SerializeField][Range(0, 1)] private float _cohesionWeight = 0.5f;
-    [SerializeField][Range(0, 1)] private float _alignmentWeight = 0.5f;
-    [SerializeField] private float _neighbourRadius = 5f;
-
     private CapsuleCollider capsuleCollider;
     private Rigidbody _rb;
 
@@ -81,8 +74,6 @@ public class ChargerAIController : MonoBehaviour
             healthBar.SetMaxHealth(maxHealth);
         }
 
-        zombies = new List<ChargerAIController>(FindObjectsOfType<ChargerAIController>());
-
         capsuleCollider = GetComponent<CapsuleCollider>();
         _rb = GetComponent<Rigidbody>();
 
@@ -92,8 +83,6 @@ public class ChargerAIController : MonoBehaviour
     void Update()
     {
         if (isDying || isConvulsing) return;
-
-        zombies.RemoveAll(z => z == null);
 
         switch (currentState)
         {
@@ -302,8 +291,6 @@ public class ChargerAIController : MonoBehaviour
 
         playerstats.IncreaseCoin(100);
 
-        zombies.Remove(this);
-
         Destroy(gameObject);
     }
 
@@ -324,8 +311,6 @@ public class ChargerAIController : MonoBehaviour
 
     void HandleWalkState()
     {
-        Vector3 flockingForce = ComputeFlocking(); // Weaker flocking influence
-        velocity += flockingForce;
         Seek(targetPosition, walkSpeed);
         if (Vector3.Distance(transform.position, targetPosition) < 1f)
             ChangeState(EnemyState.Idle);
@@ -337,47 +322,12 @@ public class ChargerAIController : MonoBehaviour
     {
         if (player == null) return;
 
-        Vector3 flockingForce = ComputeFlocking(); // Weaker flocking influence
-        velocity += flockingForce;
         Seek(player.position, runSpeed);
 
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
             ChangeState(EnemyState.Attack);
 
         if (!CanSeePlayer()) ChangeState(EnemyState.Idle);
-    }
-
-    Vector3 ComputeFlocking()
-    {
-        Vector3 separation = Vector3.zero;
-        Vector3 cohesion = Vector3.zero;
-        Vector3 alignment = Vector3.zero;
-        int neighborCount = 0;
-
-        foreach (ChargerAIController zombie in zombies)
-        {
-            if (zombie != this)
-            {
-                float distance = Vector3.Distance(transform.position, zombie.transform.position);
-                if (distance < _neighbourRadius)
-                {
-                    separation += (transform.position - zombie.transform.position).normalized / distance;
-                    cohesion += zombie.transform.position;
-                    alignment += zombie.velocity;
-                    neighborCount++;
-                }
-            }
-        }
-
-        if (neighborCount > 0)
-        {
-            cohesion /= neighborCount;
-            alignment /= neighborCount;
-            cohesion = (cohesion - transform.position).normalized;
-            alignment = alignment.normalized;
-        }
-
-        return (separation * _separationWeight) + (cohesion * _cohesionWeight) + (alignment * _alignmentWeight);
     }
 
     void HandleAttackState()
