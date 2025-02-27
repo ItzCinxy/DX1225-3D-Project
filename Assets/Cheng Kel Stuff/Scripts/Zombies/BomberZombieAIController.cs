@@ -70,6 +70,9 @@ public class BomberZombieAIController : MonoBehaviour
     [SerializeField][Range(0, 1)] private float _cohesionWeight = 0.5f;
     [SerializeField][Range(0, 1)] private float _alignmentWeight = 0.5f;
     [SerializeField] private float _neighbourRadius = 5f;
+
+    private CapsuleCollider capsuleCollider;
+    private Rigidbody _rb;
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -92,6 +95,9 @@ public class BomberZombieAIController : MonoBehaviour
         }
 
         zombies = new List<BomberZombieAIController>(FindObjectsOfType<BomberZombieAIController>());
+
+        capsuleCollider = GetComponent<CapsuleCollider>();
+        _rb = GetComponent<Rigidbody>();
 
         ChangeState(EnemyState.Walk);
     }
@@ -162,12 +168,16 @@ public class BomberZombieAIController : MonoBehaviour
             case EnemyState.Convulsing:
                 isConvulsing = true;
                 velocity = Vector3.zero;
+                if (capsuleCollider != null) capsuleCollider.enabled = false;
+                if (_rb != null) _rb.isKinematic = true;
                 animator.SetBool("Convulsing", true);
                 StartCoroutine(ConvulseBeforeDespawn());
                 break;
 
             case EnemyState.Dying:
                 isDying = true;
+                if (capsuleCollider != null) capsuleCollider.enabled = false;
+                if (_rb != null) _rb.isKinematic = true;
                 animator.SetBool("Die", true);
                 PlaySound();
                 StartCoroutine(DieAfterAnimation());

@@ -61,6 +61,8 @@ public class SpitterZombieAIController : MonoBehaviour
     [SerializeField][Range(0, 1)] private float _alignmentWeight = 0.5f;
     [SerializeField] private float _neighbourRadius = 5f;
 
+    private CapsuleCollider capsuleCollider;
+    private Rigidbody _rb;
 
     void Start()
     {
@@ -83,6 +85,9 @@ public class SpitterZombieAIController : MonoBehaviour
             healthBar.SetMaxHealth(maxHealth);
         }
         zombies = new List<SpitterZombieAIController>(FindObjectsOfType<SpitterZombieAIController>());
+
+        capsuleCollider = GetComponent<CapsuleCollider>();
+        _rb = GetComponent<Rigidbody>();
 
         ChangeState(EnemyState.Walk);
     }
@@ -153,12 +158,16 @@ public class SpitterZombieAIController : MonoBehaviour
             case EnemyState.Convulsing:
                 isConvulsing = true;
                 velocity = Vector3.zero;
+                if (capsuleCollider != null) capsuleCollider.enabled = false;
+                if (_rb != null) _rb.isKinematic = true;
                 animator.SetBool("Convulsing", true);
                 StartCoroutine(ConvulseBeforeDespawn());
                 break;
 
             case EnemyState.Dying:
                 isDying = true;
+                if (capsuleCollider != null) capsuleCollider.enabled = false;
+                if (_rb != null) _rb.isKinematic = true;
                 animator.SetBool("Die", true);
                 StartCoroutine(DieAfterAnimation());
                 break;
