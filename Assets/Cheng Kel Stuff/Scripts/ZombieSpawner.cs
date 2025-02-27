@@ -6,7 +6,7 @@ public class ZombieSpawner : MonoBehaviour
 {
     [Header("Zombie Spawning Settings")]
     public List<GameObject> zombiePrefabs; // List of zombie prefabs
-    public int totalZombies = 350; // Total number of zombies to spawn
+    public int totalZombies = 365; // Total number of zombies to spawn
     public float spawnRadius = 50f; // Radius around the spawner
     public float minSpawnDistance = 2f; // Prevents overlapping
     public LayerMask obstacleLayer; // Prevent spawning in walls
@@ -14,7 +14,7 @@ public class ZombieSpawner : MonoBehaviour
     [Header("Spawning Optimization")]
     public bool spawnInWaves = false;
     public int zombiesPerWave = 50;
-    public float waveInterval = 5f;
+    public float waveInterval = 60f;
 
     private List<Vector3> usedSpawnPositions = new List<Vector3>();
 
@@ -25,11 +25,13 @@ public class ZombieSpawner : MonoBehaviour
 
     IEnumerator WaitForMapChangeAndSpawn()
     {
-        //Wait until `MapChanger` finishes changing maps
+        // Wait until `MapChanger` finishes changing maps
         while (MapChanger.Instance == null)
         {
             yield return null; // Wait a frame
         }
+
+        yield return new WaitForSeconds(0.85f); // Small delay to ensure the map loads
 
         if (spawnInWaves)
         {
