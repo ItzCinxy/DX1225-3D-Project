@@ -221,7 +221,7 @@ public class PlayerStats : MonoBehaviour
 
     public void IncreaseMaxHealth(float amountToIncrease)
     {
-        maxHealth += amountToIncrease;
+        maxHealth += amountToIncrease + 500f;
 
         if (healthBar != null)
         {
@@ -247,7 +247,7 @@ public class PlayerStats : MonoBehaviour
 
     public void IncreaseHealthRegen(float amountToIncrease)
     {
-        healthRegenSpeed += amountToIncrease;
+        healthRegenSpeed += amountToIncrease + 1f;
     }
 
     public void IncreaseStaminaRegen(float amountToIncrease)
