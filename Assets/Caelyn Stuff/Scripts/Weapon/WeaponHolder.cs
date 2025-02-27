@@ -15,6 +15,7 @@ public class WeaponHolder : MonoBehaviour
     [Header("Grenade")]
     [SerializeField] private GameObject grenadePrefab;
     [SerializeField] private float throwForce = 10f;
+    [SerializeField] private TMP_Text numOfNadesText;
     public int numOfNades = 0;
 
     [Header("Player Stuff")]
@@ -27,12 +28,11 @@ public class WeaponHolder : MonoBehaviour
     [SerializeField] private TMP_Text weaponListText;  // New text field for weapon list
     [SerializeField] private Animator animator;
 
-    public static Transform currentTarget; // Shared target for drone
-
     private void Start()
     {
         lastFirstPersonState = _playerController.GetIsFirstPerson();
         UpdateWeaponListUI();
+        UpdateNumOfNadesText();
     }
 
     private void Update()
@@ -60,14 +60,11 @@ public class WeaponHolder : MonoBehaviour
             if (_playerInput.actions["Shoot"].IsPressed() && currentWeapon is Weapon)
             {
                 currentWeapon.Shoot();
-                ProcessHitscanEffects();
             }
 
             if (_playerInput.actions["Shoot"].WasPressedThisFrame() && currentWeapon is ProjectileWeapon)
             {
                 currentWeapon.Shoot();
-                ProcessHitscanEffects();
-                AlertNearbyZombies(transform.position, 6.5f);
             }
 
             if (_playerInput.actions["Reload"].IsPressed())
@@ -80,24 +77,8 @@ public class WeaponHolder : MonoBehaviour
         if (_playerInput.actions["Drop"].WasPressedThisFrame())
             DropWeapon();
 
-        if (_playerInput.actions["ThrowGrenade"].WasPressedThisFrame())
+        if (_playerInput.actions["ThrowGrenade"].IsPressed())
             ThrowNade();
-    }
-
-    private void ProcessHitscanEffects()
-    {
-        // ✅ Hitscan effects (Drone Targeting & Damage)
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 100f))
-        {
-            if (hit.collider.CompareTag("Zombie"))
-            {
-                currentTarget = hit.transform; // Assign hit zombie as drone's target
-                hit.collider.SendMessage("TakeDamage", 10, SendMessageOptions.DontRequireReceiver);
-            }
-
-            AlertNearbyZombies(transform.position, 2.5f);
-        }
     }
 
     private void Interact()
@@ -128,6 +109,15 @@ public class WeaponHolder : MonoBehaviour
 
         if (FindObjectOfType<LuckyBox>() is LuckyBox luckyBox)
             luckyBox.WeaponPickedUp(newWeapon);
+
+        // Change weapon layer to "WeaponLayer" so it only renders in the Weapon Camera
+        newWeapon.gameObject.layer = LayerMask.NameToLayer("Weapon");
+
+        // Apply the layer change to all child objects (for attachments, sights, etc.)
+        foreach (Transform child in newWeapon.transform)
+        {
+            child.gameObject.layer = LayerMask.NameToLayer("Weapon");
+        }
 
         bool isFirstPerson = _playerController.GetIsFirstPerson();
         Transform activeHolder = isFirstPerson ? firstPersonWeaponHolder : thirdPersonWeaponHolder;
@@ -176,6 +166,15 @@ public class WeaponHolder : MonoBehaviour
 
         if (currentWeapon.TryGetComponent(out BoxCollider bc))
             bc.enabled = true;
+
+        // Reset the weapon layer so it can be seen in the world again
+        currentWeapon.gameObject.layer = LayerMask.NameToLayer("Pickup");
+
+        // Apply layer change to all child objects (attachments, sights, etc.)
+        foreach (Transform child in currentWeapon.transform)
+        {
+            child.gameObject.layer = LayerMask.NameToLayer("Pickup");
+        }
 
         currentWeapon.transform.SetParent(null);
         ammoDisplay.text = "-- / --";
@@ -286,58 +285,6 @@ public class WeaponHolder : MonoBehaviour
         return null;
     }
 
-    void AlertNearbyZombies(Vector3 position, float alertRange)
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(position, alertRange);
-        foreach (Collider hitCollider in hitColliders)
-        {
-            // Check each type of zombie and alert them
-            StandardZombieAIController standardZombie = hitCollider.GetComponent<StandardZombieAIController>();
-            TankZombieAIController tankZombie = hitCollider.GetComponent<TankZombieAIController>();
-            ChargerAIController chargerZombie = hitCollider.GetComponent<ChargerAIController>();
-            BomberZombieAIController bomberZombie = hitCollider.GetComponent<BomberZombieAIController>();
-            //ScreamerZombieAIController screamerZombie = hitCollider.GetComponent<ScreamerZombieAIController>();
-            //ToxicroakZombieAIController toxicroakZombie = hitCollider.GetComponent<ToxicroakZombieAIController>();
-            //SpitterZombieAIController spitterZombie = hitCollider.GetComponent<SpitterZombieAIController>();
-
-            if (standardZombie != null && !standardZombie.isDying)
-            {
-                standardZombie.RotateTowardPlayer();
-                standardZombie.ChangeState(StandardZombieAIController.EnemyState.Run);
-            }
-            else if (tankZombie != null && !tankZombie.isDying)
-            {
-                tankZombie.RotateTowardPlayer();
-                tankZombie.ChangeState(TankZombieAIController.EnemyState.Run);
-            }
-            else if (chargerZombie != null && !chargerZombie.isDying)
-            {
-                chargerZombie.RotateTowardPlayer();
-                chargerZombie.ChangeState(ChargerAIController.EnemyState.Run);
-            }
-            else if (bomberZombie != null && !bomberZombie.isDying)
-            {
-                bomberZombie.RotateTowardPlayer();
-                bomberZombie.ChangeState(BomberZombieAIController.EnemyState.Run);
-            }
-            //else if (screamerZombie != null && !screamerZombie.isDying)
-            //{
-            //    screamerZombie.RotateTowardPlayer();
-            //    screamerZombie.ChangeState(ScreamerZombieAIController.EnemyState.Run);
-            //}
-            //else if (toxicroakZombie != null && !toxicroakZombie.isDying)
-            //{
-            //    toxicroakZombie.RotateTowardPlayer();
-            //    toxicroakZombie.ChangeState(ToxicroakZombieAIController.EnemyState.Run);
-            //}
-            //else if (spitterZombie != null && !spitterZombie.isDying)
-            //{
-            //    spitterZombie.RotateTowardPlayer();
-            //    spitterZombie.ChangeState(SpitterZombieAIController.EnemyState.Run);
-            //}
-        }
-    }
-
     public void UpdateWeaponHolderView()
     {
         bool isFirstPerson = _playerController.GetIsFirstPerson();
@@ -348,13 +295,29 @@ public class WeaponHolder : MonoBehaviour
             weapon.transform.SetParent(targetHolder);
             weapon.transform.localPosition = Vector3.zero;
             weapon.transform.localRotation = Quaternion.identity;
+
+            // Change the weapon tag based on the camera mode
+            if (isFirstPerson)
+            {
+                weapon.gameObject.layer = LayerMask.NameToLayer("Weapon"); // Equipped weapon in FPS mode
+            }
+            else
+            {
+                weapon.gameObject.layer = LayerMask.NameToLayer("Pickup"); // Droppable weapon in TPS mode
+            }
+
+            // Apply tag change to all child objects (attachments, scopes, etc.)
+            foreach (Transform child in weapon.transform)
+            {
+                child.gameObject.tag = weapon.gameObject.tag;
+            }
         }
     }
-
 
     public void IncreaseNadeAmount()
     {
         numOfNades++;
+        UpdateNumOfNadesText();
     }
 
     private void ThrowNade()
@@ -363,7 +326,7 @@ public class WeaponHolder : MonoBehaviour
 
         // Deduct one grenade from your stash
         numOfNades--;
-
+        UpdateNumOfNadesText();
         // Spawn the grenade at the weaponHolder's position
         Vector3 spawnPosition = thirdPersonWeaponHolder.position;
         GameObject grenadeInstance = Instantiate(grenadePrefab, spawnPosition, Quaternion.identity);
@@ -381,6 +344,14 @@ public class WeaponHolder : MonoBehaviour
         else
         {
             Debug.LogError("Grenade prefab is missing a Rigidbody component. Fix it, please.");
+        }
+    }
+    
+    private void UpdateNumOfNadesText()
+    {
+        if (numOfNadesText != null)
+        {
+            numOfNadesText.text = "Nades: " + numOfNades;
         }
     }
 }

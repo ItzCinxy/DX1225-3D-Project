@@ -2958,14 +2958,14 @@ MonoBehaviour:
   attackRange: 2.5
   idleTime: 2
   walkTime: 4
-  walkSpeed: 1.8
-  runSpeed: 5
-  visionAngle: 70
-  rotationSpeed: 6
+  walkSpeed: 3
+  runSpeed: 8
+  visionAngle: 180
+  rotationSpeed: 3
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
-  maxHealth: 50
+  maxHealth: 200
   currentHealth: 0
   attackDamage: 0
   explosionRadius: 2.5
@@ -2980,6 +2980,8 @@ MonoBehaviour:
   healthPrefab: {fileID: 6477114811567125893, guid: 1188a74ac345e70499c4a52c498df245,
     type: 3}
   explosionEffectPrefab: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
+    type: 3}
+  GrenadePickUpPrefab: {fileID: 8949150381175492050, guid: 09b20e8556f4a604fb1e00c48be3ef6c,
     type: 3}
   ZombieSounds: {fileID: 8300000, guid: af64fd26a3be268418c9b533bc6a9f35, type: 3}
   AudioSource: {fileID: 7143791235541815936}

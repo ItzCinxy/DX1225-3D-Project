@@ -2167,20 +2167,22 @@ MonoBehaviour:
   attackRange: 3
   idleTime: 4
   walkTime: 6
-  walkSpeed: 1
-  runSpeed: 2.5
-  visionAngle: 50
+  walkSpeed: 3
+  runSpeed: 7.5
+  visionAngle: 180
   rotationSpeed: 3
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
-  maxHealth: 300
+  maxHealth: 400
   currentHealth: 0
   attackDamage: 25
   attackCooldown: 3
   ammoPrefab: {fileID: 794305810215856843, guid: 306453e79aaf5574daa3db745708c34f,
     type: 3}
   healthPrefab: {fileID: 6477114811567125893, guid: 1188a74ac345e70499c4a52c498df245,
+    type: 3}
+  GrenadePickUpPrefab: {fileID: 8949150381175492050, guid: 09b20e8556f4a604fb1e00c48be3ef6c,
     type: 3}
   isDying: 0
   _separationWeight: 0

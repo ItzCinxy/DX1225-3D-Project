@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class DroneAITYPE1 : MonoBehaviour
@@ -42,7 +42,7 @@ public class DroneAITYPE1 : MonoBehaviour
 
         SetRandomWanderTarget();
 
-        // If the drone has a Rigidbody, disable gravity and physics influence
+        // Disable gravity and physics influence
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -108,36 +108,35 @@ public class DroneAITYPE1 : MonoBehaviour
 
     void SelectTarget()
     {
-        // If the target is too far, reset target
+        // If the target is too far or blocked, reset target
         if (currentTarget != null)
         {
             float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
-            if (distanceToTarget > attackRange)
+            if (distanceToTarget > attackRange || !HasLineOfSight(currentTarget))
             {
                 currentTarget = null;
             }
         }
 
-        // Prioritize player's shooting target from WeaponHolder
-        if (WeaponHolder.currentTarget != null)
-        {
-            currentTarget = WeaponHolder.currentTarget;
-            return;
-        }
-
-        // Find the closest valid zombie
-        float closestDistance = float.MaxValue;
+        // Find the closest valid zombie with line of sight
+        float closestDistance = Mathf.Infinity;
+        Transform bestTarget = null;
         GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie");
 
         foreach (GameObject zombie in zombies)
         {
             float distance = Vector3.Distance(transform.position, zombie.transform.position);
-            if (distance < closestDistance && distance <= attackRange)
+
+            // ✅ Check if within attack range and has line of sight
+            if (distance < closestDistance && distance <= attackRange && HasLineOfSight(zombie.transform))
             {
                 closestDistance = distance;
-                currentTarget = zombie.transform;
+                bestTarget = zombie.transform;
             }
         }
+
+        // Set the best available target
+        currentTarget = bestTarget;
     }
 
     void AttackTarget()
@@ -187,17 +186,46 @@ public class DroneAITYPE1 : MonoBehaviour
     {
         if (currentTarget == null || firePoint == null) return;
 
-        // Raycast from fire point for instant damage
+        // Define the layers to ignore
+        int layerMask = ~(1 << LayerMask.NameToLayer("Environment") | 1 << LayerMask.NameToLayer("Ground"));
+
+        // Perform the raycast
         RaycastHit hit;
-        if (Physics.Raycast(firePoint.position, (currentTarget.position - firePoint.position).normalized, out hit, attackRange))
+        if (Physics.Raycast(firePoint.position, (currentTarget.position - firePoint.position).normalized, out hit, attackRange, layerMask))
         {
             if (hit.collider.CompareTag("Zombie"))
             {
                 // Call the specific zombie's TakeDamage function
                 hit.collider.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
+                Debug.Log($"Drone hit {hit.collider.gameObject.name}!");
+            }
+            else
+            {
+                Debug.Log($"Drone raycast hit {hit.collider.gameObject.name}, but it's not a zombie!");
             }
         }
+        else
+        {
+            Debug.Log("Drone missed all targets.");
+        }
+    }
 
-        Debug.Log("Drone fired a raycast bullet!");
+    bool HasLineOfSight(Transform target)
+    {
+        Vector3 direction = (target.position - transform.position).normalized;
+        float distance = Vector3.Distance(transform.position, target.position);
+
+        // Define the layers that should block vision (Environment, Ground)
+        int layerMask = LayerMask.GetMask("Environment", "Ground");
+
+        // Perform the raycast
+        if (Physics.Raycast(transform.position, direction, distance, layerMask))
+        {
+            // 🚫 Hit an obstacle → No line of sight
+            return false;
+        }
+
+        // ✅ No obstacles → Has line of sight
+        return true;
     }
 }

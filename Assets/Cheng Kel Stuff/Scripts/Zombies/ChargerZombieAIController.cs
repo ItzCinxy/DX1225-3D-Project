@@ -36,6 +36,7 @@ public class ChargerAIController : MonoBehaviour
     [Header("Loot Drops")]
     [SerializeField] private GameObject ammoPrefab;
     [SerializeField] private GameObject healthPrefab;
+    [SerializeField] private GameObject GrenadePickUpPrefab;
 
     private Transform player;
     private CharacterController playerController;
@@ -49,12 +50,8 @@ public class ChargerAIController : MonoBehaviour
 
     int canStartAttack = 1;
 
-    [Header("Flocking")]
-    private List<ChargerAIController> zombies;
-    [SerializeField][Range(0, 1)] private float _separationWeight = 0.5f;
-    [SerializeField][Range(0, 1)] private float _cohesionWeight = 0.5f;
-    [SerializeField][Range(0, 1)] private float _alignmentWeight = 0.5f;
-    [SerializeField] private float _neighbourRadius = 5f;
+    private CapsuleCollider capsuleCollider;
+    private Rigidbody _rb;
 
     void Start()
     {
@@ -66,8 +63,9 @@ public class ChargerAIController : MonoBehaviour
         if (player != null)
         {
             playerController = player.GetComponent<CharacterController>();
-            playerstats = player.GetComponent<PlayerStats>();
         }
+
+        playerstats = FindObjectOfType<PlayerStats>();
 
         currentHealth = maxHealth;
 
@@ -76,7 +74,8 @@ public class ChargerAIController : MonoBehaviour
             healthBar.SetMaxHealth(maxHealth);
         }
 
-        zombies = new List<ChargerAIController>(FindObjectsOfType<ChargerAIController>());
+        capsuleCollider = GetComponent<CapsuleCollider>();
+        _rb = GetComponent<Rigidbody>();
 
         ChangeState(EnemyState.Walk);
     }
@@ -84,8 +83,6 @@ public class ChargerAIController : MonoBehaviour
     void Update()
     {
         if (isDying || isConvulsing) return;
-
-        zombies.RemoveAll(z => z == null);
 
         switch (currentState)
         {
@@ -147,12 +144,16 @@ public class ChargerAIController : MonoBehaviour
             case EnemyState.Convulsing:
                 isConvulsing = true;
                 velocity = Vector3.zero;
+                if (capsuleCollider != null) capsuleCollider.enabled = false;
+                if (_rb != null) _rb.isKinematic = true;
                 animator.SetBool("Convulsing", true);
                 StartCoroutine(ConvulseBeforeDespawn());
                 break;
 
             case EnemyState.Dying:
                 isDying = true;
+                if (capsuleCollider != null) capsuleCollider.enabled = false;
+                if (_rb != null) _rb.isKinematic = true;
                 animator.SetBool("Die", true);
                 StartCoroutine(DieAfterAnimation());
                 break;
@@ -216,7 +217,7 @@ public class ChargerAIController : MonoBehaviour
             healthBar.SetHealth(currentHealth);
         }
 
-        RotateTowardPlayer();
+        StartCoroutine(RotateTowardPlayer());
 
         if (currentHealth <= 0)
         {
@@ -228,17 +229,32 @@ public class ChargerAIController : MonoBehaviour
         }
     }
 
-    public void RotateTowardPlayer()
+    public void WeaponRotateTowardsPlayer()
     {
-        if (player == null) return;
+        StartCoroutine(RotateTowardPlayer());
+    }
+
+    IEnumerator RotateTowardPlayer()
+    {
+        if (player == null) yield break; // Stop if no player exists
 
         Vector3 directionToPlayer = (player.position - transform.position).normalized;
         directionToPlayer.y = 0; // Ignore vertical rotation
 
         Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-    }
 
+        float elapsedTime = 0f;
+        float duration = 0.5f; // Adjust this to control rotation speed
+
+        while (elapsedTime < duration)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, (elapsedTime / duration));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.rotation = targetRotation; // Ensure final rotation is exact
+    }
 
     IEnumerator DieAfterAnimation()
     {
@@ -253,7 +269,7 @@ public class ChargerAIController : MonoBehaviour
     {
         ObjectiveManager.Instance.ZombieKilled();
         // Randomly decide whether to drop health or ammo (50% chance for each)
-        int dropChance = Random.Range(0, 2); // Generates either 0 or 1
+        int dropChance = Random.Range(0, 6); // Generates either 0 or 1
 
         if (dropChance == 0 && ammoPrefab != null)
         {
@@ -263,6 +279,10 @@ public class ChargerAIController : MonoBehaviour
         {
             Instantiate(healthPrefab, transform.position, Quaternion.identity);
         }
+        else if (dropChance == 2 && GrenadePickUpPrefab != null)
+        {
+            Instantiate(GrenadePickUpPrefab, transform.position, Quaternion.identity);
+        }
 
         if (healthBar != null)
         {
@@ -270,8 +290,6 @@ public class ChargerAIController : MonoBehaviour
         }
 
         playerstats.IncreaseCoin(100);
-
-        zombies.Remove(this);
 
         Destroy(gameObject);
     }
@@ -293,8 +311,6 @@ public class ChargerAIController : MonoBehaviour
 
     void HandleWalkState()
     {
-        Vector3 flockingForce = ComputeFlocking(); // Weaker flocking influence
-        velocity += flockingForce;
         Seek(targetPosition, walkSpeed);
         if (Vector3.Distance(transform.position, targetPosition) < 1f)
             ChangeState(EnemyState.Idle);
@@ -306,47 +322,12 @@ public class ChargerAIController : MonoBehaviour
     {
         if (player == null) return;
 
-        Vector3 flockingForce = ComputeFlocking(); // Weaker flocking influence
-        velocity += flockingForce;
         Seek(player.position, runSpeed);
 
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
             ChangeState(EnemyState.Attack);
 
         if (!CanSeePlayer()) ChangeState(EnemyState.Idle);
-    }
-
-    Vector3 ComputeFlocking()
-    {
-        Vector3 separation = Vector3.zero;
-        Vector3 cohesion = Vector3.zero;
-        Vector3 alignment = Vector3.zero;
-        int neighborCount = 0;
-
-        foreach (ChargerAIController zombie in zombies)
-        {
-            if (zombie != this)
-            {
-                float distance = Vector3.Distance(transform.position, zombie.transform.position);
-                if (distance < _neighbourRadius)
-                {
-                    separation += (transform.position - zombie.transform.position).normalized / distance;
-                    cohesion += zombie.transform.position;
-                    alignment += zombie.velocity;
-                    neighborCount++;
-                }
-            }
-        }
-
-        if (neighborCount > 0)
-        {
-            cohesion /= neighborCount;
-            alignment /= neighborCount;
-            cohesion = (cohesion - transform.position).normalized;
-            alignment = alignment.normalized;
-        }
-
-        return (separation * _separationWeight) + (cohesion * _cohesionWeight) + (alignment * _alignmentWeight);
     }
 
     void HandleAttackState()

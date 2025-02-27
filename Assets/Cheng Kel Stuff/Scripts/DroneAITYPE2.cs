@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class DroneAITYPE2 : MonoBehaviour
@@ -115,33 +115,52 @@ public class DroneAITYPE2 : MonoBehaviour
         if (currentTarget != null)
         {
             float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
-            if (distanceToTarget > attackRange)
+            if (distanceToTarget > attackRange || !HasLineOfSight(currentTarget))
             {
                 currentTarget = null;
             }
         }
 
-        // Prioritize player's shooting target from WeaponHolder
-        if (WeaponHolder.currentTarget != null)
-        {
-            currentTarget = WeaponHolder.currentTarget;
-            return;
-        }
-
-        // Find the closest valid zombie
-        float closestDistance = float.MaxValue;
+        // Find the closest valid zombie with line of sight
+        float closestDistance = Mathf.Infinity;
+        Transform bestTarget = null;
         GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie");
 
         foreach (GameObject zombie in zombies)
         {
             float distance = Vector3.Distance(transform.position, zombie.transform.position);
-            if (distance < closestDistance && distance <= attackRange)
+
+            // ✅ Check if within attack range and has line of sight
+            if (distance < closestDistance && distance <= attackRange && HasLineOfSight(zombie.transform))
             {
                 closestDistance = distance;
-                currentTarget = zombie.transform;
+                bestTarget = zombie.transform;
             }
         }
+
+        // Set the best available target
+        currentTarget = bestTarget;
     }
+
+    bool HasLineOfSight(Transform target)
+    {
+        Vector3 direction = (target.position - transform.position).normalized;
+        float distance = Vector3.Distance(transform.position, target.position);
+
+        // Define the layers that should block vision (Environment, Ground)
+        int layerMask = LayerMask.GetMask("Environment", "Ground");
+
+        // Perform the raycast
+        if (Physics.Raycast(transform.position, direction, distance, layerMask))
+        {
+            // 🚫 Hit an obstacle → No line of sight
+            return false;
+        }
+
+        // ✅ No obstacles → Has line of sight
+        return true;
+    }
+
 
     void AttackTarget()
     {

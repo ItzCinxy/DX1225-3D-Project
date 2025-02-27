@@ -76,7 +76,15 @@ public class PlayerController : MonoBehaviour
         HandleCameraToggle();
         HandleGamePause();
 
-        if (isSkillTreeOpen) return;
+        if (isSkillTreeOpen)
+        {
+            Time.timeScale = 0;
+            return;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
 
         HandleGroundCheck();
         HandleCrouch();

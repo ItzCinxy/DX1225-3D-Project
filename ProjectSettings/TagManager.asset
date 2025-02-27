@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Zombie
   - Grenade
+  - Drone
   layers:
   - Default
   - TransparentFX
@@ -20,12 +21,12 @@ TagManager:
   - Player
   - Key
   - Grenade
-  - 
+  - Weapon
   - 
   - Drone
   - 
   - 
-  - 
+  - Exit
   - 
   - 
   - 

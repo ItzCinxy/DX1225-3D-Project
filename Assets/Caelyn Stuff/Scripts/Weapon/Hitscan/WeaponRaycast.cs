@@ -31,7 +31,7 @@ public class WeaponRaycast : MonoBehaviour
         hasShot = true;
 
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, shootRange, targetLayer))
+        if (Physics.Raycast(ray, out hit, shootRange, targetLayer | LayerMask.GetMask("Default", "Environment", "Door", "Ground")))
         {
            // Debug.Log($"Hit: {hit.collider.gameObject.name}");
 
