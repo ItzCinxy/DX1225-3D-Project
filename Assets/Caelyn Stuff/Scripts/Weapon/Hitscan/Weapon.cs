@@ -26,6 +26,7 @@ public class Weapon : WeaponBase
             weaponRaycast?.FireRaycast();
             // Instantiate muzzle flash properly
             GameObject flashInstance = Instantiate(muzzleFlash, flashPos.position, flashPos.rotation);
+            flashInstance.transform.SetParent(flashPos);
 
             // Get the ParticleSystem component and let it play
             ParticleSystem ps = flashInstance.GetComponent<ParticleSystem>();
