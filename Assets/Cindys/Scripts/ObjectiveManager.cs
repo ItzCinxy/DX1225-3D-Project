@@ -13,6 +13,10 @@ public class ObjectiveManager : MonoBehaviour
     [Header("Objective Displays")]
     [SerializeField] private TMP_Text questDisplay;
 
+    [Header("Objective Trail")]
+    [SerializeField] private ObjectiveTrail objectiveTrail;
+    [SerializeField] private Transform playerStartPosition; // Player's spawn point
+
     // List to store objectives for the current map
     private List<Objective> currentObjectives;
 
@@ -21,21 +25,14 @@ public class ObjectiveManager : MonoBehaviour
     [Header("Map 1 Objectives")]
     [SerializeField] private Objective map1KeyObjective;
     [SerializeField] private Objective map1ZombieObjective;
+    [SerializeField] private Transform map1KeyLocation; // Location of the keycard
+    [SerializeField] private Transform map1DoorLocation; // Location of the main door
 
     [Header("Map 2 Objectives")]
     //[SerializeField] private Objective map2BossObjective;
     [SerializeField] private Objective map2UnlockingArea;
     [SerializeField] private Objective map2ZombieObjective;
-
-    private void Awake()
-    {
-        //if (Instance == null)
-        //    Instance = this;
-        //else
-        //    Destroy(gameObject);
-
-        //SetMapObjectives(1); // Initialize with map 1 objectives
-    }
+    [SerializeField] private Transform map2UnlockLocation; // Location to unlock
 
     void Start()
     {
@@ -49,6 +46,11 @@ public class ObjectiveManager : MonoBehaviour
 
     private int currentMapIndex = 1;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q)) { ReactivateTrail(); }
+    }
+
     public void SetMapObjectives(int mapIndex)
     {
         objectivesCompleted = false;
@@ -58,9 +60,13 @@ public class ObjectiveManager : MonoBehaviour
         {
             case 1:
                 currentObjectives = new List<Objective> { map1KeyObjective, map1ZombieObjective };
+                if (!map1KeyObjective.isCompleted)
+                    objectiveTrail.SetTarget(map1KeyLocation, playerStartPosition); // Guide to keycard
                 break;
             case 2:
                 currentObjectives = new List<Objective> { map2ZombieObjective, map2UnlockingArea };
+                if (!map2UnlockingArea.isCompleted)
+                    objectiveTrail.SetTarget(map2UnlockLocation, playerStartPosition); // Guide to unlocking area
                 break;
             default:
                 currentObjectives = new List<Objective>();
@@ -111,6 +117,8 @@ public class ObjectiveManager : MonoBehaviour
 
             UpdateObjectiveDisplay();
             CheckObjectives();
+
+            objectiveTrail.SetTarget(map1DoorLocation, playerStartPosition);
         }
     }
 
@@ -168,6 +176,39 @@ public class ObjectiveManager : MonoBehaviour
 
         UpdateObjectiveDisplay();
         CheckObjectives();
+
+        objectiveTrail.DisableTrail();
+    }
+
+    private void ReactivateTrail()
+    {
+        if (objectivesCompleted)
+        {
+            objectiveTrail.DisableTrail(); // Don't show if everything is done
+            return;
+        }
+
+        foreach (var objective in currentObjectives)
+        {
+            if (!objective.isCompleted) // Find the next unfinished objective
+            {
+                if (objective.objectiveName.ToLower().Contains("key"))
+                {
+                    objectiveTrail.SetTarget(map1KeyLocation, playerStartPosition);
+                    return;
+                }
+                if (objective.objectiveName.ToLower().Contains("door"))
+                {
+                    objectiveTrail.SetTarget(map1DoorLocation, playerStartPosition);
+                    return;
+                }
+                if (objective.objectiveName.ToLower().Contains("area"))
+                {
+                    objectiveTrail.SetTarget(map2UnlockLocation, playerStartPosition);
+                    return;
+                }
+            }
+        }
     }
 
     private void CheckObjectives()
@@ -196,6 +237,8 @@ public class ObjectiveManager : MonoBehaviour
             }
 
             OpenDoor(currentMapIndex); // Pass the current map index to the OpenDoor method
+
+            objectiveTrail.DisableTrail();
         }
     }
 
