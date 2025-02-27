@@ -1778,14 +1778,14 @@ MonoBehaviour:
   attackRange: 2
   idleTime: 2
   walkTime: 3
-  walkSpeed: 2
-  runSpeed: 6
-  visionAngle: 70
-  rotationSpeed: 7
+  walkSpeed: 4
+  runSpeed: 10
+  visionAngle: 180
+  rotationSpeed: 3
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
-  maxHealth: 150
+  maxHealth: 200
   currentHealth: 0
   attackDamage: 20
   attackCooldown: 1
