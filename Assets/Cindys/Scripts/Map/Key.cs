@@ -8,6 +8,7 @@ public class Key : MonoBehaviour
 {
     [SerializeField] private LayerMask layer;
     [SerializeField] private InputActionReference pickUpAction;
+    [SerializeField] private GameObject keycard;
 
     private void Update()
     {
@@ -28,6 +29,7 @@ public class Key : MonoBehaviour
         {
             ObjectiveManager.Instance.PickUpKey();
             Destroy(hitInfo.collider.gameObject);
+            Destroy(keycard);
             Debug.Log("Key picked up!");
         }
     }

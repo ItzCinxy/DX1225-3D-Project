@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ambientColor:
     serializedVersion: 2
-    key0: {r: 0, g: 0.01549387, b: 1, a: 1}
+    key0: {r: 0, g: 0.015686035, b: 1, a: 1}
     key1: {r: 0.78616345, g: 0.78616345, b: 0.78616345, a: 1}
     key2: {r: 1, g: 1, b: 1, a: 0}
     key3: {r: 0.6855345, g: 0.6855345, b: 0.6855345, a: 0}
@@ -75,9 +75,9 @@ MonoBehaviour:
   fogColor:
     serializedVersion: 2
     key0: {r: 0, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 0.63664603, b: 0.51257855, a: 1}
-    key2: {r: 0.63836473, g: 0.8695277, b: 1, a: 0}
-    key3: {r: 0.99452, g: 1, b: 0.75157225, a: 0}
+    key1: {r: 0.6226415, g: 0.46006495, b: 0.39355636, a: 1}
+    key2: {r: 0.5479806, g: 0.64100164, b: 0.64779866, a: 0}
+    key3: {r: 0.8050314, g: 0.56629837, b: 0.30125383, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
