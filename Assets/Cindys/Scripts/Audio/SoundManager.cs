@@ -26,8 +26,9 @@ public class SoundManager : MonoBehaviour
     public AudioClip ZombieAttack;
     public AudioClip ZombieHurt;
     public AudioClip ZombieDie;
+    public AudioClip ZombieExplodeDie;
 
-    public AudioClip EXplodeZombieDie;
+    public AudioClip AfterExplodeZombieDie;
 
     private bool isPaused = false;
 
