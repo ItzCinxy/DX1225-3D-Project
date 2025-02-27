@@ -66,7 +66,7 @@ public class TankZombieAIController : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         healthBar = GetComponentInChildren<UIEnemyHealthBar>();
 
-        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        _player = FindObjectOfType<PlayerController>();
 
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
